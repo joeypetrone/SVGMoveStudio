@@ -36,5 +36,18 @@ namespace SVGMoveStudio.Data
 
             return singleObject;
         }
+
+        public void Remove(int objectId)
+        {
+            var db = new SqlConnection(_connectionString);
+
+            var query = @"DELETE
+                          FROM Object
+                          WHERE ObjectId = @oid";
+
+            var parameters = new { oid = objectId };
+
+            db.Execute(query, parameters);
+        }
     }
 }

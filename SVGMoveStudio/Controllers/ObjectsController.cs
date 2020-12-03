@@ -39,5 +39,18 @@ namespace SVGMoveStudio.Controllers
 
             return Ok(singleObject);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteObjectById(int id)
+        {
+            if (_repo.GetObjectById(id) == null)
+            {
+                return NotFound("This object does not exist in the database");
+            }
+
+            _repo.Remove(id);
+
+            return Ok();
+        }
     }
 }
