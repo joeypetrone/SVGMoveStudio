@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace SVGMoveStudio.Models
 {
-    public class Object
+    public class Element
     {
-        public int ObjectId { get; set; }
+        public int ElementId { get; set; }
         public int SVGId { get; set; }
-        public int ObjectTypeId { get; set; }
-        public string ObjectName { get; set; }
+        public int ElementTypeId { get; set; }
+        public string ElementName { get; set; }
         public int ArrangeNumber { get; set; }
         public string Fill { get; set; }
         public decimal FillOpacity { get; set; }
@@ -30,5 +30,6 @@ namespace SVGMoveStudio.Models
         public string PathShape { get; set; }
         public int PathLength { get; set; }
         public bool isDefault { get; set; }
+
     }
 }
