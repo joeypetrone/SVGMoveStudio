@@ -26,5 +26,18 @@ namespace SVGMoveStudio.Controllers
 
             return Ok(allObjects);
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetSingleObject(int id)
+        {
+            var singleObject = _repo.GetObjectById(id);
+
+            if (singleObject == null)
+            {
+                return NotFound("This object does not exist in the database");
+            }
+
+            return Ok(singleObject);
+        }
     }
 }

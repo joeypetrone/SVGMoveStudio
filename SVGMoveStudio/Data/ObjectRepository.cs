@@ -21,5 +21,20 @@ namespace SVGMoveStudio.Data
 
             return objects.ToList();
         }
+
+        public Models.Object GetObjectById(int objectId)
+        {
+            var db = new SqlConnection(_connectionString);
+
+            var query = @"SELECT *
+                          FROM Object
+                          WHERE ObjectId = @oid";
+
+            var parameters = new { oid = objectId };
+
+            var singleObject = db.QueryFirstOrDefault<Models.Object>(query, parameters);
+
+            return singleObject;
+        }
     }
 }
