@@ -9,43 +9,43 @@ using Dapper;
 
 namespace SVGMoveStudio.Data
 {
-    public class ObjectRepository
+    public class ElementRepository
     {
         const string _connectionString = "Server=localhost;Database=SVGMoveStudio;Trusted_Connection=true;";
-        
-        public List<Models.Object> GetAll()
+
+        public List<Element> GetAll()
         {
             var db = new SqlConnection(_connectionString);
 
-            var objects = db.Query<Models.Object>("SELECT * FROM Object");
+            var elements = db.Query<Element>("SELECT * FROM Element");
 
-            return objects.ToList();
+            return elements.ToList();
         }
 
-        public Models.Object GetObjectById(int objectId)
+        public Element GetElementById(int elementId)
         {
             var db = new SqlConnection(_connectionString);
 
             var query = @"SELECT *
-                          FROM Object
-                          WHERE ObjectId = @oid";
+                          FROM Element
+                          WHERE ElementId = @eid";
 
-            var parameters = new { oid = objectId };
+            var parameters = new { eid = elementId };
 
-            var singleObject = db.QueryFirstOrDefault<Models.Object>(query, parameters);
+            var singleElement = db.QueryFirstOrDefault<Element>(query, parameters);
 
-            return singleObject;
+            return singleElement;
         }
 
-        public void Remove(int objectId)
+        public void Remove(int elementId)
         {
             var db = new SqlConnection(_connectionString);
 
             var query = @"DELETE
-                          FROM Object
-                          WHERE ObjectId = @oid";
+                          FROM Element
+                          WHERE ElementId = @eid";
 
-            var parameters = new { oid = objectId };
+            var parameters = new { eid = elementId };
 
             db.Execute(query, parameters);
         }

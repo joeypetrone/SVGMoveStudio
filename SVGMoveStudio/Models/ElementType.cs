@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace SVGMoveStudio.Models
 {
-    public class ObjectType
+    public class ElementType
     {
-        public int ObjectTypeId { get; set; }
-        public string ObjectTypeName { get; set; }
+        public int ElementTypeId { get; set; }
+        public string ElementTypeName { get; set; }
     }
 }
