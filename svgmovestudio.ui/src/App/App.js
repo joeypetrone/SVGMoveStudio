@@ -1,16 +1,20 @@
-import './App.scss';
-import fbConnection from '../helpers/data/connection';
 import React from 'react';
 import {
   BrowserRouter,
   Route,
   Redirect,
   Switch
-} from 'react-router-dom'
+} from 'react-router-dom';
+
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import fbConnection from '../helpers/data/connection';
 
 import MyNavbar from '../components/shared/MyNavbar/MyNavbar';
 import Home from '../components/pages/Home/Home';
 import Documents from '../components/pages/Documents/Documents';
+
+import './App.scss';
 
 fbConnection();
 
@@ -24,6 +28,20 @@ const PrivateRoute = ({ component: Component, authed, ...rest }) => {
 class App extends React.Component {
   state = {
     authed: false
+  }
+
+  componentDidMount() {
+    this.removeListener = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ authed: true });
+      } else {
+        this.setState({ authed: false });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.removeListener();
   }
 
   render() {
