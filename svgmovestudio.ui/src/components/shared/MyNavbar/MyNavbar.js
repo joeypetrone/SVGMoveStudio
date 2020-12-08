@@ -53,7 +53,7 @@ class MyNavbar extends React.Component {
               </NavItem>
             </Nav>
           </Collapse>
-          <Button className="btn-dark">Login</Button>
+          <Button className="btn-dark">Sign In</Button>
         </Navbar>
       </div>
     )

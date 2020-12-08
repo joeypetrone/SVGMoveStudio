@@ -12,12 +12,12 @@ namespace SVGMoveStudio.Controllers
     public abstract class FirebaseEnabledController : ControllerBase
     {
         protected string UserId => User.FindFirst(x => x.Type == "user_id").Value;
-    }
+    } 
 
     [Route("api/users")]
     [ApiController]
     [Authorize]
-    public class UsersController : ControllerBase
+    public class UsersController : FirebaseEnabledController
     {
         UserRepository _repo;
 
