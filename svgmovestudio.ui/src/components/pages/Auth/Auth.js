@@ -12,11 +12,13 @@ class Auth extends React.Component {
     }
   }
 
-  signinClickEvent = (e) => {
+  signInClickEvent = (e) => {
     const { user } = this.state;
     e.preventDefault();
     authData.signInUser(user)
-      .then()
+      .then(
+        this.props.history.push('/home')
+      )
       .catch(error => {
         console.error('there was an error in the user\'s sign in', error)
       })
@@ -68,9 +70,10 @@ class Auth extends React.Component {
                   />
                 </Col>
               </FormGroup>
-              <Button className="btn-dark mb-3">Sign In</Button>
+              <Button className="btn-dark mb-3" onClick={this.signInClickEvent}>Sign In</Button>
             </Form>
-            <CardText className="d-inline">Try it Free! </CardText><NavLink className="navbar-links d-inline" tag={RRNavLink} to='/documents'>Register</NavLink> 
+            <CardText className="d-inline">Try it Free! </CardText>
+            <NavLink className="navbar-links d-inline" tag={RRNavLink} to='/documents'>Register</NavLink> 
           </CardBody>
         </Card>         
       </div>
