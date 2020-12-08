@@ -15,6 +15,7 @@ import Home from '../components/pages/Home/Home';
 import Documents from '../components/pages/Documents/Documents';
 
 import './App.scss';
+import authData from '../helpers/data/authData';
 
 fbConnection();
 
