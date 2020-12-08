@@ -33,7 +33,7 @@ const registerUser = (user) => {
   });
 };
 
-const loginUser = (user) => {
+const signInUser = (user) => {
   //sub out whatever auth method firebase provides that you want to use.
   return firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(cred => {
     //get token from firebase
@@ -43,7 +43,7 @@ const loginUser = (user) => {
   });
 };
 
-const logoutUser = () => {
+const signOutUser = () => {
   return firebase.auth().signOut();
 };
 
@@ -51,4 +51,4 @@ const getUid = () => {
   return firebase.auth().currentUser.uid;
 };
 
-export default {getUid, loginUser, logoutUser, registerUser};
+export default {getUid, signInUser, signOutUser, registerUser};

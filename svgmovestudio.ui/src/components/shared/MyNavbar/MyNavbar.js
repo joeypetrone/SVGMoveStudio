@@ -12,6 +12,7 @@ import {
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import './MyNavbar.scss';
+import authData from '../../../helpers/data/authData';
 
 class MyNavbar extends React.Component {
   static propTypes = {
@@ -28,9 +29,14 @@ class MyNavbar extends React.Component {
     console.log('In toggle', this.state.isOpen);
   }
 
+  signOutEvent = (e) => {
+    e.preventDefault();
+    authData.signOutUser()
+  }
 
   render() {
     const { isOpen } = this.state;
+    const { authed } = this.props;
 
     return(
       <div className="MyNavbar">
@@ -53,7 +59,10 @@ class MyNavbar extends React.Component {
               </NavItem>
             </Nav>
           </Collapse>
-          <Button className="btn-dark btn-sm">Sign In</Button>
+          { authed === true
+          ? <NavLink className="btn-dark btn-sm" onClick={this.signOutEvent}>Sign Out</NavLink>
+          : <NavLink className="btn-dark btn-sm" tag={RRNavLink} to='/sign-in'>Sign In</NavLink>
+          }
         </Navbar>
       </div>
     )
