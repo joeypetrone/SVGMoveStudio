@@ -7,8 +7,7 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
-  Button
+  NavLink
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import './MyNavbar.scss';
@@ -53,7 +52,7 @@ class MyNavbar extends React.Component {
               </NavItem>
             </Nav>
           </Collapse>
-          <Button className="btn-dark btn-sm">Sign In</Button>
+          <NavLink className="btn-dark btn-sm" tag={RRNavLink} to='/sign-in'>Sign In</NavLink>
         </Navbar>
       </div>
     )
