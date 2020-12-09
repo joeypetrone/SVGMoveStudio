@@ -22,7 +22,11 @@ const registerUser = (user) => {
   return firebase.auth().createUserWithEmailAndPassword(user.email, user.password).then(cred => {
     
     //get email from firebase
-    let userInfo = {email: cred.user.email};
+    let userInfo = {
+      username: user.userName,
+      email: cred.user.email,
+      firebaseUID: cred.firebaseUID
+    };
 
     //get token from firebase
     cred.user.getIdToken()

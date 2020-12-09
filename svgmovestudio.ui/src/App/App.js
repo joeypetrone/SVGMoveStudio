@@ -12,6 +12,7 @@ import fbConnection from '../helpers/data/connection';
 
 import MyNavbar from '../components/shared/MyNavbar/MyNavbar';
 import Home from '../components/pages/Home/Home';
+import Register from '../components/pages/Register/Register';
 import Documents from '../components/pages/Documents/Documents';
 import Auth from '../components/pages/Auth/Auth';
 
@@ -57,6 +58,7 @@ class App extends React.Component {
             <div className="container">
               <Switch>
                 <Route path='/home' component={Home} authed={authed}/>
+                <Route path='/sign-up' component={Register} authed={authed}/>
                 <Route path='/documents' component={Documents} authed={authed}/>
                 <Route path='/sign-in' component={Auth} authed={authed}/>
                 <Redirect from="*" to="home" />
