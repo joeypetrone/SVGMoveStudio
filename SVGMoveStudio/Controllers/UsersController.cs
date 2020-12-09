@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SVGMoveStudio.Data;
+using SVGMoveStudio.Models;
 
 namespace SVGMoveStudio.Controllers
 {
     public abstract class FirebaseEnabledController : ControllerBase
     {
-        protected string UserId => User.FindFirst(x => x.Type == "user_id").Value;
+        protected string FirebaseUserId => User.FindFirst(x => x.Type == "user_id").Value;
     } 
 
     [Route("api/users")]
@@ -45,6 +46,16 @@ namespace SVGMoveStudio.Controllers
             }
 
             return Ok(singleUser);
+        }
+
+        [HttpPost]
+        public IActionResult CreateUser(User user)
+        {
+            user.FirebaseUId = FirebaseUserId;
+
+            _repo.Add(user);
+
+            return Created($"/api/users/{user.UserId}", user);
         }
 
         [HttpDelete("{id}")]

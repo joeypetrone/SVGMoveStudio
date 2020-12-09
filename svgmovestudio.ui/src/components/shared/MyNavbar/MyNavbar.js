@@ -8,7 +8,6 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Button
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import './MyNavbar.scss';
@@ -24,9 +23,7 @@ class MyNavbar extends React.Component {
   }
 
   toggle = () => {
-    console.log('In toggle', this.state.isOpen);
     this.setState({ isOpen: !this.setState.isOpen });
-    console.log('In toggle', this.state.isOpen);
   }
 
   signOutEvent = (e) => {

@@ -13,6 +13,34 @@ namespace SVGMoveStudio.Data
     {
         const string _connectionString = "Server=localhost;Database=SVGMoveStudio;Trusted_Connection=true;";
 
+        public void Add(User userToAdd)
+        {
+            using var db = new SqlConnection(_connectionString);
+
+            var query = @"INSERT INTO [dbo].[User]
+                                   ([FirebaseUid]
+                                   ,[DateCreated]
+                                   ,[UserName]
+                                   ,[Email])
+                        Output inserted.UserId
+                        VALUES
+                               (@firebaseuid, 
+                                getdate(), 
+                                @username, 
+                                @email)";
+
+            var parameters = new
+            {
+                firebaseuid = userToAdd.FirebaseUId,
+                username = userToAdd.UserName,
+                email = userToAdd.Email
+            };
+
+            var newId = db.ExecuteScalar<int>(query, parameters);
+
+            userToAdd.UserId = newId;
+        }
+
         public List<User> GetAll()
         {
             var db = new SqlConnection(_connectionString);

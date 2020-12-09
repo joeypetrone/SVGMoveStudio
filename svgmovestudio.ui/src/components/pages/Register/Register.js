@@ -2,26 +2,33 @@ import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Col, Card, CardBody, CardTitle, CardText, NavLink } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
 import authData from '../../../helpers/data/authData';
-import './Auth.scss';
+import './Register.scss';
 
-class Auth extends React.Component {
+class Register extends React.Component {
   state = {
     user: {
+      username: '',
       email: '',
       password: ''
     }
   }
 
-  signInClickEvent = (e) => {
+  signUpClickEvent = (e) => {
     const { user } = this.state;
     e.preventDefault();
-    authData.signInUser(user)
+    authData.registerUser(user)
       .then(
         this.props.history.push('/home')
       )
       .catch(error => {
         console.error('there was an error in the user\'s sign in', error)
       })
+  }
+
+  usernameChange = e => {
+    const tempUser = { ...this.state.user };
+    tempUser.username = e.target.value;
+    this.setState({ user: tempUser })
   }
 
   emailChange = e => {
@@ -38,12 +45,26 @@ class Auth extends React.Component {
 
   render() {
     const { user } = this.state;
+
     return (
-      <div className="Auth">
+      <div className="Register">
         <Card className="w-50 mt-3 mx-auto">
           <CardBody>
-            <CardTitle className="pb-3" tag="h5">Welcome to SVG Move Studio!</CardTitle>
+            <CardTitle className="pb-3" tag="h5">Join SVG Move Studio for Free</CardTitle>
             <Form>
+            <FormGroup row>
+                <Label for="username" sm={3}></Label>
+                <Col sm={6}>
+                  <Input 
+                    type="username" 
+                    name="username" 
+                    id="username" 
+                    placeholder="Username"
+                    value={user.username}
+                    onChange={this.usernameChange} 
+                  />
+                </Col>
+              </FormGroup>
               <FormGroup row>
                 <Label for="exampleEmail" sm={3}></Label>
                 <Col sm={6}>
@@ -70,15 +91,15 @@ class Auth extends React.Component {
                   />
                 </Col>
               </FormGroup>
-              <Button className="btn-dark mb-3" onClick={this.signInClickEvent}>Sign In</Button>
+              <Button className="btn-dark mb-3" onClick={this.signUpClickEvent}>Sign Up</Button>
             </Form>
-            <CardText className="d-inline">Try it Free! </CardText>
-            <NavLink className="navbar-links d-inline" tag={RRNavLink} to='/sign-up'>Register</NavLink> 
+            <CardText className="d-inline">Already a member? </CardText>
+            <NavLink className="navbar-links d-inline" tag={RRNavLink} to='/sign-in'>Sign In</NavLink> 
           </CardBody>
-        </Card>         
+        </Card> 
       </div>
     )
   }
 }
 
-export default Auth;
+export default Register;
