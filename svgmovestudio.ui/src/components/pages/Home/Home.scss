@@ -1,3 +1,13 @@
 .Home {
   display: block;
+
+  .SignUpCol {
+    background-color: #EEF0F2;
+    padding-top: 3.0rem;
+
+    .SignUpInfo {
+      font-size: 0.9rem;
+      margin: 0px;
+    }
+  }
 }
