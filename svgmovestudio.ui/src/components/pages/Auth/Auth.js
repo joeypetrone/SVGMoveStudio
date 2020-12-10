@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, FormGroup, Label, Input, Col, Card, CardBody, CardTitle, CardText, NavLink } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Card, CardBody, CardTitle, CardText, NavLink, Row } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
 import authData from '../../../helpers/data/authData';
 import './Auth.scss';
@@ -43,10 +43,9 @@ class Auth extends React.Component {
         <Card className="w-50 mt-3 mx-auto">
           <CardBody>
             <CardTitle className="pb-3" tag="h5">Welcome to SVG Move Studio!</CardTitle>
-            <Form>
-              <FormGroup row>
-                <Label for="exampleEmail" sm={3}></Label>
-                <Col sm={6}>
+            <Row className="col-6 offset-3 w-100">
+              <Form>
+                <FormGroup>
                   <Input 
                     type="email" 
                     name="email" 
@@ -55,11 +54,8 @@ class Auth extends React.Component {
                     value={user.email}
                     onChange={this.emailChange} 
                   />
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label for="examplePassword" sm={3}></Label>
-                <Col sm={6}>
+                </FormGroup>
+                <FormGroup>
                   <Input 
                     type="password" 
                     name="password" 
@@ -68,10 +64,10 @@ class Auth extends React.Component {
                     value={user.password}
                     onChange={this.passwordChange}  
                   />
-                </Col>
-              </FormGroup>
-              <Button className="btn-dark mb-3" onClick={this.signInClickEvent}>Sign In</Button>
-            </Form>
+                </FormGroup>
+                <Button className="btn-dark mb-3 w-100" onClick={this.signInClickEvent}>Sign In</Button>
+              </Form>
+            </Row>
             <CardText className="d-inline">Try it Free! </CardText>
             <NavLink className="navbar-links d-inline" tag={RRNavLink} to='/sign-up'>Register</NavLink> 
           </CardBody>
