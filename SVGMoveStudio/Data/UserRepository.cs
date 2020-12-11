@@ -65,6 +65,21 @@ namespace SVGMoveStudio.Data
             return singleUser;
         }
 
+        public User GetUserByFirebaseUid(string firebaseUid)
+        {
+            var db = new SqlConnection(_connectionString);
+
+            var query = @"SELECT *
+                          FROM [User]
+                          WHERE FirebaseUid = firebaseUid";
+
+            var parameters = new { firebaseUid };
+
+            var singleUserByUid = db.QueryFirstOrDefault<User>(query, parameters);
+
+            return singleUserByUid;
+        }
+
         public void Remove(int userId)
         {
             var db = new SqlConnection(_connectionString);

@@ -60,7 +60,7 @@ class App extends React.Component {
               <Switch>
                 <Route path='/home' component={Home} authed={authed}/>
                 <Route path='/sign-up' component={Register} authed={authed}/>
-                <Route path='/editor' component={SVGEditor} authed={authed}/>
+                <Route path='/editor' render={(props) => <SVGEditor authed={authed} {...props} />} />
                 <Route path='/documents' component={Documents} authed={authed}/>
                 <Route path='/sign-in' component={Auth} authed={authed}/>
                 <Redirect from="*" to="home" />
