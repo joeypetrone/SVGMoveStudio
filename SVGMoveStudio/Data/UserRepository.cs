@@ -71,7 +71,7 @@ namespace SVGMoveStudio.Data
 
             var query = @"SELECT *
                           FROM [User]
-                          WHERE FirebaseUid = firebaseUid";
+                          WHERE FirebaseUid = @firebaseUid";
 
             var parameters = new { firebaseUid };
 

@@ -11,7 +11,10 @@ class SVGEditor extends React.Component {
   }
 
   state = {
-    user: {}
+    user: {},
+    userSVGs: {},
+    userElements: {},
+    defaultElements: {}    
   }
 
   componentDidMount() {
