@@ -17,6 +17,7 @@ import Documents from '../components/pages/Documents/Documents';
 import Auth from '../components/pages/Auth/Auth';
 
 import './App.scss';
+import SVGEditor from '../components/pages/SVGEditor/SVGEditor';
 
 
 fbConnection();
@@ -59,6 +60,7 @@ class App extends React.Component {
               <Switch>
                 <Route path='/home' component={Home} authed={authed}/>
                 <Route path='/sign-up' component={Register} authed={authed}/>
+                <Route path='/editor' component={SVGEditor} authed={authed}/>
                 <Route path='/documents' component={Documents} authed={authed}/>
                 <Route path='/sign-in' component={Auth} authed={authed}/>
                 <Redirect from="*" to="home" />
