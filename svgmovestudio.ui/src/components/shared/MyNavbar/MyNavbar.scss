@@ -1,9 +1,11 @@
+@import '../../../styles/variables';
+
 .MyNavbar {
   display: block;
   border-bottom: solid 0.05rem lightgray;
 
   .nav-brand {
-    font-family: 'ABeeZee', sans-serif;
+    font-family: $brandFontFamily; 
   }
 
   .nav-center {
