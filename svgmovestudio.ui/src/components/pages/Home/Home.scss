@@ -1,8 +1,10 @@
+@import '../../../styles/variables';
+
 .Home {
   display: block;
 
   .SignUpCol {
-    background-color: #EEF0F2;
+    background-color: $componentColorGrey;
     padding-top: 3.0rem;
 
     .SignUpInfo {
