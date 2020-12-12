@@ -32,11 +32,16 @@ class SVGEditor extends React.Component {
     const { user, defaultElements } = this.state;
 
     const buildDefaultElements = defaultElements.map(element => {
-      if (element.elementName === 'Circle') {
+      if (element.elementTypeId === 2) {
         return (<svg width="100" height="100">
                   <circle cx={element.x_CoordinateStart} cy={element.y_CoordinateStart} r={element.x_Radius} fill="red" />
                 </svg>) 
       }
+      else if (element.elementTypeId === 1) {
+        return (<svg width="100" height="100">
+                    <rect x={element.x_CoordinateStart} y={element.y_CoordinateStart} width={element.width} height={element.height} />
+                </svg>) 
+      } 
       else {
         return <span>{element.elementName}</span>
       }
@@ -47,13 +52,13 @@ class SVGEditor extends React.Component {
         <Container className="editor-window mt-3 rounded">
           Editor
           <hr/>
-          <h3>{user.firstName + ' ' + user.lastName}</h3>
-          <CardImg className="rounded w-25" src={user.photoUrl} alt="user"/>
         </Container>
         <Container className="editor-toolbox my-3 rounded">
           Toolbox
           <hr/>
-          {buildDefaultElements}
+          <div className="d-flew row justify-content-between p-3">
+            {buildDefaultElements}
+          </div>
         </Container>
       </div>
     )
