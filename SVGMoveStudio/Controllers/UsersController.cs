@@ -17,7 +17,6 @@ namespace SVGMoveStudio.Controllers
 
     [Route("api/users")]
     [ApiController]
-    [Authorize]
     public class UsersController : FirebaseEnabledController
     {
         UserRepository _repo;
@@ -46,6 +45,21 @@ namespace SVGMoveStudio.Controllers
             }
 
             return Ok(singleUser);
+        }
+
+        [HttpGet("firebaseUid")]
+        public IActionResult GetUserByFirebaseUid()
+        {
+            var uid = FirebaseUserId;
+
+            var singleUserByUid = _repo.GetUserByFirebaseUid(uid);
+
+            if (singleUserByUid == null)
+            {
+                return NotFound("User with that id not found in the database.");
+            }
+
+            return Ok(singleUserByUid);
         }
 
         [HttpPost]
