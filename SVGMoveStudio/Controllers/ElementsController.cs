@@ -40,6 +40,14 @@ namespace SVGMoveStudio.Controllers
             return Ok(singleElement);
         }
 
+        [HttpGet("default")]
+        public IActionResult GetDefaultElements()
+        {
+            var defaultElements = _repo.GetDefault();
+
+            return Ok(defaultElements);
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteElementById(int id)
         {

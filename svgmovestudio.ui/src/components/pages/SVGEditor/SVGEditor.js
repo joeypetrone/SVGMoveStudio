@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import './SVGEditor.scss';
 import userData from '../../../helpers/data/userData';
+import elementData from '../../../helpers/data/elementData';
 
 class SVGEditor extends React.Component {
   static  propTypes = {
@@ -22,6 +23,9 @@ class SVGEditor extends React.Component {
       userData.getUserByFirebasaeUid()
           .then(user => (this.setState({ user })) );
     }
+
+    elementData.getDefaultElements()
+      .then(elements => this.setState({ defaultElements: elements }) )
   }
 
   render() {

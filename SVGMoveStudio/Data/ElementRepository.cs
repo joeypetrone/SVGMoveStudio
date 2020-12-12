@@ -22,6 +22,19 @@ namespace SVGMoveStudio.Data
             return elements.ToList();
         }
 
+        public List<Element> GetDefault()
+        {
+            var db = new SqlConnection(_connectionString);
+
+            var query = @"SELECT *
+                          FROM Element
+                          WHERE isDefault = 1";
+
+            var defaultElements = db.Query<Element>(query);
+
+            return defaultElements.ToList();
+        }
+
         public Element GetElementById(int elementId)
         {
             var db = new SqlConnection(_connectionString);
