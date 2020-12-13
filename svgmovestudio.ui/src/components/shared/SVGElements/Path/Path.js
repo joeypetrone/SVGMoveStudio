@@ -1,20 +1,20 @@
 import React from 'react';
 import elementShape from '../../../../helpers/propz/elementShape';
-import './Polygon.scss';
+import './Path.scss';
 
-class Polygon extends React.Component {
+class Path extends React.Component {
   static propTypes = {
     element: elementShape.elementShape 
   }
 
   state = {
-    polygonXml: ''
+    pathXml: ''
   }
 
   componentDidMount() {
     const { element } = this.props;
     this.setState({
-      polygonXml: `<polygon points="${element.points}" fill="${element.fill}" />`
+      pathXml: `<path d="${element.pathShape}" fill="${element.fill}" />`
     })
   }
 
@@ -22,9 +22,9 @@ class Polygon extends React.Component {
     const { element } = this.props;
 
     return (
-      <polygon points={element.points} fill={element.fill}>{element.elementName}</polygon>
+      <path d={element.pathShape} fill={element.fill}>{element.elementName}</path>
     )
   }
 }
 
-export default Polygon;
+export default Path;

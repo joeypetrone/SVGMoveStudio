@@ -7,6 +7,17 @@ class Circle extends React.Component {
     element: elementShape.elementShape 
   }
 
+  state = {
+    circleXml: ''
+  }
+
+  componentDidMount() {
+    const { element } = this.props;
+    this.setState({
+      circleXml: `<circle cx="${element.x_CoordinateStart}" cy="${element.y_CoordinateStart}" r="${element.x_Radius}" fill="${element.fill}" />`
+    })
+  }
+
   render() {
     const { element } = this.props;
 

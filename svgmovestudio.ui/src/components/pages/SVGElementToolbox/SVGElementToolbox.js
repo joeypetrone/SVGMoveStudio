@@ -5,6 +5,8 @@ import Circle from '../../shared/SVGElements/Circle/Circle';
 import Ellipse from '../../shared/SVGElements/Ellipse/Ellipse';
 import Polygon from '../../shared/SVGElements/Polygon/Polygon';
 import Line from '../../shared/SVGElements/Line/Line';
+import Polyline from '../../shared/SVGElements/Polyline/Polyline';
+import Path from '../../shared/SVGElements/Path/Path';
 import './SVGElementToolbox.scss';
 
 class SVGElementToolbox extends React.Component {
@@ -24,25 +26,19 @@ class SVGElementToolbox extends React.Component {
         case 3:
           return <Ellipse element={element}/>;
         case 4:
-          const polygon = <Polygon element={element}/>
-          console.log('polygon in elementChoice', polygon)
           return <Polygon element={element}/>;
         case 5:
           return <Line element={element}/>;
         case 6:
-          return <polyline points={element.points} stroke={element.stroke} stroke-width={element.strokeWidth} fill={element.fill}>{element.elementName}</polyline>;
+          return <Polyline element={element}/>
         case 7:
-          return <path d={element.pathShape} fill={element.fill}>{element.elementName}</path>;                                    
+          return <Path element={element}/>;                                    
         default:
           return element.elementName;
       }
     }
 
     const buildElements = elements.map(element => {
-      const SVGData = `<svg width="100" height="100" viewBox="0 0 100 100">${elementChoice(element)}</svg>`
-
-      console.log(SVGData);
-
       return (
         <Card className="px-3 pb-3 pt-0">
           <small className="m-1 mb-2 pb-1 border-bottom">{element.elementName}</small>

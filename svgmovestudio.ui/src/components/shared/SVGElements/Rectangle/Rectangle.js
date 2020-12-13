@@ -8,11 +8,18 @@ class Rectangle extends React.Component {
   }
 
   state = {
-    RectangleData: ''
+    rectangleXml: ''
+  }
+
+  componentDidMount() {
+    const { element } = this.props;
+    this.setState({
+      rectangleXml: `<rect x="${element.x_CoordinateStart}" width="${element.width}" height="${element.height}" fill="${element.fill}" />`
+    })
   }
 
   render() {
-    const { element } = this.props;
+    const { element } = this.props; 
 
     return (
       <rect x={element.x_CoordinateStart} width={element.width} height={element.height} fill={element.fill}>{element.elementName}</rect>
