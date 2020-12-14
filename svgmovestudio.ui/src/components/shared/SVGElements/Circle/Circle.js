@@ -1,6 +1,5 @@
 import React from 'react';
 import elementShape from '../../../../helpers/propz/elementShape';
-import './Circle.scss';
 
 class Circle extends React.Component {
   static propTypes = {

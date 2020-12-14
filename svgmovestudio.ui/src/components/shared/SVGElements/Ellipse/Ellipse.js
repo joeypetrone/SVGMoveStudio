@@ -1,6 +1,5 @@
 import React from 'react';
 import elementShape from '../../../../helpers/propz/elementShape';
-import './Ellipse.scss';
 
 class Ellipse extends React.Component {
   static propTypes = {

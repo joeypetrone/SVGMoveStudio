@@ -1,6 +1,5 @@
 import React from 'react';
 import elementShape from '../../../../helpers/propz/elementShape';
-import './Line.scss';
 
 class Line extends React.Component {
   static propTypes = {

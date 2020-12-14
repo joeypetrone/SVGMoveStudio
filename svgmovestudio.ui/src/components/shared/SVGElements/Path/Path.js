@@ -1,6 +1,5 @@
 import React from 'react';
 import elementShape from '../../../../helpers/propz/elementShape';
-import './Path.scss';
 
 class Path extends React.Component {
   static propTypes = {

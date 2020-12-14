@@ -1,6 +1,5 @@
 import React from 'react';
 import elementShape from '../../../../helpers/propz/elementShape';
-import './Polygon.scss';
 
 class Polygon extends React.Component {
   static propTypes = {

@@ -1,6 +1,5 @@
 import React from 'react';
 import elementShape from '../../../../helpers/propz/elementShape';
-import './Polyline.scss';
 
 class Polyline extends React.Component {
   static propTypes = {

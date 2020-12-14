@@ -1,6 +1,5 @@
 import React from 'react';
 import elementShape from '../../../../helpers/propz/elementShape';
-import './Rectangle.scss';
 
 class Rectangle extends React.Component {
   static propTypes = {
