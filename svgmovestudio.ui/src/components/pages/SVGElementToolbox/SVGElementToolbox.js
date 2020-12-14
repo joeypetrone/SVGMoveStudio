@@ -1,5 +1,12 @@
 import React from 'react';
 import { Card, Button } from 'reactstrap';
+import Rectangle from '../../shared/SVGElements/Rectangle/Rectangle';
+import Circle from '../../shared/SVGElements/Circle/Circle';
+import Ellipse from '../../shared/SVGElements/Ellipse/Ellipse';
+import Polygon from '../../shared/SVGElements/Polygon/Polygon';
+import Line from '../../shared/SVGElements/Line/Line';
+import Polyline from '../../shared/SVGElements/Polyline/Polyline';
+import Path from '../../shared/SVGElements/Path/Path';
 import './SVGElementToolbox.scss';
 
 class SVGElementToolbox extends React.Component {
@@ -13,19 +20,19 @@ class SVGElementToolbox extends React.Component {
     const elementChoice = (element) => {
       switch(element.elementTypeId) {
         case 1:
-          return <rect x={element.x_CoordinateStart} width={element.width} height={element.height} fill={element.fill}>{element.elementName}</rect>;
-        case 2:
-          return <circle cx={element.x_CoordinateStart} cy={element.y_CoordinateStart} r={element.x_Radius} fill={element.fill}>{element.elementName}</circle>;
+          return <Rectangle element={element}/>;
+        case 2: 
+          return <Circle element={element}/>;
         case 3:
-          return <ellipse cx={element.x_CoordinateStart} cy={element.y_CoordinateStart} rx={element.x_Radius} ry={element.y_Radius} fill={element.fill}>{element.elementName}</ellipse>;
+          return <Ellipse element={element}/>;
         case 4:
-          return <polygon points={element.points} fill={element.fill}>{element.elementName}</polygon>;
+          return <Polygon element={element}/>;
         case 5:
-          return <line x1={element.x_CoordinateStart} y1={element.y_CoordinateStart} x2={element.x_CoordinateEnd} y2={element.y_CoordinateEnd} stroke={element.stroke} stroke-width={element.strokeWidth}>{element.elementName}</line>;
+          return <Line element={element}/>;
         case 6:
-          return <polyline points={element.points} stroke={element.stroke} stroke-width={element.strokeWidth} fill={element.fill}>{element.elementName}</polyline>;
+          return <Polyline element={element}/>
         case 7:
-          return <path d={element.pathShape} fill={element.fill}>{element.elementName}</path>;                                    
+          return <Path element={element}/>;                                    
         default:
           return element.elementName;
       }
