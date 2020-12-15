@@ -17,7 +17,8 @@ class SVGEditor extends React.Component {
     user: {},
     userSVGs: [],
     userElements: [],
-    defaultElements: []    
+    defaultElements: [],
+    viewboxElements: []    
   }
 
   componentDidMount() {
@@ -30,20 +31,28 @@ class SVGEditor extends React.Component {
       .then(elements => this.setState({ defaultElements: elements }) )
   }
 
+  addElementToViewbox = (element) => {
+    const { viewboxElements } = this.state;
+    const joined = viewboxElements.concat(<circle cx="50" cy="50" r="50" fill="Gold">Circle</circle>);
+    console.log('element' , element.elementName);
+    console.log('joined', joined);
+    this.setState({ viewboxElements: joined });
+  }
+
   render() {
-    const { defaultElements } = this.state;
+    const { defaultElements, viewboxElements } = this.state;
 
     return (
       <div className="SVGEditor">
         <Container className="editor-window mt-3 rounded">
           Editor
           <hr/>
-          <SVGEditorViewbox />
+          <SVGEditorViewbox viewboxElements={viewboxElements}/>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">
           Toolbox
           <hr/>
-          <SVGElementToolbox elements={defaultElements}/>
+          <SVGElementToolbox elements={defaultElements} addElementToViewbox={this.addElementToViewbox}/>
         </Container>
       </div>
     )
