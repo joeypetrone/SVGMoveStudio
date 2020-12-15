@@ -6,6 +6,7 @@ import './SVGEditor.scss';
 import userData from '../../../helpers/data/userData';
 import elementData from '../../../helpers/data/elementData';
 import SVGElementToolbox from '../SVGElementToolbox/SVGElementToolbox';
+import SVGEditorViewbox from '../../shared/SVGEditorViewbox/SVGEditorViewbox';
 
 class SVGEditor extends React.Component {
   static  propTypes = {
@@ -37,6 +38,7 @@ class SVGEditor extends React.Component {
         <Container className="editor-window mt-3 rounded">
           Editor
           <hr/>
+          <SVGEditorViewbox />
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">
           Toolbox
