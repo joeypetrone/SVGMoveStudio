@@ -13,7 +13,7 @@ class Rectangle extends React.Component {
   componentDidMount() {
     const { element } = this.props;
     this.setState({
-      rectangleXml: `<rect x="${element.x_CoordinateStart}" width="${element.width}" height="${element.height}" fill="${element.fill}" />`
+      rectangleXml: `<rect x="${element.x_CoordinateStart}" x="${element.y_CoordinateStart}" width="${element.width}" height="${element.height}" fill="${element.fill}" />`
     })
   }
 
@@ -21,7 +21,7 @@ class Rectangle extends React.Component {
     const { element } = this.props; 
 
     return (
-      <rect x={element.x_CoordinateStart} width={element.width} height={element.height} fill={element.fill}>{element.elementName}</rect>
+      <rect x={element.x_CoordinateStart} y={element.y_CoordinateStart} width={element.width} height={element.height} fill={element.fill}>{element.elementName}</rect>
     )
   }
 }

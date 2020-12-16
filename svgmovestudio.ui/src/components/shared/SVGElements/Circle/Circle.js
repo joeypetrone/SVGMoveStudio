@@ -3,11 +3,7 @@ import elementShape from '../../../../helpers/propz/elementShape';
 
 class Circle extends React.Component {
   static propTypes = {
-    element: elementShape.elementShape 
-  }
-
-  state = {
-    circleXml: ''
+    element: elementShape.elementShape, 
   }
 
   componentDidMount() {
