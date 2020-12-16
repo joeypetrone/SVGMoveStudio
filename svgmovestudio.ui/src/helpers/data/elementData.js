@@ -7,4 +7,10 @@ const getDefaultElements = () => new Promise((resolve, reject) => {
     .catch(reject)
 })
 
-export default { getDefaultElements };
+const getElementByElementId = (elementId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/elements/${elementId}`)
+    .then(response => resolve(response.data))
+    .catch(reject)
+})
+
+export default { getDefaultElements, getElementByElementId };
