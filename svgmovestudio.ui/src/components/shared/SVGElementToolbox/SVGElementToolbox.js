@@ -7,7 +7,7 @@ class SVGElementToolbox extends React.Component {
   static propTypes = {
     defaultElements: [],
     addElementToViewbox: PropTypes.func.isRequired,
-    elementChoice: PropTypes.func.isRequired
+    elementChoice: PropTypes.func.isRequired,
   }
 
   state = {

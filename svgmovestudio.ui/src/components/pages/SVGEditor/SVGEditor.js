@@ -27,7 +27,8 @@ class SVGEditor extends React.Component {
     userSVGs: [],
     userElements: [],
     defaultElements: [],
-    viewboxAddElementIds: []    
+    viewboxAddElementIds: [],
+    editorObject: {}    
   }
 
   componentDidMount() {
@@ -44,6 +45,16 @@ class SVGEditor extends React.Component {
     const { viewboxAddElementIds } = this.state;
     const joined = viewboxAddElementIds.concat(elementId)
     this.setState({ viewboxAddElementIds: joined });
+  }
+
+  createMoveElementObject = (x_position, y_position) => {
+    this.setState({
+      editorObject: {
+        x_position,
+        y_position
+      }
+    })
+
   }
 
   elementChoice = (element) => {
@@ -68,7 +79,7 @@ class SVGEditor extends React.Component {
   }
 
   render() {
-    const { defaultElements, viewboxAddElementIds } = this.state;
+    const { defaultElements, viewboxAddElementIds, editorObject } = this.state;
 
     return (
       <div className="SVGEditor">
@@ -76,8 +87,8 @@ class SVGEditor extends React.Component {
           Editor
           <hr/>
           <Row className="mx-0">
-            <SVGEditorViewbox defaultElements={defaultElements} viewboxAddElementIds={viewboxAddElementIds} elementChoice={this.elementChoice}/>
-            <SVGEditorSidePanel />
+            <SVGEditorViewbox defaultElements={defaultElements} viewboxAddElementIds={viewboxAddElementIds} elementChoice={this.elementChoice} editorObject={editorObject}/>
+            <SVGEditorSidePanel createMoveElementObject={this.createMoveElementObject} />
           </Row>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">
