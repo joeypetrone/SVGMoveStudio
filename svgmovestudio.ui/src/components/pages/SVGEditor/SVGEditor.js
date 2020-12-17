@@ -1,11 +1,11 @@
 import React from 'react';
-import { Container } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import './SVGEditor.scss';
 import userData from '../../../helpers/data/userData';
 import elementData from '../../../helpers/data/elementData';
-import SVGElementToolbox from '../SVGElementToolbox/SVGElementToolbox';
+import SVGElementToolbox from '../../shared/SVGElementToolbox/SVGElementToolbox';
 import SVGEditorViewbox from '../../shared/SVGEditorViewbox/SVGEditorViewbox';
 
 import Rectangle from '../../shared/SVGElements/Rectangle/Rectangle';
@@ -15,6 +15,7 @@ import Polygon from '../../shared/SVGElements/Polygon/Polygon';
 import Line from '../../shared/SVGElements/Line/Line';
 import Polyline from '../../shared/SVGElements/Polyline/Polyline';
 import Path from '../../shared/SVGElements/Path/Path';
+import SVGEditorSidePanel from '../../shared/SVGEditorSidePanel/SVGEditorSidePanel';
 
 class SVGEditor extends React.Component {
   static  propTypes = {
@@ -26,7 +27,8 @@ class SVGEditor extends React.Component {
     userSVGs: [],
     userElements: [],
     defaultElements: [],
-    viewboxAddElementIds: []    
+    viewboxAddElementIds: [],
+    editorObject: {}    
   }
 
   componentDidMount() {
@@ -43,6 +45,16 @@ class SVGEditor extends React.Component {
     const { viewboxAddElementIds } = this.state;
     const joined = viewboxAddElementIds.concat(elementId)
     this.setState({ viewboxAddElementIds: joined });
+  }
+
+  createMoveElementObject = (x_position, y_position) => {
+    this.setState({
+      editorObject: {
+        x_position,
+        y_position
+      }
+    })
+
   }
 
   elementChoice = (element) => {
@@ -67,14 +79,17 @@ class SVGEditor extends React.Component {
   }
 
   render() {
-    const { defaultElements, viewboxAddElementIds } = this.state;
+    const { defaultElements, viewboxAddElementIds, editorObject } = this.state;
 
     return (
       <div className="SVGEditor">
         <Container className="editor-window mt-3 rounded">
           Editor
           <hr/>
-          <SVGEditorViewbox defaultElements={defaultElements} viewboxAddElementIds={viewboxAddElementIds} elementChoice={this.elementChoice}/>
+          <Row className="mx-0">
+            <SVGEditorViewbox defaultElements={defaultElements} viewboxAddElementIds={viewboxAddElementIds} elementChoice={this.elementChoice} editorObject={editorObject}/>
+            <SVGEditorSidePanel createMoveElementObject={this.createMoveElementObject} />
+          </Row>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">
           Toolbox

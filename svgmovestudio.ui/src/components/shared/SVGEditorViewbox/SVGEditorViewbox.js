@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import './SVGEditorViewbox.scss';
 
@@ -7,7 +6,8 @@ class SVGEditorViewbox extends React.Component {
   static propTypes = {
     defaultElements: [],
     viewboxAddElementIds: [],
-    elementChoice: PropTypes.func.isRequired
+    elementChoice: PropTypes.func.isRequired,
+    editorObject: PropTypes.object.isRequired
   }
 
   state = {
@@ -17,7 +17,7 @@ class SVGEditorViewbox extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { viewboxAddElementIds, defaultElements } = this.props;
+    const { viewboxAddElementIds, defaultElements, editorObject } = this.props;
     const { allElementsInSVG } = this.state;
     const lastElement = viewboxAddElementIds[viewboxAddElementIds.length - 1];
     const elementToAdd = Object.assign({}, defaultElements[lastElement - 1])
@@ -64,21 +64,17 @@ class SVGEditorViewbox extends React.Component {
       })
       this.setState({allElementsInSVG: updatedElementArray, totalElements: this.state.totalElements + 1})      
     }
+
+    if (prevProps.editorObject !== editorObject) {
+      const { editorObject } = this.props;
+      this.moveElement(0, editorObject.x_position, editorObject.y_position)
+    }
   }
 
-  moveCircle = (e) => {
+  moveElement = (index, x_position, y_position) => {
     const { allElementsInSVG } = this.state;
-    allElementsInSVG[0].x_CoordinateStart = 400;
-    allElementsInSVG[0].y_CoordinateStart = 250;
-    allElementsInSVG[0].x_Radius = 100;
-    this.forceUpdate()
-  }
-
-  moveEllipse = (e) => {
-    const { allElementsInSVG } = this.state;
-    allElementsInSVG[1].x_CoordinateStart = 400;
-    allElementsInSVG[1].y_CoordinateStart = 250;
-    allElementsInSVG[1].x_Radius = 100;
+    allElementsInSVG[index].x_CoordinateStart = x_position;
+    allElementsInSVG[index].y_CoordinateStart = y_position;
     this.forceUpdate()
   }
 
@@ -97,9 +93,6 @@ class SVGEditorViewbox extends React.Component {
         <svg width="800" height="500" viewBox="0 0 800 500">
           {buildViewboxElements()}
         </svg>
-        <Button className="btn-light" onClick={this.moveCircle} >Circle Position Middle</Button>
-        <Button className="btn-light" onClick={this.moveEllipse} >Ellipse Position Middle</Button>
-
       </div>
     )
   }
