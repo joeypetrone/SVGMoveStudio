@@ -97,9 +97,6 @@ class SVGEditorViewbox extends React.Component {
         <svg width="800" height="500" viewBox="0 0 800 500">
           {buildViewboxElements()}
         </svg>
-        <Button className="btn-light" onClick={this.moveCircle} >Circle Position Middle</Button>
-        <Button className="btn-light" onClick={this.moveEllipse} >Ellipse Position Middle</Button>
-
       </div>
     )
   }
