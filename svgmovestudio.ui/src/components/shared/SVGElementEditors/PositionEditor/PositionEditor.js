@@ -6,13 +6,21 @@ import './PositionEditor.scss';
 class PositionEditor extends React.Component {
   static propTypes = {
     updateElementPosition: PropTypes.func.isRequired,
-    selectedElement: PropTypes.object.isRequired 
+    selectedElement: PropTypes.object.isRequired
   }
 
   state = {
-    editorControl: {
-      x_position: 0,
-      y_position: 0
+    x_position: 0,
+    y_position: 0
+  }
+
+  componentDidMount() {
+    const { selectedElement } = this.props;
+
+    if (selectedElement) {
+      const x_position = selectedElement.x_Translate;
+      const y_position = selectedElement.y_Translate;
+      this.setState({x_position, y_position})
     }
   }
 
@@ -21,37 +29,30 @@ class PositionEditor extends React.Component {
 
     if (prevProps.selectedElement !== selectedElement) {
       if (selectedElement) {
-        const selectedElementPosition = {
-          x_position: selectedElement.x_CoordinateStart,
-          y_position: selectedElement.y_CoordinateStart
-        }
-  
-        this.setState({editorControl: selectedElementPosition})
+        const x_position = selectedElement.x_Translate;
+        const y_position = selectedElement.y_Translate;
+        this.setState({x_position, y_position})
       }
     }
   }
 
   moveElementClickEvent = (e) => {
     const { updateElementPosition } = this.props;
-    const { editorControl } = this.state;
+    const { x_position, y_position } = this.state;
     e.preventDefault();
-    updateElementPosition(editorControl.x_position, editorControl.y_position);
+    updateElementPosition(x_position, y_position);
   }
 
   x_positionChange = e => {
-    const tempEditorControl = { ...this.state.editorControl };
-    tempEditorControl.x_position = e.target.value;
-    this.setState({ editorControl: tempEditorControl })
+    this.setState({ x_position: e.target.value })
   }
 
   y_positionChange = e => {
-    const tempEditorControl = { ...this.state.editorControl };
-    tempEditorControl.y_position = e.target.value;
-    this.setState({ editorControl: tempEditorControl })
+    this.setState({ y_position: e.target.value })
   }
 
   render() {
-    const { editorControl } = this.state;
+    const { x_position, y_position } = this.state;
 
     return (
       <div className="PositionEditor">
@@ -66,7 +67,7 @@ class PositionEditor extends React.Component {
                   type="number" 
                   name="x_position" 
                   id="x_position" 
-                  value={editorControl.x_position}
+                  value={x_position}
                   onChange={this.x_positionChange} 
                 />
                 <InputGroupAddon addonType="append">
@@ -83,7 +84,7 @@ class PositionEditor extends React.Component {
                   type="number" 
                   name="y_position" 
                   id="y_position" 
-                  value={editorControl.y_position}
+                  value={y_position}
                   onChange={this.y_positionChange} 
                 />
                 <InputGroupAddon addonType="append">

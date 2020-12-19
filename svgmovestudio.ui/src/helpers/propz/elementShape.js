@@ -24,6 +24,12 @@ const elementShape = PropTypes.shape({
   points: PropTypes.string,
   pathShape: PropTypes.string,
   pathLength: PropTypes.number,
+  x_Translate: PropTypes.number,
+  y_Translate: PropTypes.number,
+  rotate: PropTypes.number,
+  scale: PropTypes.number,
+  x_Skew: PropTypes.number,
+  y_Skew: PropTypes.number,
   isDefault: PropTypes.bool.isRequired
 });
 

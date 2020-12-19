@@ -29,7 +29,12 @@ namespace SVGMoveStudio.Models
         public string Points { get; set; }
         public string PathShape { get; set; }
         public int PathLength { get; set; }
+        public int X_Translate { get; set; }
+        public int Y_Translate { get; set; }
+        public int Rotate { get; set; }
+        public int Scale { get; set; }
+        public int X_Skew { get; set; }
+        public int Y_Skew { get; set; }
         public bool isDefault { get; set; }
-
     }
 }

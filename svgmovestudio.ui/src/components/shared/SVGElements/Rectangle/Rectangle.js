@@ -20,8 +20,20 @@ class Rectangle extends React.Component {
   render() {
     const { element } = this.props; 
 
+    const transformEditors = () => {
+      return `translate(${element.x_Translate}, ${element.y_Translate})`
+    }
+
     return (
-      <rect x={element.x_CoordinateStart} y={element.y_CoordinateStart} width={element.width} height={element.height} fill={element.fill} opacity={element.opacity}>{element.elementName}</rect>
+      <rect 
+        x={element.x_CoordinateStart} 
+        y={element.y_CoordinateStart} 
+        width={element.width} 
+        height={element.height} 
+        fill={element.fill} 
+        opacity={element.opacity} 
+        transform={transformEditors()}
+      />
     )
   }
 }

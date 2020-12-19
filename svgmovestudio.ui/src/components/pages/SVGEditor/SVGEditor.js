@@ -70,8 +70,8 @@ class SVGEditor extends React.Component {
 
   updateElementPosition = (x_position, y_position) => {
     const { selectedElement } = this.state;
-    selectedElement.x_CoordinateStart = x_position;
-    selectedElement.y_CoordinateStart = y_position;
+    selectedElement.x_Translate = x_position;
+    selectedElement.y_Translate = y_position;
     this.forceUpdate()
   }
 

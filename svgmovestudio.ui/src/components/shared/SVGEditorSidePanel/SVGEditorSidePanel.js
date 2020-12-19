@@ -21,11 +21,11 @@ class SVGEditorSidePanel extends React.Component {
     const showSelectedEditor = () => {
       switch(selectedEditor) {
         case 'position':
-          return <PositionEditor selectedElement={selectedElement} updateElementPosition={updateElementPosition}/>
+          return <PositionEditor selectedElement={selectedElement} selectedEditor={selectedEditor} updateElementPosition={updateElementPosition}/>
         case 'scale':
           return <ScaleEditor />
         case 'color':
-          return <ColorEditor selectedElement={selectedElement} updateElementColor={updateElementColor}/>
+          return <ColorEditor selectedElement={selectedElement} selectedEditor={selectedEditor} updateElementColor={updateElementColor}/>
         case 'stretch':
           return <StretchEditor />          
         default:

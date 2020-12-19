@@ -20,8 +20,19 @@ class Polyline extends React.Component {
   render() {
     const { element } = this.props;
 
+    const transformEditors = () => {
+      return `translate(${element.x_Translate}, ${element.y_Translate})`
+    }
+
     return (
-      <polyline points={element.points} stroke={element.stroke} stroke-width={element.strokeWidth} fill={element.fill}>{element.elementName}</polyline>
+      <polyline 
+        points={element.points} 
+        stroke={element.stroke} 
+        stroke-width={element.strokeWidth} 
+        fill={element.fill} 
+        opacity={element.opacity}
+        transform={transformEditors()}
+      />
     )
   }
 }

@@ -20,8 +20,20 @@ class Line extends React.Component {
   render() {
     const { element } = this.props;
 
+    const transformEditors = () => {
+      return `translate(${element.x_Translate}, ${element.y_Translate})`
+    }
+
     return (
-      <line x1={element.x_CoordinateStart} y1={element.y_CoordinateStart} x2={element.x_CoordinateEnd} y2={element.y_CoordinateEnd} stroke={element.stroke} stroke-width={element.strokeWidth}>{element.elementName}</line>
+      <line 
+        x1={element.x_CoordinateStart} 
+        y1={element.y_CoordinateStart} 
+        x2={element.x_CoordinateEnd} 
+        y2={element.y_CoordinateEnd} 
+        stroke={element.stroke} 
+        stroke-width={element.strokeWidth}
+        transform={transformEditors()} 
+      />
     )
   }
 }

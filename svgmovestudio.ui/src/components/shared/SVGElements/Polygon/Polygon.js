@@ -17,11 +17,21 @@ class Polygon extends React.Component {
     })
   }
 
+
+
   render() {
     const { element } = this.props;
 
+    const transformEditors = () => {
+      return `translate(${element.x_Translate}, ${element.y_Translate})`
+    }
+
     return (
-      <polygon points={element.points} fill={element.fill}>{element.elementName}</polygon>
+      <polygon 
+        points={element.points} 
+        fill={element.fill} 
+        transform={transformEditors()}
+      />
     )
   }
 }
