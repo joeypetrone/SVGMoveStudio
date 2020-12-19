@@ -5,7 +5,7 @@ import './PositionEditor.scss';
 
 class PositionEditor extends React.Component {
   static propTypes = {
-    createMoveElementObject: PropTypes.func.isRequired, 
+    updateElementPosition: PropTypes.func.isRequired, 
   }
 
   state = {
@@ -16,10 +16,10 @@ class PositionEditor extends React.Component {
   }
 
   moveElementClickEvent = (e) => {
-    const { createMoveElementObject } = this.props;
+    const { updateElementPosition } = this.props;
     const { editorControl } = this.state;
     e.preventDefault();
-    createMoveElementObject(editorControl.x_position, editorControl.y_position);
+    updateElementPosition(editorControl.x_position, editorControl.y_position);
   }
 
   x_positionChange = e => {

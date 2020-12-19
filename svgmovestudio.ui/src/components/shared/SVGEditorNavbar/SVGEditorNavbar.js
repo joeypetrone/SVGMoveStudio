@@ -5,7 +5,9 @@ import './SVGEditorNavbar.scss'
 
 class SVGEditorNavbar extends React.Component {
   static propTypes = {
-    openSelectedEditor: PropTypes.func.isRequired
+    openSelectedEditor: PropTypes.func.isRequired,
+    viewboxElements: [],
+    setSelectedElement: PropTypes.func.isRequired
   }
 
   editorSelectionClickEvent = (e) => {
@@ -15,19 +17,28 @@ class SVGEditorNavbar extends React.Component {
     openSelectedEditor(editorName);
   }
 
-  render() {  
+  elementChange = (e) => {
+    const { viewboxElements, setSelectedElement } = this.props;
+    const selectedElementTempId = e.target.value;
+    const selectedElement = viewboxElements.find(element => element.tempId === parseInt(selectedElementTempId))
+    setSelectedElement(selectedElement);
+  }
+
+  render() { 
+    const { viewboxElements } = this.props;
+    
+    const buildElementOptions = viewboxElements.map((element) => {
+      return <option value={element.tempId}>{element.elementName}</option>
+    })
+    
     return (
       <div className="SVGEditorNavbar pt-3 pb-2">
         <Row>
           <Col md={2} className="pr-3">
             <FormGroup className="m-0">
-              <Input className="pb-2" type="select" name="select" id="exampleSelect">
+              <Input className="pb-2" type="select" name="select" id="exampleSelect" onChange={this.elementChange} >
                 <option>Select Element</option>
-                <option>Shape 1</option>
-                <option>Shape 2</option>
-                <option>Shape 3</option>
-                <option>Shape 4</option>
-                <option>Shape 5</option>
+                {buildElementOptions}
               </Input>
             </FormGroup>
           </Col>
@@ -35,16 +46,16 @@ class SVGEditorNavbar extends React.Component {
             <Navbar className="border pl-1 py-0 pr-0 rounded" color="light" light expand="sm">
               <Nav className="mr-auto" navbar>
                 <NavItem>
-                  <NavLink className="pt-2 pb-1 text-dark" id="position" onClick={this.editorSelectionClickEvent}>Position</NavLink>
+                  <NavLink className="pt-2 pb-1 text-dark pointer" id="position" onClick={this.editorSelectionClickEvent}>Position</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink  className="pt-2 pb-1 text-dark" id="scale" onClick={this.editorSelectionClickEvent}>Scale</NavLink>
+                  <NavLink  className="pt-2 pb-1 text-dark pointer" id="scale" onClick={this.editorSelectionClickEvent}>Scale</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink  className="pt-2 pb-1 text-dark" id="color" onClick={this.editorSelectionClickEvent}>Color</NavLink>
+                  <NavLink  className="pt-2 pb-1 text-dark pointer" id="color" onClick={this.editorSelectionClickEvent}>Color</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink  className="pt-2 pb-1 text-dark" id="stretch" onClick={this.editorSelectionClickEvent}>Stretch</NavLink>
+                  <NavLink  className="pt-2 pb-1 text-dark pointer" id="stretch" onClick={this.editorSelectionClickEvent}>Stretch</NavLink>
                 </NavItem>
               </Nav>
             </Navbar>

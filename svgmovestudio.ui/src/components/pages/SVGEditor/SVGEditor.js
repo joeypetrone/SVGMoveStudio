@@ -29,8 +29,10 @@ class SVGEditor extends React.Component {
     userElements: [],
     defaultElements: [],
     viewboxAddElementIds: [],
+    viewboxElements: [],
     editorObject: {},
-    selectedEditor: ''
+    selectedEditor: '',
+    selectedElement: {}
   }
 
   componentDidMount() {
@@ -43,10 +45,18 @@ class SVGEditor extends React.Component {
       .then(elements => this.setState({ defaultElements: elements }) )
   }
 
+  // addElementToViewbox = (elementId) => {
+  //   const { viewboxAddElementIds } = this.state;
+  //   const joined = viewboxAddElementIds.concat(elementId)
+  //   this.setState({ viewboxAddElementIds: joined });
+  // }
+
   addElementToViewbox = (elementId) => {
-    const { viewboxAddElementIds } = this.state;
-    const joined = viewboxAddElementIds.concat(elementId)
-    this.setState({ viewboxAddElementIds: joined });
+    const { defaultElements, viewboxElements } = this.state;
+    const elementToAdd = Object.assign({}, defaultElements.find(element => element.elementId === parseInt(elementId)));
+    elementToAdd.tempId = viewboxElements.length;
+    const joined = viewboxElements.concat(elementToAdd);
+    this.setState({ viewboxElements: joined });
   }
 
   createMoveElementObject = (x_position, y_position) => {
@@ -58,8 +68,19 @@ class SVGEditor extends React.Component {
     })
   }
 
+  updateElementPosition = (x_position, y_position) => {
+    const { selectedElement } = this.state;
+    selectedElement.x_CoordinateStart = x_position;
+    selectedElement.y_CoordinateStart = y_position;
+    this.forceUpdate()
+  }
+
   openSelectedEditor = (editorName) => {
     this.setState({selectedEditor: editorName})
+  }
+
+  setSelectedElement = (element) => {
+    this.setState({selectedElement: element});
   }
 
   elementChoice = (element) => {
@@ -84,15 +105,15 @@ class SVGEditor extends React.Component {
   }
 
   render() {
-    const { defaultElements, viewboxAddElementIds, editorObject, selectedEditor } = this.state;
+    const { defaultElements, viewboxElements, editorObject, selectedEditor, selectedElement } = this.state;
 
     return (
       <div className="SVGEditor">
         <Container className="editor-window mt-3 rounded">
-          <SVGEditorNavbar openSelectedEditor={this.openSelectedEditor}/>
+          <SVGEditorNavbar openSelectedEditor={this.openSelectedEditor} viewboxElements={viewboxElements} setSelectedElement={this.setSelectedElement}/>
           <Row className="mx-0">
-            <SVGEditorViewbox defaultElements={defaultElements} viewboxAddElementIds={viewboxAddElementIds} elementChoice={this.elementChoice} editorObject={editorObject}/>
-            <SVGEditorSidePanel selectedEditor={selectedEditor} createMoveElementObject={this.createMoveElementObject} />
+            <SVGEditorViewbox defaultElements={defaultElements} selectedElement={selectedElement} viewboxElements={viewboxElements} elementChoice={this.elementChoice} editorObject={editorObject}/>
+            <SVGEditorSidePanel selectedEditor={selectedEditor} updateElementPosition={this.updateElementPosition} />
           </Row>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">

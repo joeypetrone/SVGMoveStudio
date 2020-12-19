@@ -4,22 +4,28 @@ import './SVGEditorSidePanel';
 
 import PositionEditor from '../../shared/SVGElementEditors/PositionEditor/PositionEditor';
 import ScaleEditor from '../../shared/SVGElementEditors/ScaleEditor/ScaleEditor';
+import ColorEditor from '../../shared/SVGElementEditors/ColorEditor/ColorEditor';
+import StretchEditor from '../../shared/SVGElementEditors/StretchEditor/StretchEditor';
 
 class SVGEditorSidePanel extends React.Component {
   static propTypes = {
-    createMoveElementObject: PropTypes.func.isRequired, 
+    updateElementPosition: PropTypes.func.isRequired, 
     selectedEditor: PropTypes.string.isRequired
   }
 
   render() {
-    const { selectedEditor, createMoveElementObject } = this.props;
+    const { selectedEditor, updateElementPosition } = this.props;
 
     const showSelectedEditor = () => {
       switch(selectedEditor) {
         case 'position':
-          return <PositionEditor createMoveElementObject={createMoveElementObject}/>
+          return <PositionEditor updateElementPosition={updateElementPosition}/>
         case 'scale':
           return <ScaleEditor />
+        case 'color':
+          return <ColorEditor />
+        case 'stretch':
+          return <StretchEditor />          
         default:
           break;  
       }    
