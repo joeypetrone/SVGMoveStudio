@@ -89,7 +89,7 @@ class SVGEditorViewbox extends React.Component {
     } 
 
     return (
-      <div className="SVGEditorViewbox rounded">
+      <div className="SVGEditorViewbox rounded mr-2">
         <svg width="800" height="500" viewBox="0 0 800 500">
           {buildViewboxElements()}
         </svg>

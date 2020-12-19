@@ -16,6 +16,7 @@ import Line from '../../shared/SVGElements/Line/Line';
 import Polyline from '../../shared/SVGElements/Polyline/Polyline';
 import Path from '../../shared/SVGElements/Path/Path';
 import SVGEditorSidePanel from '../../shared/SVGEditorSidePanel/SVGEditorSidePanel';
+import SVGEditorNavbar from '../../shared/SVGEditorNavbar/SVGEditorNavbar';
 
 class SVGEditor extends React.Component {
   static  propTypes = {
@@ -28,7 +29,7 @@ class SVGEditor extends React.Component {
     userElements: [],
     defaultElements: [],
     viewboxAddElementIds: [],
-    editorObject: {}    
+    editorObject: {}
   }
 
   componentDidMount() {
@@ -84,8 +85,7 @@ class SVGEditor extends React.Component {
     return (
       <div className="SVGEditor">
         <Container className="editor-window mt-3 rounded">
-          Editor
-          <hr/>
+          <SVGEditorNavbar />
           <Row className="mx-0">
             <SVGEditorViewbox defaultElements={defaultElements} viewboxAddElementIds={viewboxAddElementIds} elementChoice={this.elementChoice} editorObject={editorObject}/>
             <SVGEditorSidePanel createMoveElementObject={this.createMoveElementObject} />

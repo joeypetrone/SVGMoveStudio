@@ -38,7 +38,7 @@ class SVGEditorSidePanel extends React.Component {
     const { editorControl } = this.state;
 
     return (
-      <div className="SVGEditorSidePanel rounded-circle col-3 m-1">
+      <div className="SVGEditorSidePanel border bg-light rounded col-3 m-0">
         Position
         <hr/>
         <Form>
