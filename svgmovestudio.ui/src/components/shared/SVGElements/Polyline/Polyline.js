@@ -30,6 +30,7 @@ class Polyline extends React.Component {
         stroke={element.stroke} 
         stroke-width={element.strokeWidth} 
         fill={element.fill} 
+        fillOpacity={element.fillOpacity}
         opacity={element.opacity}
         transform={transformEditors()}
       />

@@ -25,7 +25,8 @@ class Circle extends React.Component {
         cx={element.x_CoordinateStart} 
         cy={element.y_CoordinateStart} 
         r={element.x_Radius} 
-        fill={element.fill} 
+        fill={element.fill}
+        fillOpacity={element.fillOpacity} 
         opacity={element.opacity} 
         transform={transformEditors()}        
       />

@@ -30,6 +30,8 @@ class Polygon extends React.Component {
       <polygon 
         points={element.points} 
         fill={element.fill} 
+        fillOpacity={element.fillOpacity}
+        opacity={element.opacity}
         transform={transformEditors()}
       />
     )

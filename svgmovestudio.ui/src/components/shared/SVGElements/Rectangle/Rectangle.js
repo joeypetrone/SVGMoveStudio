@@ -30,7 +30,8 @@ class Rectangle extends React.Component {
         y={element.y_CoordinateStart} 
         width={element.width} 
         height={element.height} 
-        fill={element.fill} 
+        fill={element.fill}
+        fillOpacity={element.fillOpacity} 
         opacity={element.opacity} 
         transform={transformEditors()}
       />

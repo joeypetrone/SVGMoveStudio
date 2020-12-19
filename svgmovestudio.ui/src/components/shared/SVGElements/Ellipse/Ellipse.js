@@ -30,7 +30,8 @@ class Ellipse extends React.Component {
         cy={element.y_CoordinateStart} 
         rx={element.x_Radius} 
         ry={element.y_Radius} 
-        fill={element.fill} 
+        fill={element.fill}
+        fillOpacity={element.fillOpacity} 
         opacity={element.opacity}
         transform={transformEditors()} 
       />

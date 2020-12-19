@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Col, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, InputGroup, Col, Button } from 'reactstrap';
 import './ColorEditor.scss'
 
 class ColorEditor extends React.Component {
@@ -10,9 +10,20 @@ class ColorEditor extends React.Component {
   }
 
   state = {
-    editorControl: {
-      fill: '',
-      opacity: 0
+    fillColor: '',
+    fillOpacity: 0,
+    strokeColor: '',
+    strokeOpacity: 0
+  }
+
+  componentDidMount() {
+    const { selectedElement } = this.props;
+
+    if (selectedElement) {
+      const fillColor = selectedElement.fill;
+      const fillOpacity = selectedElement.fillOpacity * 10;
+
+      this.setState({fillColor, fillOpacity})
     }
   }
 
@@ -21,37 +32,36 @@ class ColorEditor extends React.Component {
 
     if (prevProps.selectedElement !== selectedElement) {
       if (selectedElement) {
-        const selectedElementColor = {
-          fill: selectedElement.fill,
-          opacity: selectedElement.opacity
-        }
+        const fillColor = selectedElement.fill;
+        const fillOpacity = selectedElement.fillOpacity * 10;
   
-        this.setState({editorControl: selectedElementColor})
+        this.setState({fillColor, fillOpacity})
       }
     }
   }
 
   colorElementClickEvent = (e) => {
     const { updateElementColor } = this.props;
-    const { editorControl } = this.state;
+    const { fillColor, fillOpacity } = this.state;
     e.preventDefault();
-    updateElementColor(editorControl.fill, editorControl.opacity);
+    updateElementColor(fillColor, fillOpacity);
   }
 
-  fillChange = e => {
-    const tempEditorControl = { ...this.state.editorControl };
-    tempEditorControl.fill = e.target.value;
-    this.setState({ editorControl: tempEditorControl })
+  fillColorChange = e => {
+    this.setState({ fillColor: e.target.value })
   }
 
-  opacityChange = e => {
-    const tempEditorControl = { ...this.state.editorControl };
-    tempEditorControl.opacity = e.target.value;
-    this.setState({ editorControl: tempEditorControl })
+  fillOpacityChange = e => {
+    this.setState({ fillOpacity: e.target.value })
   }
 
   render() {
-    const { editorControl } = this.state;
+    const { 
+      fillColor, 
+      fillOpacity,
+      strokeColor,
+      strokeOpacity
+     } = this.state;
 
     return (
       <div className="ColorEditor">
@@ -66,25 +76,57 @@ class ColorEditor extends React.Component {
                   type="color"
                   name="fill color"
                   id="fill-color"
-                  value={editorControl.fill}
+                  value={fillColor}
+                  onChange={this.fillColorChange} 
+                />
+              </InputGroup>
+            </Col>         
+          </FormGroup>
+          <FormGroup row>
+            <Label for="fill=opacity" sm={5}>Fill Opacity</Label>
+            <Col sm={7}>
+              <InputGroup>
+                <Input 
+                  className="mt-3"
+                  type="range" 
+                  name="fill opacity" 
+                  id="fill-opacity"
+                  min="0"
+                  max="10" 
+                  value={fillOpacity}
+                  onChange={this.fillOpacityChange} 
+                />
+              </InputGroup>
+            </Col>         
+          </FormGroup>
+          <FormGroup row>
+            <Label for="stroke-color" sm={5}>Stroke Color</Label>
+            <Col sm={7}>
+              <InputGroup>
+                <Input
+                  className="mt-3"
+                  type="color"
+                  name="stroke color"
+                  id="stroke-color"
+                  value={strokeColor}
                   onChange={this.fillChange} 
                 />
               </InputGroup>
             </Col>         
           </FormGroup>
           <FormGroup row>
-            <Label for="opacity" sm={5}>Opacity</Label>
+            <Label for="stroke-opacity" sm={5}>Stroke Opacity</Label>
             <Col sm={7}>
               <InputGroup>
                 <Input 
-                  className="mt-3"
+                  className="mt-4"
                   type="range" 
-                  name="opacity" 
-                  id="opacity"
+                  name="stroke opacity" 
+                  id="stroke-opacity"
                   min="0"
                   max="10" 
-                  value={editorControl.opacity}
-                  onChange={this.opacityChange} 
+                  value={strokeOpacity}
+                  onChange={this.strokeOpacityChange} 
                 />
               </InputGroup>
             </Col>         
