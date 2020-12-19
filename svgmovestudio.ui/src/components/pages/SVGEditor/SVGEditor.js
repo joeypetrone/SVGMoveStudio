@@ -75,6 +75,13 @@ class SVGEditor extends React.Component {
     this.forceUpdate()
   }
 
+  updateElementColor = (fill, opacity) => {
+    const { selectedElement } = this.state;
+    selectedElement.fill = fill;
+    selectedElement.opacity = opacity / 10;
+    this.forceUpdate()
+  }
+
   openSelectedEditor = (editorName) => {
     this.setState({selectedEditor: editorName})
   }
@@ -113,7 +120,7 @@ class SVGEditor extends React.Component {
           <SVGEditorNavbar openSelectedEditor={this.openSelectedEditor} viewboxElements={viewboxElements} setSelectedElement={this.setSelectedElement}/>
           <Row className="mx-0">
             <SVGEditorViewbox defaultElements={defaultElements} selectedElement={selectedElement} viewboxElements={viewboxElements} elementChoice={this.elementChoice} editorObject={editorObject}/>
-            <SVGEditorSidePanel selectedEditor={selectedEditor} updateElementPosition={this.updateElementPosition} />
+            <SVGEditorSidePanel selectedEditor={selectedEditor} selectedElement={selectedElement} updateElementPosition={this.updateElementPosition} updateElementColor={this.updateElementColor}/>
           </Row>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">

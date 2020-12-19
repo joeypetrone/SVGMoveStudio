@@ -21,7 +21,7 @@ class Ellipse extends React.Component {
     const { element } = this.props;
 
     return (
-      <ellipse cx={element.x_CoordinateStart} cy={element.y_CoordinateStart} rx={element.x_Radius} ry={element.y_Radius} fill={element.fill}>{element.elementName}</ellipse>
+      <ellipse cx={element.x_CoordinateStart} cy={element.y_CoordinateStart} rx={element.x_Radius} ry={element.y_Radius} fill={element.fill} opacity={element.opacity}>{element.elementName}</ellipse>
     )
   }
 }

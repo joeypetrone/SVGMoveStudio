@@ -5,13 +5,29 @@ import './PositionEditor.scss';
 
 class PositionEditor extends React.Component {
   static propTypes = {
-    updateElementPosition: PropTypes.func.isRequired, 
+    updateElementPosition: PropTypes.func.isRequired,
+    selectedElement: PropTypes.object.isRequired 
   }
 
   state = {
     editorControl: {
       x_position: 0,
       y_position: 0
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { selectedElement } = this.props;
+
+    if (prevProps.selectedElement !== selectedElement) {
+      if (selectedElement) {
+        const selectedElementPosition = {
+          x_position: selectedElement.x_CoordinateStart,
+          y_position: selectedElement.y_CoordinateStart
+        }
+  
+        this.setState({editorControl: selectedElementPosition})
+      }
     }
   }
 
