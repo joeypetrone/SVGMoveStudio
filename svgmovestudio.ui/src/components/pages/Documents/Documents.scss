@@ -1,3 +1,10 @@
+@import '../../../styles/variables';
+
 .Documents {
   display: block;
+
+  .documents-body {
+    background-color: $componentColorGrey;
+    height: 500px;
+  }
 }

@@ -20,8 +20,18 @@ class Path extends React.Component {
   render() {
     const { element } = this.props;
 
+    const transformEditors = () => {
+      return `translate(${element.x_Translate}, ${element.y_Translate})`
+    }
+
     return (
-      <path d={element.pathShape} fill={element.fill}>{element.elementName}</path>
+      <path 
+        d={element.pathShape} 
+        fill={element.fill}
+        fillOpacity={element.fillOpacity}
+        opacity={element.opacity}
+        transform={transformEditors()}
+      />
     )
   }
 }

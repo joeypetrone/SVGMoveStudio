@@ -27,7 +27,7 @@ class Home extends React.Component {
         <Container className="mb-3">
           <Row className="mt-3">
             <Col xs="8">
-              <CardImg className="rounded" top width="100%" src="https://icon-library.com/images/placeholder-image-icon/placeholder-image-icon-3.jpg" alt="Card image cap" />
+              <CardImg className="rounded" top width="100%" src="https://images.pexels.com/photos/392018/pexels-photo-392018.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Card image cap" />
             </Col>
             <Col className="SignUpCol rounded" xs="4">
               <Row className="col-8 offset-2 pb-3 text-left">

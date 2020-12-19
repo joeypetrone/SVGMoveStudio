@@ -16,6 +16,7 @@ import Line from '../../shared/SVGElements/Line/Line';
 import Polyline from '../../shared/SVGElements/Polyline/Polyline';
 import Path from '../../shared/SVGElements/Path/Path';
 import SVGEditorSidePanel from '../../shared/SVGEditorSidePanel/SVGEditorSidePanel';
+import SVGEditorNavbar from '../../shared/SVGEditorNavbar/SVGEditorNavbar';
 
 class SVGEditor extends React.Component {
   static  propTypes = {
@@ -28,7 +29,10 @@ class SVGEditor extends React.Component {
     userElements: [],
     defaultElements: [],
     viewboxAddElementIds: [],
-    editorObject: {}    
+    viewboxElements: [],
+    editorObject: {},
+    selectedEditor: '',
+    selectedElement: {}
   }
 
   componentDidMount() {
@@ -41,10 +45,18 @@ class SVGEditor extends React.Component {
       .then(elements => this.setState({ defaultElements: elements }) )
   }
 
+  // addElementToViewbox = (elementId) => {
+  //   const { viewboxAddElementIds } = this.state;
+  //   const joined = viewboxAddElementIds.concat(elementId)
+  //   this.setState({ viewboxAddElementIds: joined });
+  // }
+
   addElementToViewbox = (elementId) => {
-    const { viewboxAddElementIds } = this.state;
-    const joined = viewboxAddElementIds.concat(elementId)
-    this.setState({ viewboxAddElementIds: joined });
+    const { defaultElements, viewboxElements } = this.state;
+    const elementToAdd = Object.assign({}, defaultElements.find(element => element.elementId === parseInt(elementId)));
+    elementToAdd.tempId = viewboxElements.length;
+    const joined = viewboxElements.concat(elementToAdd);
+    this.setState({ viewboxElements: joined });
   }
 
   createMoveElementObject = (x_position, y_position) => {
@@ -54,7 +66,28 @@ class SVGEditor extends React.Component {
         y_position
       }
     })
+  }
 
+  updateElementPosition = (x_position, y_position) => {
+    const { selectedElement } = this.state;
+    selectedElement.x_Translate = x_position;
+    selectedElement.y_Translate = y_position;
+    this.forceUpdate()
+  }
+
+  updateElementColor = (fillColor, fillOpacity) => {
+    const { selectedElement } = this.state;
+    selectedElement.fill = fillColor;
+    selectedElement.fillOpacity = fillOpacity / 10;
+    this.forceUpdate()
+  }
+
+  openSelectedEditor = (editorName) => {
+    this.setState({selectedEditor: editorName})
+  }
+
+  setSelectedElement = (element) => {
+    this.setState({selectedElement: element});
   }
 
   elementChoice = (element) => {
@@ -79,16 +112,15 @@ class SVGEditor extends React.Component {
   }
 
   render() {
-    const { defaultElements, viewboxAddElementIds, editorObject } = this.state;
+    const { defaultElements, viewboxElements, editorObject, selectedEditor, selectedElement } = this.state;
 
     return (
       <div className="SVGEditor">
         <Container className="editor-window mt-3 rounded">
-          Editor
-          <hr/>
+          <SVGEditorNavbar openSelectedEditor={this.openSelectedEditor} viewboxElements={viewboxElements} setSelectedElement={this.setSelectedElement}/>
           <Row className="mx-0">
-            <SVGEditorViewbox defaultElements={defaultElements} viewboxAddElementIds={viewboxAddElementIds} elementChoice={this.elementChoice} editorObject={editorObject}/>
-            <SVGEditorSidePanel createMoveElementObject={this.createMoveElementObject} />
+            <SVGEditorViewbox defaultElements={defaultElements} selectedElement={selectedElement} viewboxElements={viewboxElements} elementChoice={this.elementChoice} editorObject={editorObject}/>
+            <SVGEditorSidePanel selectedEditor={selectedEditor} selectedElement={selectedElement} updateElementPosition={this.updateElementPosition} updateElementColor={this.updateElementColor}/>
           </Row>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">
