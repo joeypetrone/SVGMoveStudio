@@ -29,7 +29,8 @@ class SVGEditor extends React.Component {
     userElements: [],
     defaultElements: [],
     viewboxAddElementIds: [],
-    editorObject: {}
+    editorObject: {},
+    selectedEditor: ''
   }
 
   componentDidMount() {
@@ -55,7 +56,10 @@ class SVGEditor extends React.Component {
         y_position
       }
     })
+  }
 
+  openSelectedEditor = (editorName) => {
+    this.setState({selectedEditor: editorName})
   }
 
   elementChoice = (element) => {
@@ -80,15 +84,15 @@ class SVGEditor extends React.Component {
   }
 
   render() {
-    const { defaultElements, viewboxAddElementIds, editorObject } = this.state;
+    const { defaultElements, viewboxAddElementIds, editorObject, selectedEditor } = this.state;
 
     return (
       <div className="SVGEditor">
         <Container className="editor-window mt-3 rounded">
-          <SVGEditorNavbar />
+          <SVGEditorNavbar openSelectedEditor={this.openSelectedEditor}/>
           <Row className="mx-0">
             <SVGEditorViewbox defaultElements={defaultElements} viewboxAddElementIds={viewboxAddElementIds} elementChoice={this.elementChoice} editorObject={editorObject}/>
-            <SVGEditorSidePanel createMoveElementObject={this.createMoveElementObject} />
+            <SVGEditorSidePanel selectedEditor={selectedEditor} createMoveElementObject={this.createMoveElementObject} />
           </Row>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">

@@ -1,9 +1,21 @@
 import React from 'react';
-import { FormGroup, Input, Nav, NavLink, NavItem, Navbar, Row, Col, Button } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { FormGroup, Input, Nav, NavLink, NavItem, Navbar, Row, Col } from 'reactstrap';
 import './SVGEditorNavbar.scss'
 
 class SVGEditorNavbar extends React.Component {
-  render() {
+  static propTypes = {
+    openSelectedEditor: PropTypes.func.isRequired
+  }
+
+  editorSelectionClickEvent = (e) => {
+    e.preventDefault();
+    const { openSelectedEditor } = this.props;
+    const editorName = e.target.id;
+    openSelectedEditor(editorName);
+  }
+
+  render() {  
     return (
       <div className="SVGEditorNavbar pt-3 pb-2">
         <Row>
@@ -23,16 +35,16 @@ class SVGEditorNavbar extends React.Component {
             <Navbar className="border pl-1 py-0 pr-0 rounded" color="light" light expand="sm">
               <Nav className="mr-auto" navbar>
                 <NavItem>
-                  <NavLink className="pt-2 pb-1 text-dark">Position</NavLink>
+                  <NavLink className="pt-2 pb-1 text-dark" id="position" onClick={this.editorSelectionClickEvent}>Position</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink  className="pt-2 pb-1 text-dark">Scale</NavLink>
+                  <NavLink  className="pt-2 pb-1 text-dark" id="scale" onClick={this.editorSelectionClickEvent}>Scale</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink  className="pt-2 pb-1 text-dark">Color</NavLink>
+                  <NavLink  className="pt-2 pb-1 text-dark" id="color" onClick={this.editorSelectionClickEvent}>Color</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink  className="pt-2 pb-1 text-dark">Stretch</NavLink>
+                  <NavLink  className="pt-2 pb-1 text-dark" id="stretch" onClick={this.editorSelectionClickEvent}>Stretch</NavLink>
                 </NavItem>
               </Nav>
             </Navbar>
