@@ -27,11 +27,12 @@ class Polyline extends React.Component {
     return (
       <polyline 
         points={element.points} 
-        stroke={element.stroke} 
-        stroke-width={element.strokeWidth} 
         fill={element.fill} 
-        fillOpacity={element.fillOpacity}
+        fill-opacity={element.fillOpacity}
         opacity={element.opacity}
+        stroke={element.stroke}
+        stroke-width={element.strokeWidth}
+        stroke-opacity={element.strokeOpacity}
         transform={transformEditors()}
       />
     )

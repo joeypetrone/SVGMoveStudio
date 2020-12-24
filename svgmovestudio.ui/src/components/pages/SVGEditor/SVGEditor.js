@@ -75,10 +75,12 @@ class SVGEditor extends React.Component {
     this.forceUpdate()
   }
 
-  updateElementColor = (fillColor, fillOpacity) => {
+  updateElementColor = (fillColor, fillOpacity, strokeColor, strokeOpacity) => {
     const { selectedElement } = this.state;
     selectedElement.fill = fillColor;
     selectedElement.fillOpacity = fillOpacity / 10;
+    selectedElement.stroke = strokeColor;
+    selectedElement.strokeOpacity = strokeOpacity / 10;
     this.forceUpdate()
   }
 

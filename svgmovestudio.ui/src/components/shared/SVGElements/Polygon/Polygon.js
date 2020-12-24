@@ -32,6 +32,9 @@ class Polygon extends React.Component {
         fill={element.fill} 
         fillOpacity={element.fillOpacity}
         opacity={element.opacity}
+        stroke={element.stroke}
+        stroke-width={element.strokeWidth}
+        stroke-opacity={element.strokeOpacity}
         transform={transformEditors()}
       />
     )

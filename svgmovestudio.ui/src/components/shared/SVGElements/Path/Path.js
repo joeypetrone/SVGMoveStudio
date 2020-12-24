@@ -28,8 +28,11 @@ class Path extends React.Component {
       <path 
         d={element.pathShape} 
         fill={element.fill}
-        fillOpacity={element.fillOpacity}
+        fill-opacity={element.fillOpacity}
         opacity={element.opacity}
+        stroke={element.stroke}
+        stroke-width={element.strokeWidth}
+        stroke-opacity={element.strokeOpacity}
         transform={transformEditors()}
       />
     )

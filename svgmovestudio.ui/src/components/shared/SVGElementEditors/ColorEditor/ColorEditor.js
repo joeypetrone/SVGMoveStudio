@@ -22,8 +22,10 @@ class ColorEditor extends React.Component {
     if (selectedElement) {
       const fillColor = selectedElement.fill;
       const fillOpacity = selectedElement.fillOpacity * 10;
+      const strokeColor = selectedElement.stroke;
+      const strokeOpacity = selectedElement.strokeOpacity * 10;
 
-      this.setState({fillColor, fillOpacity})
+      this.setState({fillColor, fillOpacity, strokeColor, strokeOpacity})
     }
   }
 
@@ -34,17 +36,19 @@ class ColorEditor extends React.Component {
       if (selectedElement) {
         const fillColor = selectedElement.fill;
         const fillOpacity = selectedElement.fillOpacity * 10;
+        const strokeColor = selectedElement.stroke;
+        const strokeOpacity = selectedElement.strokeOpacity * 10;
   
-        this.setState({fillColor, fillOpacity})
+        this.setState({fillColor, fillOpacity, strokeColor, strokeOpacity})
       }
     }
   }
 
   colorElementClickEvent = (e) => {
     const { updateElementColor } = this.props;
-    const { fillColor, fillOpacity } = this.state;
+    const { fillColor, fillOpacity, strokeColor, strokeOpacity} = this.state;
     e.preventDefault();
-    updateElementColor(fillColor, fillOpacity);
+    updateElementColor(fillColor, fillOpacity, strokeColor, strokeOpacity);
   }
 
   fillColorChange = e => {
@@ -55,6 +59,14 @@ class ColorEditor extends React.Component {
     this.setState({ fillOpacity: e.target.value })
   }
 
+  strokeColorChange = e => {
+    this.setState({ strokeColor: e.target.value })
+  }
+
+  strokeOpacityChange = e => {
+    this.setState({ strokeOpacity: e.target.value })
+  }
+
   render() {
     const { 
       fillColor, 
@@ -63,11 +75,16 @@ class ColorEditor extends React.Component {
       strokeOpacity
      } = this.state;
 
+     const { selectedElement } = this.props;
+
     return (
       <div className="ColorEditor">
         Color
         <hr/>
         <Form>
+          {selectedElement.fill === null
+          ? ''
+          :
           <FormGroup row>
             <Label for="fill-color" sm={5}>Fill Color</Label>
             <Col sm={7}>
@@ -81,7 +98,11 @@ class ColorEditor extends React.Component {
                 />
               </InputGroup>
             </Col>         
-          </FormGroup>
+          </FormGroup>          
+          }
+          {selectedElement.fill === null
+          ? ''
+          :
           <FormGroup row>
             <Label for="fill=opacity" sm={5}>Fill Opacity</Label>
             <Col sm={7}>
@@ -99,6 +120,10 @@ class ColorEditor extends React.Component {
               </InputGroup>
             </Col>         
           </FormGroup>
+          }
+          {selectedElement.stroke === null
+          ? ''
+          : 
           <FormGroup row>
             <Label for="stroke-color" sm={5}>Stroke Color</Label>
             <Col sm={7}>
@@ -109,11 +134,15 @@ class ColorEditor extends React.Component {
                   name="stroke color"
                   id="stroke-color"
                   value={strokeColor}
-                  onChange={this.fillChange} 
+                  onChange={this.strokeColorChange} 
                 />
               </InputGroup>
             </Col>         
           </FormGroup>
+          }
+          {selectedElement.strokeOpacity === null
+          ? ''
+          :
           <FormGroup row>
             <Label for="stroke-opacity" sm={5}>Stroke Opacity</Label>
             <Col sm={7}>
@@ -131,6 +160,7 @@ class ColorEditor extends React.Component {
               </InputGroup>
             </Col>         
           </FormGroup>
+          }
           <Button className="btn-dark mb-3 w-100" onClick={this.colorElementClickEvent}>Submit Change</Button>
         </Form>
       </div>
