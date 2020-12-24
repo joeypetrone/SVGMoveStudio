@@ -23,7 +23,8 @@ class Polygon extends React.Component {
     const { element } = this.props;
 
     const transformEditors = () => {
-      return `translate(${element.x_Translate}, ${element.y_Translate})`
+      return `translate(${element.x_Translate}, ${element.y_Translate})
+              scale(${element.scale})`
     }
 
     return (

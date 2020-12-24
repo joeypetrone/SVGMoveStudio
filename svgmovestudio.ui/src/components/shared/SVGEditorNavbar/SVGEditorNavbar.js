@@ -10,6 +10,8 @@ class SVGEditorNavbar extends React.Component {
     setSelectedElement: PropTypes.func.isRequired
   }
 
+
+
   editorSelectionClickEvent = (e) => {
     e.preventDefault();
     const { openSelectedEditor } = this.props;
@@ -20,8 +22,13 @@ class SVGEditorNavbar extends React.Component {
   elementChange = (e) => {
     const { viewboxElements, setSelectedElement } = this.props;
     const selectedElementTempId = e.target.value;
-    const selectedElement = viewboxElements.find(element => element.tempId === parseInt(selectedElementTempId))
-    setSelectedElement(selectedElement);
+    const selectedElement =  viewboxElements.find(element => element.tempId === parseInt(selectedElementTempId))
+
+    if (selectedElementTempId === 'default') {
+      setSelectedElement({});
+    } else {
+      setSelectedElement(selectedElement)
+    }
   }
 
   render() { 
@@ -37,7 +44,7 @@ class SVGEditorNavbar extends React.Component {
           <Col md={2} className="pr-3">
             <FormGroup className="m-0">
               <Input className="pb-2" type="select" name="select" id="exampleSelect" onChange={this.elementChange} >
-                <option>Select Element</option>
+                <option value="default">Select Element</option>
                 {buildElementOptions}
               </Input>
             </FormGroup>

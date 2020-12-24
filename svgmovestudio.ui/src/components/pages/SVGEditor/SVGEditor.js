@@ -30,7 +30,6 @@ class SVGEditor extends React.Component {
     defaultElements: [],
     viewboxAddElementIds: [],
     viewboxElements: [],
-    editorObject: {},
     selectedEditor: '',
     selectedElement: {}
   }
@@ -45,12 +44,6 @@ class SVGEditor extends React.Component {
       .then(elements => this.setState({ defaultElements: elements }) )
   }
 
-  // addElementToViewbox = (elementId) => {
-  //   const { viewboxAddElementIds } = this.state;
-  //   const joined = viewboxAddElementIds.concat(elementId)
-  //   this.setState({ viewboxAddElementIds: joined });
-  // }
-
   addElementToViewbox = (elementId) => {
     const { defaultElements, viewboxElements } = this.state;
     const elementToAdd = Object.assign({}, defaultElements.find(element => element.elementId === parseInt(elementId)));
@@ -59,19 +52,17 @@ class SVGEditor extends React.Component {
     this.setState({ viewboxElements: joined });
   }
 
-  createMoveElementObject = (x_position, y_position) => {
-    this.setState({
-      editorObject: {
-        x_position,
-        y_position
-      }
-    })
-  }
-
   updateElementPosition = (x_position, y_position) => {
     const { selectedElement } = this.state;
     selectedElement.x_Translate = x_position;
     selectedElement.y_Translate = y_position;
+    this.forceUpdate()
+  }
+
+  updateElementScale = (scale, strokeWidth) => {
+    const { selectedElement } = this.state;
+    selectedElement.scale = scale;
+    selectedElement.strokeWidth = strokeWidth;
     this.forceUpdate()
   }
 
@@ -114,21 +105,40 @@ class SVGEditor extends React.Component {
   }
 
   render() {
-    const { defaultElements, viewboxElements, editorObject, selectedEditor, selectedElement } = this.state;
+    const { defaultElements, viewboxElements, selectedEditor, selectedElement } = this.state;
 
     return (
       <div className="SVGEditor">
         <Container className="editor-window mt-3 rounded">
-          <SVGEditorNavbar openSelectedEditor={this.openSelectedEditor} viewboxElements={viewboxElements} setSelectedElement={this.setSelectedElement}/>
+          <SVGEditorNavbar 
+            openSelectedEditor={this.openSelectedEditor} 
+            viewboxElements={viewboxElements} 
+            setSelectedElement={this.setSelectedElement}
+          />
           <Row className="mx-0">
-            <SVGEditorViewbox defaultElements={defaultElements} selectedElement={selectedElement} viewboxElements={viewboxElements} elementChoice={this.elementChoice} editorObject={editorObject}/>
-            <SVGEditorSidePanel selectedEditor={selectedEditor} selectedElement={selectedElement} updateElementPosition={this.updateElementPosition} updateElementColor={this.updateElementColor}/>
+            <SVGEditorViewbox 
+              defaultElements={defaultElements} 
+              selectedElement={selectedElement} 
+              viewboxElements={viewboxElements} 
+              elementChoice={this.elementChoice}
+            />
+            <SVGEditorSidePanel 
+              selectedEditor={selectedEditor} 
+              selectedElement={selectedElement} 
+              updateElementPosition={this.updateElementPosition} 
+              updateElementScale={this.updateElementScale}
+              updateElementColor={this.updateElementColor}
+            />
           </Row>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">
           Toolbox
           <hr/>
-          <SVGElementToolbox defaultElements={defaultElements} addElementToViewbox={this.addElementToViewbox} elementChoice={this.elementChoice}/>
+          <SVGElementToolbox 
+            defaultElements={defaultElements} 
+            addElementToViewbox={this.addElementToViewbox} 
+            elementChoice={this.elementChoice}
+          />
         </Container>
       </div>
     )

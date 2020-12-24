@@ -29,9 +29,13 @@ class PositionEditor extends React.Component {
 
     if (prevProps.selectedElement !== selectedElement) {
       if (selectedElement) {
-        const x_position = selectedElement.x_Translate;
-        const y_position = selectedElement.y_Translate;
-        this.setState({x_position, y_position})
+        if(Object.entries(selectedElement).length === 0) {
+          this.setState({x_position: 0, y_position: 0})
+        } else {
+          const x_position = selectedElement.x_Translate;
+          const y_position = selectedElement.y_Translate;
+          this.setState({x_position, y_position})
+        }
       }
     }
   }
@@ -52,7 +56,16 @@ class PositionEditor extends React.Component {
   }
 
   render() {
+    const { selectedElement } = this.props;
     const { x_position, y_position } = this.state;
+
+    const disable = () => {
+      if (Object.entries(selectedElement).length === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
 
     return (
       <div className="PositionEditor">
@@ -68,7 +81,8 @@ class PositionEditor extends React.Component {
                   name="x_position" 
                   id="x_position" 
                   value={x_position}
-                  onChange={this.x_positionChange} 
+                  onChange={this.x_positionChange}
+                  disabled={disable()}
                 />
                 <InputGroupAddon addonType="append">
                   <InputGroupText>px</InputGroupText>
@@ -86,6 +100,7 @@ class PositionEditor extends React.Component {
                   id="y_position" 
                   value={y_position}
                   onChange={this.y_positionChange} 
+                  disabled={disable()}
                 />
                 <InputGroupAddon addonType="append">
                   <InputGroupText>px</InputGroupText>
@@ -93,7 +108,7 @@ class PositionEditor extends React.Component {
               </InputGroup>
             </Col>         
           </FormGroup>
-          <Button className="btn-dark mb-3 w-100" onClick={this.moveElementClickEvent}>Submit Change</Button>
+          <Button className="btn-dark mb-3 w-100" onClick={this.moveElementClickEvent} disabled={disable()}>Submit Change</Button>
         </Form>
       </div>
     )
