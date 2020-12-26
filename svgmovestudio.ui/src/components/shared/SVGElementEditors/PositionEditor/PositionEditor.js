@@ -18,9 +18,13 @@ class PositionEditor extends React.Component {
     const { selectedElement } = this.props;
 
     if (selectedElement) {
-      const x_position = selectedElement.x_Translate;
-      const y_position = selectedElement.y_Translate;
-      this.setState({x_position, y_position})
+      if(Object.entries(selectedElement).length === 0) {
+        this.setState({scale: 0, strokeWidth: 0})
+      } else {
+        const scale = selectedElement.scale;
+        const strokeWidth = selectedElement.strokeWidth;
+        this.setState({scale, strokeWidth})
+      }
     }
   }
 

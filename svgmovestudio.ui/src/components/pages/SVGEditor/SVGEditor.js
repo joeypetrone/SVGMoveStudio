@@ -86,19 +86,47 @@ class SVGEditor extends React.Component {
   elementChoice = (element) => {
     switch(element.elementTypeId) {
       case 1:
-        return <Rectangle element={element}/>;
+        if (element.tempId === undefined) {
+          return <Rectangle key={element.elementId} element={element}/>;
+        } else {
+          return <Rectangle key={element.tempId} element={element}/>;
+        }
       case 2: 
-        return <Circle element={element}/>;
+        if (element.tempId === undefined) {
+          return <Circle key={element.elementId} element={element}/>;
+        } else {
+          return <Circle key={element.tempId} element={element}/>;
+        }
       case 3:
-        return <Ellipse element={element}/>;
+        if (element.tempId === undefined) {
+          return <Ellipse key={element.elementId} element={element}/>;
+        } else {
+          return <Ellipse key={element.tempId} element={element}/>;
+        }
       case 4:
-        return <Polygon element={element}/>;
+        if (element.tempId === undefined) {
+          return <Polygon key={element.elementId} element={element}/>;
+        } else {
+          return <Polygon key={element.tempId} element={element}/>;
+        }
       case 5:
-        return <Line element={element}/>;
+        if (element.tempId === undefined) {
+          return <Line key={element.elementId} element={element}/>;
+        } else {
+          return <Line key={element.tempId} element={element}/>;
+        }
       case 6:
-        return <Polyline element={element}/>
+        if (element.tempId === undefined) {
+          return <Polyline key={element.elementId} element={element}/>;
+        } else {
+          return <Polyline key={element.tempId} element={element}/>;
+        }
       case 7:
-        return <Path element={element}/>;                                    
+        if (element.tempId === undefined) {
+          return <Path key={element.elementId} element={element}/>;
+        } else {
+          return <Path key={element.tempId} element={element}/>;
+        }
       default:
         return element.elementName;
     }

@@ -10,22 +10,31 @@ class ColorEditor extends React.Component {
   }
 
   state = {
-    fillColor: '',
-    fillOpacity: 0,
-    strokeColor: '',
-    strokeOpacity: 0
+    fillColor: '#000000',
+    fillOpacity: 5,
+    strokeColor: '#000000',
+    strokeOpacity: 5
   }
 
   componentDidMount() {
     const { selectedElement } = this.props;
 
     if (selectedElement) {
-      const fillColor = selectedElement.fill;
-      const fillOpacity = selectedElement.fillOpacity * 10;
-      const strokeColor = selectedElement.stroke;
-      const strokeOpacity = selectedElement.strokeOpacity * 10;
-
-      this.setState({fillColor, fillOpacity, strokeColor, strokeOpacity})
+      if(Object.entries(selectedElement).length === 0) {
+        this.setState({
+          fillColor: '#000000',
+          fillOpacity: 5,
+          strokeColor: '#000000',
+          strokeOpacity: 5
+        })
+      } else {
+        const fillColor = selectedElement.fill;
+        const fillOpacity = selectedElement.fillOpacity * 10;
+        const strokeColor = selectedElement.stroke;
+        const strokeOpacity = selectedElement.strokeOpacity * 10;
+  
+        this.setState({fillColor, fillOpacity, strokeColor, strokeOpacity})
+      }
     }
   }
 
@@ -34,12 +43,21 @@ class ColorEditor extends React.Component {
 
     if (prevProps.selectedElement !== selectedElement) {
       if (selectedElement) {
-        const fillColor = selectedElement.fill;
-        const fillOpacity = selectedElement.fillOpacity * 10;
-        const strokeColor = selectedElement.stroke;
-        const strokeOpacity = selectedElement.strokeOpacity * 10;
-  
-        this.setState({fillColor, fillOpacity, strokeColor, strokeOpacity})
+        if(Object.entries(selectedElement).length === 0) {
+          this.setState({
+            fillColor: '#000000',
+            fillOpacity: 5,
+            strokeColor: '#000000',
+            strokeOpacity: 5
+          })
+        } else {
+          const fillColor = selectedElement.fill;
+          const fillOpacity = selectedElement.fillOpacity * 10;
+          const strokeColor = selectedElement.stroke;
+          const strokeOpacity = selectedElement.strokeOpacity * 10;
+    
+          this.setState({fillColor, fillOpacity, strokeColor, strokeOpacity})
+        }
       }
     }
   }
@@ -73,9 +91,17 @@ class ColorEditor extends React.Component {
       fillOpacity,
       strokeColor,
       strokeOpacity
-     } = this.state;
+    } = this.state;
 
-     const { selectedElement } = this.props;
+    const { selectedElement } = this.props;
+
+    const disable = () => {
+      if (Object.entries(selectedElement).length === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } 
 
     return (
       <div className="ColorEditor">
@@ -94,7 +120,8 @@ class ColorEditor extends React.Component {
                   name="fill color"
                   id="fill-color"
                   value={fillColor}
-                  onChange={this.fillColorChange} 
+                  onChange={this.fillColorChange}
+                  disabled={disable()}  
                 />
               </InputGroup>
             </Col>         
@@ -115,7 +142,8 @@ class ColorEditor extends React.Component {
                   min="0"
                   max="10" 
                   value={fillOpacity}
-                  onChange={this.fillOpacityChange} 
+                  onChange={this.fillOpacityChange}
+                  disabled={disable()}  
                 />
               </InputGroup>
             </Col>         
@@ -134,7 +162,8 @@ class ColorEditor extends React.Component {
                   name="stroke color"
                   id="stroke-color"
                   value={strokeColor}
-                  onChange={this.strokeColorChange} 
+                  onChange={this.strokeColorChange}
+                  disabled={disable()} 
                 />
               </InputGroup>
             </Col>         
@@ -155,13 +184,14 @@ class ColorEditor extends React.Component {
                   min="0"
                   max="10" 
                   value={strokeOpacity}
-                  onChange={this.strokeOpacityChange} 
+                  onChange={this.strokeOpacityChange}
+                  disabled={disable()} 
                 />
               </InputGroup>
             </Col>         
           </FormGroup>
           }
-          <Button className="btn-dark mb-3 w-100" onClick={this.colorElementClickEvent}>Submit Change</Button>
+          <Button className="btn-dark mb-3 w-100" onClick={this.colorElementClickEvent} disabled={disable()}>Submit Change</Button>
         </Form>
       </div>
     )

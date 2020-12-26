@@ -4,7 +4,7 @@ import './SVGEditorViewbox.scss';
 
 class SVGEditorViewbox extends React.Component {
   static propTypes = {
-    viewboxElements: [],
+    viewboxElements: PropTypes.array.isRequired,
     elementChoice: PropTypes.func.isRequired,
   }
 

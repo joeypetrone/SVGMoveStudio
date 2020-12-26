@@ -18,9 +18,13 @@ class ScaleEditor extends React.Component {
     const { selectedElement } = this.props;
 
     if (selectedElement) {
-      const scale = selectedElement.scale;
-      const strokeWidth = selectedElement.strokeWidth;
-      this.setState({scale, strokeWidth})
+      if(Object.entries(selectedElement).length === 0) {
+        this.setState({scale: 0, strokeWidth: 0})
+      } else {
+        const scale = selectedElement.scale;
+        const strokeWidth = selectedElement.strokeWidth;
+        this.setState({scale, strokeWidth})
+      }
     }
   }
 
@@ -29,9 +33,13 @@ class ScaleEditor extends React.Component {
 
     if (prevProps.selectedElement !== selectedElement) {
       if (selectedElement) {
-        const scale = selectedElement.scale;
-        const strokeWidth = selectedElement.strokeWidth;
-        this.setState({scale, strokeWidth})
+        if(Object.entries(selectedElement).length === 0) {
+          this.setState({scale: 0, strokeWidth: 0})
+        } else {
+          const scale = selectedElement.scale;
+          const strokeWidth = selectedElement.strokeWidth;
+          this.setState({scale, strokeWidth})
+        }
       }
     } 
   }
@@ -53,6 +61,15 @@ class ScaleEditor extends React.Component {
 
   render() {
     const { scale, strokeWidth } =this.state;
+    const { selectedElement } = this.props;
+
+    const disable = () => {
+      if (Object.entries(selectedElement).length === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
 
     return (
       <div className="ScaleEditor">
@@ -70,6 +87,7 @@ class ScaleEditor extends React.Component {
                   id="scale" 
                   value={scale}
                   onChange={this.scaleChange} 
+                  disabled={disable()}
                 />
               </InputGroup>
             </Col>         
@@ -83,12 +101,13 @@ class ScaleEditor extends React.Component {
                   name="stroke width" 
                   id="stroke-width" 
                   value={strokeWidth}
-                  onChange={this.strokeWidthChange} 
+                  onChange={this.strokeWidthChange}
+                  disabled={disable()} 
                 />
               </InputGroup>
             </Col>         
           </FormGroup>
-          <Button className="btn-dark mb-3 w-100" onClick={this.scaleElementClickEvent}>Submit Change</Button>
+          <Button className="btn-dark mb-3 w-100" onClick={this.scaleElementClickEvent} disabled={disable()}>Submit Change</Button>
         </Form>
       </div>
     )

@@ -6,7 +6,7 @@ import './SVGEditorNavbar.scss'
 class SVGEditorNavbar extends React.Component {
   static propTypes = {
     openSelectedEditor: PropTypes.func.isRequired,
-    viewboxElements: [],
+    viewboxElements: PropTypes.array.isRequired,
     setSelectedElement: PropTypes.func.isRequired
   }
 
@@ -35,7 +35,7 @@ class SVGEditorNavbar extends React.Component {
     const { viewboxElements } = this.props;
     
     const buildElementOptions = viewboxElements.map((element) => {
-      return <option value={element.tempId}>{element.elementName}</option>
+      return <option key={element.tempId} value={element.tempId}>{element.elementName}</option>
     })
     
     return (

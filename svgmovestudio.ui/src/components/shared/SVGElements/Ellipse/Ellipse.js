@@ -32,11 +32,11 @@ class Ellipse extends React.Component {
         rx={element.x_Radius} 
         ry={element.y_Radius} 
         fill={element.fill}
-        fill-opacity={element.fillOpacity} 
+        fillOpacity={element.fillOpacity} 
         opacity={element.opacity}
         stroke={element.stroke}
-        stroke-width={element.strokeWidth}
-        stroke-opacity={element.strokeOpacity}
+        strokeWidth={element.strokeWidth}
+        strokeOpacity={element.strokeOpacity}
         transform={transformEditors()} 
       />
     )
