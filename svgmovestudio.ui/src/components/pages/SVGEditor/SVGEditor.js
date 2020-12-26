@@ -30,7 +30,6 @@ class SVGEditor extends React.Component {
     defaultElements: [],
     viewboxAddElementIds: [],
     viewboxElements: [],
-    editorObject: {},
     selectedEditor: '',
     selectedElement: {}
   }
@@ -45,27 +44,12 @@ class SVGEditor extends React.Component {
       .then(elements => this.setState({ defaultElements: elements }) )
   }
 
-  // addElementToViewbox = (elementId) => {
-  //   const { viewboxAddElementIds } = this.state;
-  //   const joined = viewboxAddElementIds.concat(elementId)
-  //   this.setState({ viewboxAddElementIds: joined });
-  // }
-
   addElementToViewbox = (elementId) => {
     const { defaultElements, viewboxElements } = this.state;
     const elementToAdd = Object.assign({}, defaultElements.find(element => element.elementId === parseInt(elementId)));
     elementToAdd.tempId = viewboxElements.length;
     const joined = viewboxElements.concat(elementToAdd);
     this.setState({ viewboxElements: joined });
-  }
-
-  createMoveElementObject = (x_position, y_position) => {
-    this.setState({
-      editorObject: {
-        x_position,
-        y_position
-      }
-    })
   }
 
   updateElementPosition = (x_position, y_position) => {
@@ -75,10 +59,19 @@ class SVGEditor extends React.Component {
     this.forceUpdate()
   }
 
-  updateElementColor = (fillColor, fillOpacity) => {
+  updateElementScale = (scale, strokeWidth) => {
+    const { selectedElement } = this.state;
+    selectedElement.scale = scale;
+    selectedElement.strokeWidth = strokeWidth;
+    this.forceUpdate()
+  }
+
+  updateElementColor = (fillColor, fillOpacity, strokeColor, strokeOpacity) => {
     const { selectedElement } = this.state;
     selectedElement.fill = fillColor;
     selectedElement.fillOpacity = fillOpacity / 10;
+    selectedElement.stroke = strokeColor;
+    selectedElement.strokeOpacity = strokeOpacity / 10;
     this.forceUpdate()
   }
 
@@ -93,40 +86,87 @@ class SVGEditor extends React.Component {
   elementChoice = (element) => {
     switch(element.elementTypeId) {
       case 1:
-        return <Rectangle element={element}/>;
+        if (element.tempId === undefined) {
+          return <Rectangle key={element.elementId} element={element}/>;
+        } else {
+          return <Rectangle key={element.tempId} element={element}/>;
+        }
       case 2: 
-        return <Circle element={element}/>;
+        if (element.tempId === undefined) {
+          return <Circle key={element.elementId} element={element}/>;
+        } else {
+          return <Circle key={element.tempId} element={element}/>;
+        }
       case 3:
-        return <Ellipse element={element}/>;
+        if (element.tempId === undefined) {
+          return <Ellipse key={element.elementId} element={element}/>;
+        } else {
+          return <Ellipse key={element.tempId} element={element}/>;
+        }
       case 4:
-        return <Polygon element={element}/>;
+        if (element.tempId === undefined) {
+          return <Polygon key={element.elementId} element={element}/>;
+        } else {
+          return <Polygon key={element.tempId} element={element}/>;
+        }
       case 5:
-        return <Line element={element}/>;
+        if (element.tempId === undefined) {
+          return <Line key={element.elementId} element={element}/>;
+        } else {
+          return <Line key={element.tempId} element={element}/>;
+        }
       case 6:
-        return <Polyline element={element}/>
+        if (element.tempId === undefined) {
+          return <Polyline key={element.elementId} element={element}/>;
+        } else {
+          return <Polyline key={element.tempId} element={element}/>;
+        }
       case 7:
-        return <Path element={element}/>;                                    
+        if (element.tempId === undefined) {
+          return <Path key={element.elementId} element={element}/>;
+        } else {
+          return <Path key={element.tempId} element={element}/>;
+        }
       default:
         return element.elementName;
     }
   }
 
   render() {
-    const { defaultElements, viewboxElements, editorObject, selectedEditor, selectedElement } = this.state;
+    const { defaultElements, viewboxElements, selectedEditor, selectedElement } = this.state;
 
     return (
       <div className="SVGEditor">
         <Container className="editor-window mt-3 rounded">
-          <SVGEditorNavbar openSelectedEditor={this.openSelectedEditor} viewboxElements={viewboxElements} setSelectedElement={this.setSelectedElement}/>
+          <SVGEditorNavbar 
+            openSelectedEditor={this.openSelectedEditor} 
+            viewboxElements={viewboxElements} 
+            setSelectedElement={this.setSelectedElement}
+          />
           <Row className="mx-0">
-            <SVGEditorViewbox defaultElements={defaultElements} selectedElement={selectedElement} viewboxElements={viewboxElements} elementChoice={this.elementChoice} editorObject={editorObject}/>
-            <SVGEditorSidePanel selectedEditor={selectedEditor} selectedElement={selectedElement} updateElementPosition={this.updateElementPosition} updateElementColor={this.updateElementColor}/>
+            <SVGEditorViewbox 
+              defaultElements={defaultElements} 
+              selectedElement={selectedElement} 
+              viewboxElements={viewboxElements} 
+              elementChoice={this.elementChoice}
+            />
+            <SVGEditorSidePanel 
+              selectedEditor={selectedEditor} 
+              selectedElement={selectedElement} 
+              updateElementPosition={this.updateElementPosition} 
+              updateElementScale={this.updateElementScale}
+              updateElementColor={this.updateElementColor}
+            />
           </Row>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">
           Toolbox
           <hr/>
-          <SVGElementToolbox defaultElements={defaultElements} addElementToViewbox={this.addElementToViewbox} elementChoice={this.elementChoice}/>
+          <SVGElementToolbox 
+            defaultElements={defaultElements} 
+            addElementToViewbox={this.addElementToViewbox} 
+            elementChoice={this.elementChoice}
+          />
         </Container>
       </div>
     )

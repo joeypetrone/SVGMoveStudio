@@ -21,7 +21,8 @@ class Line extends React.Component {
     const { element } = this.props;
 
     const transformEditors = () => {
-      return `translate(${element.x_Translate}, ${element.y_Translate})`
+      return `translate(${element.x_Translate}, ${element.y_Translate})
+              scale(${element.scale})`
     }
 
     return (
@@ -31,7 +32,8 @@ class Line extends React.Component {
         x2={element.x_CoordinateEnd} 
         y2={element.y_CoordinateEnd} 
         stroke={element.stroke} 
-        stroke-width={element.strokeWidth}
+        strokeWidth={element.strokeWidth}
+        strokeOpacity={element.strokeOpacity}
         transform={transformEditors()} 
       />
     )

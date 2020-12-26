@@ -5,7 +5,7 @@ import './SVGElementToolbox.scss';
 
 class SVGElementToolbox extends React.Component {
   static propTypes = {
-    defaultElements: [],
+    defaultElements: PropTypes.array.isRequired,
     addElementToViewbox: PropTypes.func.isRequired,
     elementChoice: PropTypes.func.isRequired,
   }
@@ -25,7 +25,7 @@ class SVGElementToolbox extends React.Component {
 
     const buildElements = defaultElements.map(element => {
       return (
-        <Card className="px-3 pb-3 pt-0">
+        <Card key={element.elementId} className="px-3 pb-3 pt-0">
           <small className="m-1 mb-2 pb-1 border-bottom">{element.elementName}</small>
           <svg id={element.elementId} width="100" height="100" viewBox="0 0 100 100">{elementChoice(element)}</svg>
           <Button className="btn-sm m-1 mt-3" id={element.elementId} onClick={this.addToViewBoxEvent}>Add</Button>

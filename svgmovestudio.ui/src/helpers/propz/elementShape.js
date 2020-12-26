@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const elementShape = PropTypes.shape({
   elementId: PropTypes.number.isRequired,
-  SVGId: PropTypes.number.isRequired,
+  svgId: PropTypes.number.isRequired,
   elementTypeId: PropTypes.number.isRequired,
   elementName: PropTypes.string.isRequired,
   arrangeNumber: PropTypes.number.isRequired,

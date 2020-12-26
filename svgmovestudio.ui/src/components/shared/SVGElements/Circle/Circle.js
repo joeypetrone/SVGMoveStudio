@@ -17,7 +17,8 @@ class Circle extends React.Component {
     const { element } = this.props;
 
     const transformEditors = () => {
-      return `translate(${element.x_Translate}, ${element.y_Translate})`
+      return `translate(${element.x_Translate}, ${element.y_Translate})
+              scale(${element.scale})`
     }
 
     return (
@@ -28,6 +29,9 @@ class Circle extends React.Component {
         fill={element.fill}
         fillOpacity={element.fillOpacity} 
         opacity={element.opacity} 
+        stroke={element.stroke}
+        strokeWidth={element.strokeWidth}
+        strokeOpacity={element.strokeOpacity}
         transform={transformEditors()}        
       />
     )
