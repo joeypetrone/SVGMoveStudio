@@ -16,7 +16,7 @@ namespace SVGMoveStudio.Models
         public decimal FillOpacity { get; set; }
         public decimal Opacity { get; set; }
         public string Stroke { get; set; }
-        public int StrokeWidth { get; set; }
+        public decimal StrokeWidth { get; set; }
         public decimal StrokeOpacity { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, Label, Input, InputGroup, Col, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, InputGroup, Col } from 'reactstrap';
 import './ScaleEditor.scss';
 
 class ScaleEditor extends React.Component {
@@ -44,19 +44,18 @@ class ScaleEditor extends React.Component {
     } 
   }
 
-  scaleElementClickEvent = (e) => {
-    const { updateElementScale } = this.props;
-    const { scale, strokeWidth } = this.state;
-    e.preventDefault();
-    updateElementScale(scale, strokeWidth);
-  }
-
   scaleChange = e => {
-    this.setState({ scale: e.target.value })
+    const { updateElementScale } = this.props;
+    const scale = parseFloat(e.target.value);
+    this.setState({ scale })
+    updateElementScale(scale, null);
   }
 
   strokeWidthChange = e => {
-    this.setState({ strokeWidth: e.target.value })
+    const { updateElementScale } = this.props;
+    const strokeWidth = parseFloat(e.target.value);
+    this.setState({ strokeWidth })
+    updateElementScale(null, strokeWidth);
   }
 
   render() {
@@ -82,9 +81,11 @@ class ScaleEditor extends React.Component {
               <InputGroup>
                 <Input 
                   type="number" 
-                  step="0.1"
+                  step="0.01"
                   name="scale" 
-                  id="scale" 
+                  id="scale"
+                  min="0" 
+                  max="10"
                   value={scale}
                   onChange={this.scaleChange} 
                   disabled={disable()}
@@ -97,9 +98,12 @@ class ScaleEditor extends React.Component {
             <Col sm={5}>
               <InputGroup>
                 <Input 
-                  type="number" 
+                  type="number"
+                  step="0.01" 
                   name="stroke width" 
-                  id="stroke-width" 
+                  id="stroke-width"
+                  min="0" 
+                  max="100"
                   value={strokeWidth}
                   onChange={this.strokeWidthChange}
                   disabled={disable()} 
@@ -107,7 +111,6 @@ class ScaleEditor extends React.Component {
               </InputGroup>
             </Col>         
           </FormGroup>
-          <Button className="btn-dark mb-3 w-100" onClick={this.scaleElementClickEvent} disabled={disable()}>Submit Change</Button>
         </Form>
       </div>
     )

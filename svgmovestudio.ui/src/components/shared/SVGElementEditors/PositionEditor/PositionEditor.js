@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Col, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Col } from 'reactstrap';
 import './PositionEditor.scss';
 
 class PositionEditor extends React.Component {
@@ -19,11 +19,11 @@ class PositionEditor extends React.Component {
 
     if (selectedElement) {
       if(Object.entries(selectedElement).length === 0) {
-        this.setState({scale: 0, strokeWidth: 0})
+        this.setState({x_position: 0, y_position: 0})
       } else {
-        const scale = selectedElement.scale;
-        const strokeWidth = selectedElement.strokeWidth;
-        this.setState({scale, strokeWidth})
+        const x_position = selectedElement.x_Translate;
+        const y_position = selectedElement.y_Translate;
+        this.setState({x_position, y_position})
       }
     }
   }
@@ -44,19 +44,18 @@ class PositionEditor extends React.Component {
     }
   }
 
-  moveElementClickEvent = (e) => {
-    const { updateElementPosition } = this.props;
-    const { x_position, y_position } = this.state;
-    e.preventDefault();
-    updateElementPosition(x_position, y_position);
-  }
-
   x_positionChange = e => {
-    this.setState({ x_position: e.target.value })
+    const { updateElementPosition } = this.props;
+    const x_position = e.target.value;
+    this.setState({ x_position })
+    updateElementPosition(parseInt(x_position), null);
   }
 
   y_positionChange = e => {
-    this.setState({ y_position: e.target.value })
+    const { updateElementPosition } = this.props;
+    const y_position = e.target.value;
+    this.setState({ y_position })
+    updateElementPosition(null, parseInt(y_position));
   }
 
   render() {
@@ -112,7 +111,6 @@ class PositionEditor extends React.Component {
               </InputGroup>
             </Col>         
           </FormGroup>
-          <Button className="btn-dark mb-3 w-100" onClick={this.moveElementClickEvent} disabled={disable()}>Submit Change</Button>
         </Form>
       </div>
     )

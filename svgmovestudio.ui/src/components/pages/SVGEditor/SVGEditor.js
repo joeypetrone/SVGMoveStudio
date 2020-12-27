@@ -54,16 +54,32 @@ class SVGEditor extends React.Component {
 
   updateElementPosition = (x_position, y_position) => {
     const { selectedElement } = this.state;
-    selectedElement.x_Translate = x_position;
-    selectedElement.y_Translate = y_position;
-    this.forceUpdate()
+    if (x_position === null) {
+      selectedElement.y_Translate = y_position;
+      this.forceUpdate()
+    } else if (y_position === null) {
+      selectedElement.x_Translate = x_position;
+      this.forceUpdate()
+    } else {
+      selectedElement.x_Translate = x_position;
+      selectedElement.y_Translate = y_position;
+      this.forceUpdate()
+    }
   }
 
   updateElementScale = (scale, strokeWidth) => {
     const { selectedElement } = this.state;
-    selectedElement.scale = scale;
-    selectedElement.strokeWidth = strokeWidth;
-    this.forceUpdate()
+    if (scale === null) {
+      selectedElement.strokeWidth = strokeWidth;
+      this.forceUpdate()
+    } else if (strokeWidth === null) {
+      selectedElement.scale = scale;
+      this.forceUpdate()    
+    } else {
+      selectedElement.scale = scale;
+      selectedElement.strokeWidth = strokeWidth;
+      this.forceUpdate()
+    }
   }
 
   updateElementColor = (fillColor, fillOpacity, strokeColor, strokeOpacity) => {
