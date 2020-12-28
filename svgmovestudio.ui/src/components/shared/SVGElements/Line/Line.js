@@ -33,7 +33,7 @@ class Line extends React.Component {
         y2={element.y_CoordinateEnd} 
         stroke={element.stroke} 
         strokeWidth={element.strokeWidth}
-        strokeOpacity={element.strokeOpacity}
+        strokeOpacity={element.strokeOpacity + '%'}
         transform={transformEditors()} 
       />
     )

@@ -13,11 +13,11 @@ namespace SVGMoveStudio.Models
         public string ElementName { get; set; }
         public int ArrangeNumber { get; set; }
         public string Fill { get; set; }
-        public decimal FillOpacity { get; set; }
+        public int FillOpacity { get; set; }
         public decimal Opacity { get; set; }
         public string Stroke { get; set; }
         public decimal StrokeWidth { get; set; }
-        public decimal StrokeOpacity { get; set; }
+        public int StrokeOpacity { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public int X_CoordinateStart { get; set; }

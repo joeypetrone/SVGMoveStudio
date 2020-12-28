@@ -82,13 +82,34 @@ class SVGEditor extends React.Component {
     }
   }
 
-  updateElementColor = (fillColor, fillOpacity, strokeColor, strokeOpacity) => {
+  updateElementColor = (fillColor, strokeColor) => {
     const { selectedElement } = this.state;
-    selectedElement.fill = fillColor;
-    selectedElement.fillOpacity = fillOpacity / 10;
-    selectedElement.stroke = strokeColor;
-    selectedElement.strokeOpacity = strokeOpacity / 10;
-    this.forceUpdate()
+    if (fillColor === null) {
+      selectedElement.stroke = strokeColor;
+      this.forceUpdate()
+    } else if (strokeColor === null) {
+      selectedElement.fill = fillColor;
+      this.forceUpdate()
+    } else {
+      selectedElement.fill = fillColor;
+      selectedElement.stroke = strokeColor;
+      this.forceUpdate()
+    }
+  }
+
+  updateElementOpacity = (fillOpacity, strokeOpacity) => {
+    const { selectedElement } = this.state;
+    if (fillOpacity === null) {
+      selectedElement.strokeOpacity = strokeOpacity;
+      this.forceUpdate()
+    } else if (strokeOpacity === null) {
+      selectedElement.fillOpacity = fillOpacity;
+      this.forceUpdate()    
+    } else {
+      selectedElement.fillOpacity = fillOpacity;
+      selectedElement.strokeOpacity = strokeOpacity;
+      this.forceUpdate()
+    }
   }
 
   openSelectedEditor = (editorName) => {
@@ -172,6 +193,7 @@ class SVGEditor extends React.Component {
               updateElementPosition={this.updateElementPosition} 
               updateElementScale={this.updateElementScale}
               updateElementColor={this.updateElementColor}
+              updateElementOpacity={this.updateElementOpacity}
             />
           </Row>
         </Container>

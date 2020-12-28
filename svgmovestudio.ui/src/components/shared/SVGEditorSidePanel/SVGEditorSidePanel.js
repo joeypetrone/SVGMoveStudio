@@ -11,7 +11,8 @@ class SVGEditorSidePanel extends React.Component {
   static propTypes = {
     updateElementPosition: PropTypes.func.isRequired,
     updateElementScale: PropTypes.func.isRequired,
-    updateElementColor: PropTypes.func.isRequired, 
+    updateElementColor: PropTypes.func.isRequired,
+    updateElementOpacity: PropTypes.func.isRequired, 
     selectedEditor: PropTypes.string.isRequired,
     selectedElement: PropTypes.object.isRequired
   }
@@ -22,17 +23,31 @@ class SVGEditorSidePanel extends React.Component {
       selectedElement, 
       updateElementPosition, 
       updateElementScale, 
-      updateElementColor 
+      updateElementColor,
+      updateElementOpacity 
     } = this.props;
 
     const showSelectedEditor = () => {
       switch(selectedEditor) {
         case 'position':
-          return <PositionEditor selectedElement={selectedElement} selectedEditor={selectedEditor} updateElementPosition={updateElementPosition}/>
+          return <PositionEditor 
+                    selectedElement={selectedElement} 
+                    selectedEditor={selectedEditor} 
+                    updateElementPosition={updateElementPosition}
+                  />
         case 'scale':
-          return <ScaleEditor selectedElement={selectedElement} selectedEditor={selectedEditor} updateElementScale={updateElementScale}/>
+          return <ScaleEditor 
+                    selectedElement={selectedElement} 
+                    selectedEditor={selectedEditor} 
+                    updateElementScale={updateElementScale}
+                  />
         case 'color':
-          return <ColorEditor selectedElement={selectedElement} selectedEditor={selectedEditor} updateElementColor={updateElementColor}/>
+          return <ColorEditor 
+                    selectedElement={selectedElement} 
+                    selectedEditor={selectedEditor} 
+                    updateElementColor={updateElementColor}
+                    updateElementOpacity={updateElementOpacity}
+                  />
         case 'stretch':
           return <StretchEditor />          
         default:
