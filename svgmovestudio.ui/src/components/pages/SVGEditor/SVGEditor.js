@@ -112,6 +112,21 @@ class SVGEditor extends React.Component {
     }
   }
 
+  updateElementSkew = (x_skew, y_skew) => {
+    const { selectedElement } = this.state;
+    if (x_skew === null) {
+      selectedElement.y_Skew = y_skew;
+      this.forceUpdate()
+    } else if (y_skew === null) {
+      selectedElement.x_Skew = x_skew;
+      this.forceUpdate()    
+    } else {
+      selectedElement.x_Skew = x_skew;
+      selectedElement.y_Skew = y_skew;
+      this.forceUpdate()
+    }
+  }
+
   openSelectedEditor = (editorName) => {
     this.setState({selectedEditor: editorName})
   }
@@ -194,6 +209,7 @@ class SVGEditor extends React.Component {
               updateElementScale={this.updateElementScale}
               updateElementColor={this.updateElementColor}
               updateElementOpacity={this.updateElementOpacity}
+              updateElementSkew={this.updateElementSkew}
             />
           </Row>
         </Container>

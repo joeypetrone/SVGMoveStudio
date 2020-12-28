@@ -12,7 +12,8 @@ class SVGEditorSidePanel extends React.Component {
     updateElementPosition: PropTypes.func.isRequired,
     updateElementScale: PropTypes.func.isRequired,
     updateElementColor: PropTypes.func.isRequired,
-    updateElementOpacity: PropTypes.func.isRequired, 
+    updateElementOpacity: PropTypes.func.isRequired,     
+    updateElementSkew: PropTypes.func.isRequired,     
     selectedEditor: PropTypes.string.isRequired,
     selectedElement: PropTypes.object.isRequired
   }
@@ -24,7 +25,8 @@ class SVGEditorSidePanel extends React.Component {
       updateElementPosition, 
       updateElementScale, 
       updateElementColor,
-      updateElementOpacity 
+      updateElementOpacity, 
+      updateElementSkew 
     } = this.props;
 
     const showSelectedEditor = () => {
@@ -49,7 +51,11 @@ class SVGEditorSidePanel extends React.Component {
                     updateElementOpacity={updateElementOpacity}
                   />
         case 'stretch':
-          return <StretchEditor />          
+          return <StretchEditor 
+                    selectedElement={selectedElement} 
+                    selectedEditor={selectedEditor} 
+                    updateElementSkew={updateElementSkew}
+                  />          
         default:
           break;  
       }    

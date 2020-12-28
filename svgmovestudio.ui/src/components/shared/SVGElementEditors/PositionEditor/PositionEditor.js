@@ -81,7 +81,7 @@ class PositionEditor extends React.Component {
               <InputGroup>
                 <Input 
                   type="number" 
-                  name="x_position" 
+                  name="horizontal position" 
                   id="x_position" 
                   value={x_position}
                   onChange={this.x_positionChange}
@@ -99,7 +99,7 @@ class PositionEditor extends React.Component {
               <InputGroup>
                 <Input 
                   type="number" 
-                  name="y_position" 
+                  name="vertical position" 
                   id="y_position" 
                   value={y_position}
                   onChange={this.y_positionChange} 

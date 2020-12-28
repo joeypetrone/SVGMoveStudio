@@ -24,7 +24,9 @@ class Polygon extends React.Component {
 
     const transformEditors = () => {
       return `translate(${element.x_Translate}, ${element.y_Translate})
-              scale(${element.scale})`
+              scale(${element.scale})
+              skewX(${element.x_Skew})
+              skewY(${element.y_Skew})`
     }
 
     return (
