@@ -10,6 +10,7 @@ import StretchEditor from '../../shared/SVGElementEditors/StretchEditor/StretchE
 class SVGEditorSidePanel extends React.Component {
   static propTypes = {
     updateElementPosition: PropTypes.func.isRequired,
+    updateElementRotation: PropTypes.func.isRequired,
     updateElementScale: PropTypes.func.isRequired,
     updateElementColor: PropTypes.func.isRequired,
     updateElementOpacity: PropTypes.func.isRequired,     
@@ -22,7 +23,8 @@ class SVGEditorSidePanel extends React.Component {
     const { 
       selectedEditor, 
       selectedElement, 
-      updateElementPosition, 
+      updateElementPosition,
+      updateElementRotation, 
       updateElementScale, 
       updateElementColor,
       updateElementOpacity, 
@@ -36,6 +38,7 @@ class SVGEditorSidePanel extends React.Component {
                     selectedElement={selectedElement} 
                     selectedEditor={selectedEditor} 
                     updateElementPosition={updateElementPosition}
+                    updateElementRotation={updateElementRotation}
                   />
         case 'scale':
           return <ScaleEditor 

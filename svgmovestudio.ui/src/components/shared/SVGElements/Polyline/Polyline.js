@@ -24,7 +24,8 @@ class Polyline extends React.Component {
       return `translate(${element.x_Translate}, ${element.y_Translate})
               scale(${element.scale})
               skewX(${element.x_Skew})
-              skewY(${element.y_Skew})`
+              skewY(${element.y_Skew})
+              rotate(${element.rotate})`
     }
 
     return (

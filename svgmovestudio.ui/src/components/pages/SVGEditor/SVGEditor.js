@@ -67,6 +67,12 @@ class SVGEditor extends React.Component {
     }
   }
 
+  updateElementRotation = (rotation) => {
+    const { selectedElement } = this.state;
+    selectedElement.rotate = rotation;
+    this.forceUpdate()
+  }
+
   updateElementScale = (scale, strokeWidth) => {
     const { selectedElement } = this.state;
     if (scale === null) {
@@ -185,7 +191,12 @@ class SVGEditor extends React.Component {
   }
 
   render() {
-    const { defaultElements, viewboxElements, selectedEditor, selectedElement } = this.state;
+    const { 
+      defaultElements, 
+      viewboxElements, 
+      selectedEditor, 
+      selectedElement 
+    } = this.state;
 
     return (
       <div className="SVGEditor">
@@ -206,6 +217,7 @@ class SVGEditor extends React.Component {
               selectedEditor={selectedEditor} 
               selectedElement={selectedElement} 
               updateElementPosition={this.updateElementPosition} 
+              updateElementRotation={this.updateElementRotation} 
               updateElementScale={this.updateElementScale}
               updateElementColor={this.updateElementColor}
               updateElementOpacity={this.updateElementOpacity}

@@ -6,12 +6,14 @@ import './PositionEditor.scss';
 class PositionEditor extends React.Component {
   static propTypes = {
     updateElementPosition: PropTypes.func.isRequired,
+    updateElementRotation: PropTypes.func.isRequired,
     selectedElement: PropTypes.object.isRequired
   }
 
   state = {
     x_position: 0,
-    y_position: 0
+    y_position: 0,
+    rotation: 0
   }
 
   componentDidMount() {
@@ -19,11 +21,12 @@ class PositionEditor extends React.Component {
 
     if (selectedElement) {
       if(Object.entries(selectedElement).length === 0) {
-        this.setState({x_position: 0, y_position: 0})
+        this.setState({x_position: 0, y_position: 0, rotation: 0})
       } else {
         const x_position = selectedElement.x_Translate;
         const y_position = selectedElement.y_Translate;
-        this.setState({x_position, y_position})
+        const rotation = selectedElement.rotate;
+        this.setState({x_position, y_position, rotation})
       }
     }
   }
@@ -34,11 +37,12 @@ class PositionEditor extends React.Component {
     if (prevProps.selectedElement !== selectedElement) {
       if (selectedElement) {
         if(Object.entries(selectedElement).length === 0) {
-          this.setState({x_position: 0, y_position: 0})
+          this.setState({x_position: 0, y_position: 0, rotate: 0})
         } else {
           const x_position = selectedElement.x_Translate;
           const y_position = selectedElement.y_Translate;
-          this.setState({x_position, y_position})
+          const rotation = selectedElement.rotate;
+          this.setState({x_position, y_position, rotation})
         }
       }
     }
@@ -46,21 +50,28 @@ class PositionEditor extends React.Component {
 
   x_positionChange = e => {
     const { updateElementPosition } = this.props;
-    const x_position = e.target.value;
+    const x_position = parseInt(e.target.value);
     this.setState({ x_position })
-    updateElementPosition(parseInt(x_position), null);
+    updateElementPosition(x_position, null);
   }
 
   y_positionChange = e => {
     const { updateElementPosition } = this.props;
-    const y_position = e.target.value;
+    const y_position = parseInt(e.target.value);
     this.setState({ y_position })
-    updateElementPosition(null, parseInt(y_position));
+    updateElementPosition(null, y_position);
+  }
+
+  rotationChange = e => {
+    const { updateElementRotation } = this.props;
+    const rotation = parseInt(e.target.value);
+    this.setState({ rotation })
+    updateElementRotation(rotation);
   }
 
   render() {
     const { selectedElement } = this.props;
-    const { x_position, y_position } = this.state;
+    const { x_position, y_position, rotation } = this.state;
 
     const disable = () => {
       if (Object.entries(selectedElement).length === 0) {
@@ -107,6 +118,26 @@ class PositionEditor extends React.Component {
                 />
                 <InputGroupAddon addonType="append">
                   <InputGroupText>px</InputGroupText>
+                </InputGroupAddon>
+              </InputGroup>
+            </Col>         
+          </FormGroup>
+          <FormGroup row>
+            <Label for="rotation" sm={5}>Rotate</Label>
+            <Col sm={7}>
+              <InputGroup>
+              <Input 
+                  type="number" 
+                  name="rotation" 
+                  id="rotation"
+                  min="0"
+                  max="360" 
+                  value={rotation}
+                  onChange={this.rotationChange}
+                  disabled={disable()}  
+                />
+                <InputGroupAddon addonType="append">
+                  <InputGroupText>deg</InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
             </Col>         
