@@ -54,25 +54,83 @@ class SVGEditor extends React.Component {
 
   updateElementPosition = (x_position, y_position) => {
     const { selectedElement } = this.state;
-    selectedElement.x_Translate = x_position;
-    selectedElement.y_Translate = y_position;
+    if (x_position === null) {
+      selectedElement.y_Translate = y_position;
+      this.forceUpdate()
+    } else if (y_position === null) {
+      selectedElement.x_Translate = x_position;
+      this.forceUpdate()
+    } else {
+      selectedElement.x_Translate = x_position;
+      selectedElement.y_Translate = y_position;
+      this.forceUpdate()
+    }
+  }
+
+  updateElementRotation = (rotation) => {
+    const { selectedElement } = this.state;
+    selectedElement.rotate = rotation;
     this.forceUpdate()
   }
 
   updateElementScale = (scale, strokeWidth) => {
     const { selectedElement } = this.state;
-    selectedElement.scale = scale;
-    selectedElement.strokeWidth = strokeWidth;
-    this.forceUpdate()
+    if (scale === null) {
+      selectedElement.strokeWidth = strokeWidth;
+      this.forceUpdate()
+    } else if (strokeWidth === null) {
+      selectedElement.scale = scale;
+      this.forceUpdate()    
+    } else {
+      selectedElement.scale = scale;
+      selectedElement.strokeWidth = strokeWidth;
+      this.forceUpdate()
+    }
   }
 
-  updateElementColor = (fillColor, fillOpacity, strokeColor, strokeOpacity) => {
+  updateElementColor = (fillColor, strokeColor) => {
     const { selectedElement } = this.state;
-    selectedElement.fill = fillColor;
-    selectedElement.fillOpacity = fillOpacity / 10;
-    selectedElement.stroke = strokeColor;
-    selectedElement.strokeOpacity = strokeOpacity / 10;
-    this.forceUpdate()
+    if (fillColor === null) {
+      selectedElement.stroke = strokeColor;
+      this.forceUpdate()
+    } else if (strokeColor === null) {
+      selectedElement.fill = fillColor;
+      this.forceUpdate()
+    } else {
+      selectedElement.fill = fillColor;
+      selectedElement.stroke = strokeColor;
+      this.forceUpdate()
+    }
+  }
+
+  updateElementOpacity = (fillOpacity, strokeOpacity) => {
+    const { selectedElement } = this.state;
+    if (fillOpacity === null) {
+      selectedElement.strokeOpacity = strokeOpacity;
+      this.forceUpdate()
+    } else if (strokeOpacity === null) {
+      selectedElement.fillOpacity = fillOpacity;
+      this.forceUpdate()    
+    } else {
+      selectedElement.fillOpacity = fillOpacity;
+      selectedElement.strokeOpacity = strokeOpacity;
+      this.forceUpdate()
+    }
+  }
+
+  updateElementSkew = (x_skew, y_skew) => {
+    const { selectedElement } = this.state;
+    if (x_skew === null) {
+      selectedElement.y_Skew = y_skew;
+      this.forceUpdate()
+    } else if (y_skew === null) {
+      selectedElement.x_Skew = x_skew;
+      this.forceUpdate()    
+    } else {
+      selectedElement.x_Skew = x_skew;
+      selectedElement.y_Skew = y_skew;
+      this.forceUpdate()
+    }
   }
 
   openSelectedEditor = (editorName) => {
@@ -133,7 +191,12 @@ class SVGEditor extends React.Component {
   }
 
   render() {
-    const { defaultElements, viewboxElements, selectedEditor, selectedElement } = this.state;
+    const { 
+      defaultElements, 
+      viewboxElements, 
+      selectedEditor, 
+      selectedElement 
+    } = this.state;
 
     return (
       <div className="SVGEditor">
@@ -154,8 +217,11 @@ class SVGEditor extends React.Component {
               selectedEditor={selectedEditor} 
               selectedElement={selectedElement} 
               updateElementPosition={this.updateElementPosition} 
+              updateElementRotation={this.updateElementRotation} 
               updateElementScale={this.updateElementScale}
               updateElementColor={this.updateElementColor}
+              updateElementOpacity={this.updateElementOpacity}
+              updateElementSkew={this.updateElementSkew}
             />
           </Row>
         </Container>

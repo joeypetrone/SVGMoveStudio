@@ -24,18 +24,21 @@ class Polygon extends React.Component {
 
     const transformEditors = () => {
       return `translate(${element.x_Translate}, ${element.y_Translate})
-              scale(${element.scale})`
+              scale(${element.scale})
+              skewX(${element.x_Skew})
+              skewY(${element.y_Skew})
+              rotate(${element.rotate})`
     }
 
     return (
       <polygon 
         points={element.points} 
         fill={element.fill} 
-        fillOpacity={element.fillOpacity}
+        fillOpacity={element.fillOpacity + '%'}
         opacity={element.opacity}
         stroke={element.stroke}
         strokeWidth={element.strokeWidth}
-        strokeOpacity={element.strokeOpacity}
+        strokeOpacity={element.strokeOpacity + '%'}
         transform={transformEditors()}
       />
     )

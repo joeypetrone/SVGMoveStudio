@@ -22,7 +22,10 @@ class Line extends React.Component {
 
     const transformEditors = () => {
       return `translate(${element.x_Translate}, ${element.y_Translate})
-              scale(${element.scale})`
+              scale(${element.scale})
+              skewX(${element.x_Skew})
+              skewY(${element.y_Skew})
+              rotate(${element.rotate})`
     }
 
     return (
@@ -33,7 +36,7 @@ class Line extends React.Component {
         y2={element.y_CoordinateEnd} 
         stroke={element.stroke} 
         strokeWidth={element.strokeWidth}
-        strokeOpacity={element.strokeOpacity}
+        strokeOpacity={element.strokeOpacity + '%'}
         transform={transformEditors()} 
       />
     )

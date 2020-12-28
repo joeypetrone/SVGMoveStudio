@@ -10,8 +10,11 @@ import StretchEditor from '../../shared/SVGElementEditors/StretchEditor/StretchE
 class SVGEditorSidePanel extends React.Component {
   static propTypes = {
     updateElementPosition: PropTypes.func.isRequired,
+    updateElementRotation: PropTypes.func.isRequired,
     updateElementScale: PropTypes.func.isRequired,
-    updateElementColor: PropTypes.func.isRequired, 
+    updateElementColor: PropTypes.func.isRequired,
+    updateElementOpacity: PropTypes.func.isRequired,     
+    updateElementSkew: PropTypes.func.isRequired,     
     selectedEditor: PropTypes.string.isRequired,
     selectedElement: PropTypes.object.isRequired
   }
@@ -20,21 +23,42 @@ class SVGEditorSidePanel extends React.Component {
     const { 
       selectedEditor, 
       selectedElement, 
-      updateElementPosition, 
+      updateElementPosition,
+      updateElementRotation, 
       updateElementScale, 
-      updateElementColor 
+      updateElementColor,
+      updateElementOpacity, 
+      updateElementSkew 
     } = this.props;
 
     const showSelectedEditor = () => {
       switch(selectedEditor) {
         case 'position':
-          return <PositionEditor selectedElement={selectedElement} selectedEditor={selectedEditor} updateElementPosition={updateElementPosition}/>
+          return <PositionEditor 
+                    selectedElement={selectedElement} 
+                    selectedEditor={selectedEditor} 
+                    updateElementPosition={updateElementPosition}
+                    updateElementRotation={updateElementRotation}
+                  />
         case 'scale':
-          return <ScaleEditor selectedElement={selectedElement} selectedEditor={selectedEditor} updateElementScale={updateElementScale}/>
+          return <ScaleEditor 
+                    selectedElement={selectedElement} 
+                    selectedEditor={selectedEditor} 
+                    updateElementScale={updateElementScale}
+                  />
         case 'color':
-          return <ColorEditor selectedElement={selectedElement} selectedEditor={selectedEditor} updateElementColor={updateElementColor}/>
+          return <ColorEditor 
+                    selectedElement={selectedElement} 
+                    selectedEditor={selectedEditor} 
+                    updateElementColor={updateElementColor}
+                    updateElementOpacity={updateElementOpacity}
+                  />
         case 'stretch':
-          return <StretchEditor />          
+          return <StretchEditor 
+                    selectedElement={selectedElement} 
+                    selectedEditor={selectedEditor} 
+                    updateElementSkew={updateElementSkew}
+                  />          
         default:
           break;  
       }    

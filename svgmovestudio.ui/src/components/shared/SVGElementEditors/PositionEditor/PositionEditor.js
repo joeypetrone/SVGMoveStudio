@@ -1,17 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Col, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Col } from 'reactstrap';
 import './PositionEditor.scss';
 
 class PositionEditor extends React.Component {
   static propTypes = {
     updateElementPosition: PropTypes.func.isRequired,
+    updateElementRotation: PropTypes.func.isRequired,
     selectedElement: PropTypes.object.isRequired
   }
 
   state = {
     x_position: 0,
-    y_position: 0
+    y_position: 0,
+    rotation: 0
   }
 
   componentDidMount() {
@@ -19,11 +21,12 @@ class PositionEditor extends React.Component {
 
     if (selectedElement) {
       if(Object.entries(selectedElement).length === 0) {
-        this.setState({scale: 0, strokeWidth: 0})
+        this.setState({x_position: 0, y_position: 0, rotation: 0})
       } else {
-        const scale = selectedElement.scale;
-        const strokeWidth = selectedElement.strokeWidth;
-        this.setState({scale, strokeWidth})
+        const x_position = selectedElement.x_Translate;
+        const y_position = selectedElement.y_Translate;
+        const rotation = selectedElement.rotate;
+        this.setState({x_position, y_position, rotation})
       }
     }
   }
@@ -34,34 +37,41 @@ class PositionEditor extends React.Component {
     if (prevProps.selectedElement !== selectedElement) {
       if (selectedElement) {
         if(Object.entries(selectedElement).length === 0) {
-          this.setState({x_position: 0, y_position: 0})
+          this.setState({x_position: 0, y_position: 0, rotate: 0})
         } else {
           const x_position = selectedElement.x_Translate;
           const y_position = selectedElement.y_Translate;
-          this.setState({x_position, y_position})
+          const rotation = selectedElement.rotate;
+          this.setState({x_position, y_position, rotation})
         }
       }
     }
   }
 
-  moveElementClickEvent = (e) => {
-    const { updateElementPosition } = this.props;
-    const { x_position, y_position } = this.state;
-    e.preventDefault();
-    updateElementPosition(x_position, y_position);
-  }
-
   x_positionChange = e => {
-    this.setState({ x_position: e.target.value })
+    const { updateElementPosition } = this.props;
+    const x_position = parseInt(e.target.value);
+    this.setState({ x_position })
+    updateElementPosition(x_position, null);
   }
 
   y_positionChange = e => {
-    this.setState({ y_position: e.target.value })
+    const { updateElementPosition } = this.props;
+    const y_position = parseInt(e.target.value);
+    this.setState({ y_position })
+    updateElementPosition(null, y_position);
+  }
+
+  rotationChange = e => {
+    const { updateElementRotation } = this.props;
+    const rotation = parseInt(e.target.value);
+    this.setState({ rotation })
+    updateElementRotation(rotation);
   }
 
   render() {
     const { selectedElement } = this.props;
-    const { x_position, y_position } = this.state;
+    const { x_position, y_position, rotation } = this.state;
 
     const disable = () => {
       if (Object.entries(selectedElement).length === 0) {
@@ -82,7 +92,7 @@ class PositionEditor extends React.Component {
               <InputGroup>
                 <Input 
                   type="number" 
-                  name="x_position" 
+                  name="horizontal position" 
                   id="x_position" 
                   value={x_position}
                   onChange={this.x_positionChange}
@@ -100,7 +110,7 @@ class PositionEditor extends React.Component {
               <InputGroup>
                 <Input 
                   type="number" 
-                  name="y_position" 
+                  name="vertical position" 
                   id="y_position" 
                   value={y_position}
                   onChange={this.y_positionChange} 
@@ -112,7 +122,26 @@ class PositionEditor extends React.Component {
               </InputGroup>
             </Col>         
           </FormGroup>
-          <Button className="btn-dark mb-3 w-100" onClick={this.moveElementClickEvent} disabled={disable()}>Submit Change</Button>
+          <FormGroup row>
+            <Label for="rotation" sm={5}>Rotate</Label>
+            <Col sm={7}>
+              <InputGroup>
+              <Input 
+                  type="number" 
+                  name="rotation" 
+                  id="rotation"
+                  min="-360"
+                  max="360" 
+                  value={rotation}
+                  onChange={this.rotationChange}
+                  disabled={disable()}  
+                />
+                <InputGroupAddon addonType="append">
+                  <InputGroupText>deg</InputGroupText>
+                </InputGroupAddon>
+              </InputGroup>
+            </Col>         
+          </FormGroup>
         </Form>
       </div>
     )
