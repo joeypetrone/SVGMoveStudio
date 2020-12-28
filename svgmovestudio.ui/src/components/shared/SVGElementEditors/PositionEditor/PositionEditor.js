@@ -130,7 +130,7 @@ class PositionEditor extends React.Component {
                   type="number" 
                   name="rotation" 
                   id="rotation"
-                  min="0"
+                  min="-360"
                   max="360" 
                   value={rotation}
                   onChange={this.rotationChange}
