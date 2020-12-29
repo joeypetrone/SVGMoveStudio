@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row } from 'reactstrap';
+import { Container, Row, Button, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import './SVGEditor.scss';
@@ -17,6 +17,7 @@ import Polyline from '../../shared/SVGElements/Polyline/Polyline';
 import Path from '../../shared/SVGElements/Path/Path';
 import SVGEditorSidePanel from '../../shared/SVGEditorSidePanel/SVGEditorSidePanel';
 import SVGEditorNavbar from '../../shared/SVGEditorNavbar/SVGEditorNavbar';
+import SVGCodeModal from '../../shared/SVGCodeModal/SVGCodeModal';
 
 class SVGEditor extends React.Component {
   static  propTypes = {
@@ -223,6 +224,16 @@ class SVGEditor extends React.Component {
               updateElementOpacity={this.updateElementOpacity}
               updateElementSkew={this.updateElementSkew}
             />
+          </Row>
+          <Row className="p-2">
+            <Col md={6}>
+            </Col>
+            <Col md={6} className="pr-2">
+              <Row className="float-right mr-1">
+                <SVGCodeModal/>
+                <Button color="danger">Save SVG</Button>
+              </Row>
+            </Col>
           </Row>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">
