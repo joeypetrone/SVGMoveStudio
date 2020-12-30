@@ -1,27 +1,47 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import './SVGCodeModal.scss';
 
 const SVGCodeModal = (props) => {
   const {
-    className
+    viewboxElements
   } = props;
 
   const [modal, setModal] = useState(false);
 
-  const toggle = () => setModal(!modal);
+  const toggle = () => {
+    setModal(!modal);
+  }
+
+  const copyToClipBoard = () =>{
+
+    document.execCommand('copy');
+    toggle();
+  }
+
+  const buildSVGCode = viewboxElements.map((element) => {
+    return element.XML;
+  })
 
   return (
     <div>
       <Button className="mr-2" color="dark" onClick={toggle}>Generate Code</Button>
-      <Modal isOpen={modal} toggle={toggle} className={className}>
-        <ModalHeader toggle={toggle}>SVG Generated Code</ModalHeader>
-        <ModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
-        </ModalFooter>
+      <Modal className="w-100" isOpen={modal} toggle={toggle}>
+        <div className="SVGCodeModal">
+          <ModalHeader toggle={toggle}>SVG Generated Code</ModalHeader>
+          <ModalBody className="modal-body">
+            <textarea className="modal-text-area px-2 pt-1 pb-2 w-100 border-0 rounded"
+              value={`<svg width="800" height="500" viewBox="0 0 800 500">${buildSVGCode}</svg>`}
+            />
+          {/* {'<svg width="800" height="500" viewBox="0 0 800 500">'}
+            {buildSVGCode}
+          {'</svg>'} */}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={copyToClipBoard}>Copy Code</Button>{' '}
+            <Button color="secondary" onClick={toggle}>Cancel</Button>
+          </ModalFooter>
+        </div>
       </Modal>
     </div>
   );

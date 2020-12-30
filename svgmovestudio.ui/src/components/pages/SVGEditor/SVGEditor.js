@@ -29,10 +29,10 @@ class SVGEditor extends React.Component {
     userSVGs: [],
     userElements: [],
     defaultElements: [],
-    viewboxAddElementIds: [],
-    viewboxElements: [],
+    viewboxElements: [],    
     selectedEditor: '',
-    selectedElement: {}
+    selectedElement: {},
+    renderXML: false,
   }
 
   componentDidMount() {
@@ -142,7 +142,14 @@ class SVGEditor extends React.Component {
     this.setState({selectedElement: element});
   }
 
+  renderSVGCode = () => {
+    const { renderXML } = this.state;
+    this.setState({ renderXML: !renderXML});
+  }
+
   elementChoice = (element) => {
+    const { renderXML } = this.state;
+
     switch(element.elementTypeId) {
       case 1:
         if (element.tempId === undefined) {
@@ -152,9 +159,9 @@ class SVGEditor extends React.Component {
         }
       case 2: 
         if (element.tempId === undefined) {
-          return <Circle key={element.elementId} element={element}/>;
+          return <Circle key={element.elementId} element={element} renderXML={renderXML}/>;
         } else {
-          return <Circle key={element.tempId} element={element}/>;
+          return <Circle key={element.tempId} element={element} renderXML={renderXML}/>;
         }
       case 3:
         if (element.tempId === undefined) {
@@ -196,7 +203,7 @@ class SVGEditor extends React.Component {
       defaultElements, 
       viewboxElements, 
       selectedEditor, 
-      selectedElement 
+      selectedElement
     } = this.state;
 
     return (
@@ -230,7 +237,7 @@ class SVGEditor extends React.Component {
             </Col>
             <Col md={6} className="pr-2">
               <Row className="float-right mr-1">
-                <SVGCodeModal/>
+                <SVGCodeModal viewboxElements={viewboxElements} renderSVGCode={this.renderSVGCode}/>
                 <Button color="danger">Save SVG</Button>
               </Row>
             </Col>

@@ -1,0 +1,14 @@
+@import '../../../styles/variables';
+
+.SVGCodeModal {
+  display: block;
+
+  .modal-body {
+    background-color: $componentColorGrey;
+
+    .modal-text-area {
+      min-height: 300px;
+
+    }
+  }
+}

@@ -8,14 +8,6 @@ class SVGEditorViewbox extends React.Component {
     elementChoice: PropTypes.func.isRequired,
   }
 
-  componentDidUpdate(prevProps) {
-    const { viewboxElements } = this.props;
-
-    if (prevProps.viewboxElements !== viewboxElements) {
-      
-    }
-  }
-
   render() {
     const { elementChoice, viewboxElements } = this.props;
 
