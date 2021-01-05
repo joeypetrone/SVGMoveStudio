@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row } from 'reactstrap';
+import { Container, Row, Button, Col, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import './SVGEditor.scss';
@@ -17,6 +17,7 @@ import Polyline from '../../shared/SVGElements/Polyline/Polyline';
 import Path from '../../shared/SVGElements/Path/Path';
 import SVGEditorSidePanel from '../../shared/SVGEditorSidePanel/SVGEditorSidePanel';
 import SVGEditorNavbar from '../../shared/SVGEditorNavbar/SVGEditorNavbar';
+import SVGCodeModal from '../../shared/SVGCodeModal/SVGCodeModal';
 
 class SVGEditor extends React.Component {
   static  propTypes = {
@@ -28,10 +29,12 @@ class SVGEditor extends React.Component {
     userSVGs: [],
     userElements: [],
     defaultElements: [],
-    viewboxAddElementIds: [],
-    viewboxElements: [],
+    viewboxElements: [],    
     selectedEditor: '',
-    selectedElement: {}
+    selectedElement: {},
+    renderXML: false,
+    codeIsCopiedByUser: false,
+    saveButtonIsDisabled: true 
   }
 
   componentDidMount() {
@@ -40,8 +43,16 @@ class SVGEditor extends React.Component {
           .then(user => (this.setState({ user })) );
     }
 
+    this.disableSaveButtonToggle()
+
     elementData.getDefaultElements()
       .then(elements => this.setState({ defaultElements: elements }) )
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.authed !== this.props.authed) {
+      this.disableSaveButtonToggle()
+    }
   }
 
   addElementToViewbox = (elementId) => {
@@ -141,7 +152,14 @@ class SVGEditor extends React.Component {
     this.setState({selectedElement: element});
   }
 
+  renderSVGCode = () => {
+    const { renderXML } = this.state;
+    this.setState({ renderXML: !renderXML});
+  }
+
   elementChoice = (element) => {
+    const { renderXML } = this.state;
+
     switch(element.elementTypeId) {
       case 1:
         if (element.tempId === undefined) {
@@ -151,9 +169,9 @@ class SVGEditor extends React.Component {
         }
       case 2: 
         if (element.tempId === undefined) {
-          return <Circle key={element.elementId} element={element}/>;
+          return <Circle key={element.elementId} element={element} renderXML={renderXML}/>;
         } else {
-          return <Circle key={element.tempId} element={element}/>;
+          return <Circle key={element.tempId} element={element} renderXML={renderXML}/>;
         }
       case 3:
         if (element.tempId === undefined) {
@@ -190,18 +208,42 @@ class SVGEditor extends React.Component {
     }
   }
 
+  XMLCopiedAlert = () => {
+    this.setState({codeIsCopiedByUser: true})
+    setTimeout(this.CloseXMLAlert, 3000)
+  }
+
+  CloseXMLAlert = () => {
+    this.setState({codeIsCopiedByUser: false})
+  }
+
+  disableSaveButtonToggle = () => {
+    const { authed } = this.props;
+
+    if (authed) {
+      this.setState({saveButtonIsDisabled: false});
+    } else {
+      this.setState({saveButtonIsDisabled: true});
+    }
+  }
+
   render() {
     const { 
       defaultElements, 
       viewboxElements, 
       selectedEditor, 
-      selectedElement 
+      selectedElement,
+      codeIsCopiedByUser,
+      saveButtonIsDisabled
     } = this.state;
+
+    const { authed } = this.props;
 
     return (
       <div className="SVGEditor">
         <Container className="editor-window mt-3 rounded">
           <SVGEditorNavbar 
+            authed={authed}
             openSelectedEditor={this.openSelectedEditor} 
             viewboxElements={viewboxElements} 
             setSelectedElement={this.setSelectedElement}
@@ -223,6 +265,23 @@ class SVGEditor extends React.Component {
               updateElementOpacity={this.updateElementOpacity}
               updateElementSkew={this.updateElementSkew}
             />
+          </Row>
+          <Row className="p-2">
+            <Col md={6}>
+              {codeIsCopiedByUser 
+                  ? <Alert className="m-0 py-1 px-2" color="success">SVG code copied to clipboard!</Alert>
+                  : ''
+              }
+            </Col>
+            <Col md={6} className="pr-2">
+              <Row className="float-right mr-1">
+                <SVGCodeModal viewboxElements={viewboxElements} renderSVGCode={this.renderSVGCode} XMLCopiedAlert={this.XMLCopiedAlert}/>
+                {saveButtonIsDisabled 
+                  ? <Button color="danger" disabled>Save SVG</Button> 
+                  : <Button color="danger" >Save SVG</Button>
+                }                
+              </Row>
+            </Col>
           </Row>
         </Container>
         <Container className="editor-toolbox my-3 p-2 rounded">

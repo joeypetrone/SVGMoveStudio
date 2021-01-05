@@ -6,29 +6,15 @@ class Polygon extends React.Component {
     element: elementShape.elementShape 
   }
 
-  state = {
-    polygonXml: ''
-  }
-
-  componentDidMount() {
+  transformEditors = () => {
     const { element } = this.props;
-    this.setState({
-      polygonXml: `<polygon points="${element.points}" fill="${element.fill}" />`
-    })
+    return `translate(${element.x_Translate}, ${element.y_Translate}) scale(${element.scale}) skewX(${element.x_Skew}) skewY(${element.y_Skew}) rotate(${element.rotate})`
   }
-
-
 
   render() {
     const { element } = this.props;
 
-    const transformEditors = () => {
-      return `translate(${element.x_Translate}, ${element.y_Translate})
-              scale(${element.scale})
-              skewX(${element.x_Skew})
-              skewY(${element.y_Skew})
-              rotate(${element.rotate})`
-    }
+    element.XML = `<polygon points="${element.points}" fill="${element.fill}" fill-opacity="${element.fillOpacity + '%'}" opacity="${element.opacity}" stroke="${element.stroke}" stroke-width="${element.strokeWidth}" stroke-opacity="${element.strokeOpacity + '%'}" transform="${this.transformEditors()}"/>`;
 
     return (
       <polygon 
@@ -39,7 +25,7 @@ class Polygon extends React.Component {
         stroke={element.stroke}
         strokeWidth={element.strokeWidth}
         strokeOpacity={element.strokeOpacity + '%'}
-        transform={transformEditors()}
+        transform={this.transformEditors()}
       />
     )
   }

@@ -1,13 +1,13 @@
 @import '../../../styles/variables';
 
-.SVGEditor {
+.SVGCodeModal {
   display: block;
 
-  .editor-window {
+  .modal-body {
     background-color: $componentColorGrey;
-  }
 
-  .editor-toolbox {
-    background-color: $componentColorGrey;
+    .modal-text-area {
+      min-height: 300px;
+    }
   }
 }
