@@ -4,7 +4,8 @@ import './SVGCodeModal.scss';
 
 const SVGCodeModal = (props) => {
   const {
-    viewboxElements
+    viewboxElements,
+    XMLCopiedAlert
   } = props;
 
   const [modal, setModal] = useState(false);
@@ -13,8 +14,9 @@ const SVGCodeModal = (props) => {
     setModal(!modal);
   }
 
-  const copyToClipBoard = () =>{
-
+  const copyToClipBoard = (e) =>{
+    XMLCopiedAlert()
+    document.querySelector("textarea").select();
     document.execCommand('copy');
     toggle();
   }
@@ -33,9 +35,6 @@ const SVGCodeModal = (props) => {
             <textarea className="modal-text-area px-2 pt-1 pb-2 w-100 border-0 rounded"
               value={`<svg width="800" height="500" viewBox="0 0 800 500">${buildSVGCode}</svg>`}
             />
-          {/* {'<svg width="800" height="500" viewBox="0 0 800 500">'}
-            {buildSVGCode}
-          {'</svg>'} */}
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={copyToClipBoard}>Copy Code</Button>{' '}

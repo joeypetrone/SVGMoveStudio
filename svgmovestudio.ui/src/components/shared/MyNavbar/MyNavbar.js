@@ -57,8 +57,8 @@ class MyNavbar extends React.Component {
             </Nav>
           </Collapse>
           { authed === true
-          ? <NavLink className="btn-dark btn-sm" onClick={this.signOutEvent}>Sign Out</NavLink>
-          : <NavLink className="btn-dark btn-sm" tag={RRNavLink} to='/sign-in'>Sign In</NavLink>
+          ? <NavLink className="btn-dark btn-sm auth-button" onClick={this.signOutEvent}>Sign Out</NavLink>
+          : <NavLink className="btn-dark btn-sm auth-button" tag={RRNavLink} to='/sign-in'>Sign In</NavLink>
           }
         </Navbar>
       </div>

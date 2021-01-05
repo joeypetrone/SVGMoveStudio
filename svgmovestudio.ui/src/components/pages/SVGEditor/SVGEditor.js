@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Button, Col } from 'reactstrap';
+import { Container, Row, Button, Col, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import './SVGEditor.scss';
@@ -33,6 +33,8 @@ class SVGEditor extends React.Component {
     selectedEditor: '',
     selectedElement: {},
     renderXML: false,
+    codeIsCopiedByUser: false,
+    saveButtonIsDisabled: true 
   }
 
   componentDidMount() {
@@ -41,8 +43,16 @@ class SVGEditor extends React.Component {
           .then(user => (this.setState({ user })) );
     }
 
+    this.disableSaveButtonToggle()
+
     elementData.getDefaultElements()
       .then(elements => this.setState({ defaultElements: elements }) )
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.authed !== this.props.authed) {
+      this.disableSaveButtonToggle()
+    }
   }
 
   addElementToViewbox = (elementId) => {
@@ -198,18 +208,42 @@ class SVGEditor extends React.Component {
     }
   }
 
+  XMLCopiedAlert = () => {
+    this.setState({codeIsCopiedByUser: true})
+    setTimeout(this.CloseXMLAlert, 3000)
+  }
+
+  CloseXMLAlert = () => {
+    this.setState({codeIsCopiedByUser: false})
+  }
+
+  disableSaveButtonToggle = () => {
+    const { authed } = this.props;
+
+    if (authed) {
+      this.setState({saveButtonIsDisabled: false});
+    } else {
+      this.setState({saveButtonIsDisabled: true});
+    }
+  }
+
   render() {
     const { 
       defaultElements, 
       viewboxElements, 
       selectedEditor, 
-      selectedElement
+      selectedElement,
+      codeIsCopiedByUser,
+      saveButtonIsDisabled
     } = this.state;
+
+    const { authed } = this.props;
 
     return (
       <div className="SVGEditor">
         <Container className="editor-window mt-3 rounded">
           <SVGEditorNavbar 
+            authed={authed}
             openSelectedEditor={this.openSelectedEditor} 
             viewboxElements={viewboxElements} 
             setSelectedElement={this.setSelectedElement}
@@ -234,11 +268,18 @@ class SVGEditor extends React.Component {
           </Row>
           <Row className="p-2">
             <Col md={6}>
+              {codeIsCopiedByUser 
+                  ? <Alert className="m-0 py-1 px-2" color="success">SVG code copied to clipboard!</Alert>
+                  : ''
+              }
             </Col>
             <Col md={6} className="pr-2">
               <Row className="float-right mr-1">
-                <SVGCodeModal viewboxElements={viewboxElements} renderSVGCode={this.renderSVGCode}/>
-                <Button color="danger">Save SVG</Button>
+                <SVGCodeModal viewboxElements={viewboxElements} renderSVGCode={this.renderSVGCode} XMLCopiedAlert={this.XMLCopiedAlert}/>
+                {saveButtonIsDisabled 
+                  ? <Button color="danger" disabled>Save SVG</Button> 
+                  : <Button color="danger" >Save SVG</Button>
+                }                
               </Row>
             </Col>
           </Row>
