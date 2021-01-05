@@ -6,27 +6,15 @@ class Rectangle extends React.Component {
     element: elementShape.elementShape 
   }
 
-  state = {
-    rectangleXml: ''
-  }
-
-  componentDidMount() {
+  transformEditors = () => {
     const { element } = this.props;
-    this.setState({
-      rectangleXml: `<rect x="${element.x_CoordinateStart}" x="${element.y_CoordinateStart}" width="${element.width}" height="${element.height}" fill="${element.fill}" />`
-    })
+    return `translate(${element.x_Translate}, ${element.y_Translate}) scale(${element.scale}) skewX(${element.x_Skew}) skewY(${element.y_Skew}) rotate(${element.rotate})`
   }
 
   render() {
     const { element } = this.props; 
 
-    const transformEditors = () => {
-      return `translate(${element.x_Translate}, ${element.y_Translate})
-              scale(${element.scale})
-              skewX(${element.x_Skew})
-              skewY(${element.y_Skew})
-              rotate(${element.rotate})`
-    }
+    element.XML = `<rect x="${element.x_CoordinateStart}" y="${element.y_CoordinateStart}" width="${element.width}" height="${element.height}" fill="${element.fill}" fill-opacity="${element.fillOpacity + '%'}" opacity="${element.opacity}" stroke="${element.stroke}" stroke-width="${element.strokeWidth}" stroke-opacity="${element.strokeOpacity + '%'}" transform="${this.transformEditors()}"/>`;
 
     return (
       <rect 
@@ -40,7 +28,7 @@ class Rectangle extends React.Component {
         stroke={element.stroke}
         strokeWidth={element.strokeWidth}
         strokeOpacity={element.strokeOpacity + '%'}
-        transform={transformEditors()}
+        transform={this.transformEditors()}
       />
     )
   }
