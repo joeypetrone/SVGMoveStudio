@@ -52,6 +52,13 @@ class SVGEditor extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.authed !== this.props.authed) {
       this.disableSaveButtonToggle()
+
+      if (this.props.authed) {
+        userData.getUserByFirebasaeUid()
+            .then(user => (this.setState({ user })) );
+      } else {
+        this.setState({ user: {} })
+      }
     }
   }
 

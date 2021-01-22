@@ -21,9 +21,9 @@ namespace SVGMoveStudio.Controllers
     {
         UserRepository _repo;
 
-        public UsersController()
+        public UsersController(UserRepository repo)
         {
-            _repo = new UserRepository();
+            _repo = repo;
         }
 
         [HttpGet]

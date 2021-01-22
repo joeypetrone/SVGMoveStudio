@@ -6,12 +6,18 @@ using SVGMoveStudio.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.SqlClient;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 
 namespace SVGMoveStudio.Data
 {
     public class ElementRepository
     {
-        const string _connectionString = "Server=localhost;Database=SVGMoveStudio;Trusted_Connection=true;";
+        readonly string _connectionString;
+
+        public ElementRepository(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString("SVGMoveStudio");
+        }
 
         public List<Element> GetAll()
         {

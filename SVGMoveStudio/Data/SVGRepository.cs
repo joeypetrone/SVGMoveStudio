@@ -6,12 +6,18 @@ using SVGMoveStudio.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.SqlClient;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 
 namespace SVGMoveStudio.Data
 {
     public class SVGRepository
     {
-        const string _connectionString = "Server=localhost;Database=SVGMoveStudio;Trusted_Connection=true;";
+        readonly string _connectionString;
+
+        public SVGRepository(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString("SVGMoveStudio");
+        }
 
         public List<SVG> GetAll()
         {

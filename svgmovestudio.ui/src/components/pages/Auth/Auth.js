@@ -17,7 +17,7 @@ class Auth extends React.Component {
     e.preventDefault();
     authData.signInUser(user)
       .then(
-        this.props.history.push('/home')
+        this.props.history.push('/editor') //push to user profile when that component gets setup
       )
       .catch(error => {
         console.error('there was an error in the user\'s sign in', error)

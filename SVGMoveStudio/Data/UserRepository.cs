@@ -5,13 +5,19 @@ using System.Threading.Tasks;
 using SVGMoveStudio.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.SqlClient;
-using Dapper; 
+using Dapper;
+using Microsoft.Extensions.Configuration;
 
 namespace SVGMoveStudio.Data
 {
     public class UserRepository
     {
-        const string _connectionString = "Server=localhost;Database=SVGMoveStudio;Trusted_Connection=true;";
+        readonly string _connectionString;
+
+        public UserRepository(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString("SVGMoveStudio");
+        }
 
         public void Add(User userToAdd)
         {

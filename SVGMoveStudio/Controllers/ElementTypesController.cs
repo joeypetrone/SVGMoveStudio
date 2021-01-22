@@ -14,9 +14,9 @@ namespace SVGMoveStudio.Controllers
     {
         ElementTypeRepository _repo;
 
-        public ElementTypesController()
+        public ElementTypesController(ElementTypeRepository repo)
         {
-            _repo = new ElementTypeRepository();
+            _repo = repo;
         }
 
         [HttpGet]
