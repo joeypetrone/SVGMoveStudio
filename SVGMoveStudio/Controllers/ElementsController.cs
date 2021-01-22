@@ -12,11 +12,11 @@ namespace SVGMoveStudio.Controllers
     [ApiController]
     public class ElementsController : ControllerBase
     {
-        ElementRepository _repo;
+        readonly ElementRepository _repo;
 
-        public ElementsController()
+        public ElementsController(ElementRepository repo)
         {
-            _repo = new ElementRepository();
+            _repo = repo;
         }
 
         [HttpGet]

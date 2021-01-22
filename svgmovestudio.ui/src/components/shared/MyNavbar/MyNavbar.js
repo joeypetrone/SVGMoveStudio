@@ -52,7 +52,7 @@ class MyNavbar extends React.Component {
                 <NavLink className="navbar-links px-4" tag={RRNavLink} to='/documents'>Documents</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink className="navbar-links px-4" href="https://github.com/joeypetrone/SVGMoveStudio">GitHub</NavLink>
+                <NavLink className="navbar-links px-4" href="https://github.com/joeypetrone/SVGMoveStudio" target="_blank">GitHub</NavLink>
               </NavItem>
             </Nav>
           </Collapse>

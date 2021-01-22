@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/svgmovestudioserver/databases/SVGMoveStudio",
+      "type": "mssql.azure",
+      "connectionId": "SVGMoveStudio",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}

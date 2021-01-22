@@ -14,9 +14,9 @@ namespace SVGMoveStudio.Controllers
     {
         SVGRepository _repo;
 
-        public SVGsController()
+        public SVGsController(SVGRepository repo)
         {
-            _repo = new SVGRepository();
+            _repo = repo;
         }
 
         [HttpGet]

@@ -33,6 +33,10 @@ namespace SVGMoveStudio
 
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddTransient<UserRepository>();
+            services.AddTransient<ElementRepository>();
+            services.AddTransient<ElementTypeRepository>();
+            services.AddTransient<SVGRepository>();
+
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

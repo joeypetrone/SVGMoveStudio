@@ -10,7 +10,7 @@ class Register extends React.Component {
   signUp = (user) => {
     authData.registerUser(user)
       .then(
-        this.props.history.push('/home') //push to user profile when that component gets setup
+        this.props.history.push('/editor') //push to user profile when that component gets setup
       )
       .catch(error => {
         console.error('there was an error in the user\'s sign in', error)
