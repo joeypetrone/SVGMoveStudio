@@ -6,6 +6,7 @@ import PositionEditor from '../../shared/SVGElementEditors/PositionEditor/Positi
 import ScaleEditor from '../../shared/SVGElementEditors/ScaleEditor/ScaleEditor';
 import ColorEditor from '../../shared/SVGElementEditors/ColorEditor/ColorEditor';
 import StretchEditor from '../../shared/SVGElementEditors/StretchEditor/StretchEditor';
+import DeleteElementEditor from '../../shared/SVGElementEditors/DeleteElementEditor/DeleteElementEditor';
 
 class SVGEditorSidePanel extends React.Component {
   static propTypes = {
@@ -16,7 +17,7 @@ class SVGEditorSidePanel extends React.Component {
     updateElementOpacity: PropTypes.func.isRequired,     
     updateElementSkew: PropTypes.func.isRequired,     
     selectedEditor: PropTypes.string.isRequired,
-    selectedElement: PropTypes.object.isRequired
+    selectedElement: PropTypes.object.isRequired,
   }
 
   render() {
@@ -28,7 +29,7 @@ class SVGEditorSidePanel extends React.Component {
       updateElementScale, 
       updateElementColor,
       updateElementOpacity, 
-      updateElementSkew 
+      updateElementSkew,
     } = this.props;
 
     const showSelectedEditor = () => {
@@ -58,7 +59,12 @@ class SVGEditorSidePanel extends React.Component {
                     selectedElement={selectedElement} 
                     selectedEditor={selectedEditor} 
                     updateElementSkew={updateElementSkew}
-                  />          
+                  />
+        case 'delete':
+          return <DeleteElementEditor 
+                    selectedElement={selectedElement} 
+                    selectedEditor={selectedEditor} 
+                  />             
         default:
           break;  
       }    
