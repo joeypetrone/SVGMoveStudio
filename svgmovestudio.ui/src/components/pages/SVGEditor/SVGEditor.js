@@ -34,7 +34,8 @@ class SVGEditor extends React.Component {
     selectedElement: {},
     renderXML: false,
     codeIsCopiedByUser: false,
-    saveButtonIsDisabled: true 
+    saveButtonIsDisabled: true,
+    totalViewboxElementsHistory: 0 
   }
 
   componentDidMount() {
@@ -63,17 +64,22 @@ class SVGEditor extends React.Component {
   }
 
   addElementToViewbox = (elementId) => {
-    const { defaultElements, viewboxElements } = this.state;
+    const { defaultElements, viewboxElements, totalViewboxElementsHistory } = this.state;
     const elementToAdd = Object.assign({}, defaultElements.find(element => element.elementId === parseInt(elementId)));
-    elementToAdd.tempId = viewboxElements.length;
+    elementToAdd.tempId = totalViewboxElementsHistory + 1;
     const joined = viewboxElements.concat(elementToAdd);
     this.setState({ viewboxElements: joined });
+    this.setState({ totalViewboxElementsHistory: totalViewboxElementsHistory + 1})
+
   }
 
   deleteSelectedElement = (elementTempId) => {
     const { viewboxElements } = this.state;
-    alert(`Delete index ${elementTempId}`)
-    viewboxElements.splice(elementTempId, 1);
+    if(viewboxElements.length !== 0) {
+      viewboxElements.splice(viewboxElements.findIndex(element => element.tempId === elementTempId), 1);
+      this.setState({ selectedElement: {} })
+      this.forceUpdate();
+    }
   }
 
   updateElementPosition = (x_position, y_position) => {
