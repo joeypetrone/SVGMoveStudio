@@ -6,14 +6,15 @@ import './DeleteElementEditor.scss';
 class DeleteElementEditor extends React.Component {
   static propTypes = {
     updateElementSkew: PropTypes.func.isRequired,
-    selectedElement: PropTypes.object.isRequired
+    selectedElement: PropTypes.object.isRequired,
+    deleteSelectedElement: PropTypes.func.isRequired
   }
 
   deleteElementEvent = (e) => {
-    const {selectedElement} = this.props;
+    const {selectedElement, deleteSelectedElement} = this.props;
     e.preventDefault();
 
-    alert(`Delete ${selectedElement.elementName}`);
+    deleteSelectedElement(selectedElement.tempId);
   }
 
   render() {

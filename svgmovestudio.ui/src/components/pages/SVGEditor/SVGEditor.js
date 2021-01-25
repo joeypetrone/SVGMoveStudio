@@ -70,6 +70,12 @@ class SVGEditor extends React.Component {
     this.setState({ viewboxElements: joined });
   }
 
+  deleteSelectedElement = (elementTempId) => {
+    const { viewboxElements } = this.state;
+    alert(`Delete index ${elementTempId}`)
+    viewboxElements.splice(elementTempId, 1);
+  }
+
   updateElementPosition = (x_position, y_position) => {
     const { selectedElement } = this.state;
     if (x_position === null) {
@@ -271,6 +277,7 @@ class SVGEditor extends React.Component {
               updateElementColor={this.updateElementColor}
               updateElementOpacity={this.updateElementOpacity}
               updateElementSkew={this.updateElementSkew}
+              deleteSelectedElement={this.deleteSelectedElement}
             />
           </Row>
           <Row className="p-2">

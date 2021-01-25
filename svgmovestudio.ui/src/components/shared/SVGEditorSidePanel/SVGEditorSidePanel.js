@@ -18,6 +18,7 @@ class SVGEditorSidePanel extends React.Component {
     updateElementSkew: PropTypes.func.isRequired,     
     selectedEditor: PropTypes.string.isRequired,
     selectedElement: PropTypes.object.isRequired,
+    deleteSelectedElement: PropTypes.func.isRequired
   }
 
   render() {
@@ -30,6 +31,7 @@ class SVGEditorSidePanel extends React.Component {
       updateElementColor,
       updateElementOpacity, 
       updateElementSkew,
+      deleteSelectedElement
     } = this.props;
 
     const showSelectedEditor = () => {
@@ -64,6 +66,7 @@ class SVGEditorSidePanel extends React.Component {
           return <DeleteElementEditor 
                     selectedElement={selectedElement} 
                     selectedEditor={selectedEditor} 
+                    deleteSelectedElement={deleteSelectedElement}
                   />             
         default:
           break;  
