@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Col } from 'reactstrap';
-import './StretchEditor';
+import './StretchEditor.scss';
 
 class StretchEditor extends React.Component {
   static propTypes = {

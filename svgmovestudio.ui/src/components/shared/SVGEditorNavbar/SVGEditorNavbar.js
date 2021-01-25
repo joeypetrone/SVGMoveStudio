@@ -90,6 +90,9 @@ class SVGEditorNavbar extends React.Component {
                 <NavItem>
                   <NavLink  className="pt-2 pb-1 text-dark pointer" id="stretch" onClick={this.editorSelectionClickEvent}>Stretch</NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink  className="pt-2 pb-1 text-dark pointer" id="delete" onClick={this.editorSelectionClickEvent}>Delete</NavLink>
+                </NavItem>
               </Nav>
             </Navbar>
           </Col>

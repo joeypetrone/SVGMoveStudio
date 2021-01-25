@@ -1,5 +1,5 @@
 import React from 'react';
-import './PointsEditor';
+import './PointsEditor.scss';
 
 class PointsEditor extends React.Component {
   render() {
