@@ -1,5 +1,5 @@
 import React from 'react';
-import { Jumbotron, Container, Row } from 'reactstrap';
+import { Jumbotron, Container, Row, Col } from 'reactstrap';
 import './Documents.scss';
 
 class Documents extends React.Component {
@@ -13,6 +13,12 @@ class Documents extends React.Component {
         </Jumbotron>
         <Container className="documents-body mb-3 rounded">
           <Row className="mt-3">
+            <Col className="card p-1 m-1" xs="2">
+              By signing up, you gain access to save your SVGs and SVG animations. Signing up is easy and completely free. Sign up now or continue as a guest.
+            </Col>
+            <Col className="card rounded p-1 m-1" xs="9">
+              By signing up, you gain access to save your SVGs and SVG animations. Signing up is easy and completely free. Sign up now or continue as a guest.
+            </Col>
           </Row> 
         </Container>  
       </div>
