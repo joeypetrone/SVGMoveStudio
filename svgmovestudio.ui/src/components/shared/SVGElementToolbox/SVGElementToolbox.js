@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Button } from 'reactstrap';
+import { Card, Button, Spinner } from 'reactstrap';
 import './SVGElementToolbox.scss';
 
 class SVGElementToolbox extends React.Component {
@@ -35,7 +35,10 @@ class SVGElementToolbox extends React.Component {
 
     return (
       <div className="SVGElementToolbox d-flew row justify-content-between m-3">
-        {buildElements}
+        {(defaultElements.length === 0)
+          ? <Spinner size="sm" color="secondary" />
+          : buildElements
+        }
       </div>
     )
   }
