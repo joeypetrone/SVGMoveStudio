@@ -36,7 +36,7 @@ class SVGElementToolbox extends React.Component {
     return (
       <div className="SVGElementToolbox d-flew row justify-content-between m-3">
         {(defaultElements.length === 0)
-          ? <Spinner size="sm" color="secondary" />
+          ? <small className="font-weight-bold text-dark"><Spinner size="sm" color="secondary" /> Loading...</small> 
           : buildElements
         }
       </div>
