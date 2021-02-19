@@ -3,6 +3,9 @@ import { Jumbotron, Container, Row, Nav, NavItem, NavLink } from 'reactstrap';
 import './Documents.scss';
 
 import DocumentsOverview from '../../shared/DocumentsTabs/DocumentsOverview/DocumentsOverview'
+import DocumentsReference from '../../shared/DocumentsTabs/DocumentsReference/DocumentsReference'
+import DocumentsOverviewNav from '../../shared/DocumentsSidebarNav/DocmentsOverviewNav/DocumentsOverviewNav'
+import DocumentsReferenceNav from '../../shared/DocumentsSidebarNav/DocumentsReferenceNav/DocumentsReferenceNav'
 
 class Documents extends React.Component {
   state = {
@@ -40,10 +43,16 @@ class Documents extends React.Component {
           </Nav>
           <Row className="m-0">
             <div className="documents-navbar bg-white p-1 mb-1 mr-1 rounded border">
-
+              {selectedDocument === 'overview'
+              ? <DocumentsOverviewNav />
+              : <DocumentsReferenceNav />
+              }
             </div>
             <div className="documents-textarea bg-white p-1 mb-1 rounded border">
-            <DocumentsOverview />
+              {selectedDocument === 'overview'
+              ? <DocumentsOverview />
+              : <DocumentsReference />
+              }
             </div>
           </Row> 
         </Container>  
