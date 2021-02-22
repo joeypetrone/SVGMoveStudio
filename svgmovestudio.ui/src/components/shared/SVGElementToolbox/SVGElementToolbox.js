@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Button, Spinner } from 'reactstrap';
+import { Card, Button } from 'reactstrap';
 import './SVGElementToolbox.scss';
 
+import ElementToolboxPlaceholder from '../../shared/Placeholders/ElementToolboxPlaceholder/ElementToolboxPlaceholder';
 class SVGElementToolbox extends React.Component {
   static propTypes = {
     defaultElements: PropTypes.array.isRequired,
@@ -22,6 +23,9 @@ class SVGElementToolbox extends React.Component {
 
   render() {
     const {defaultElements, elementChoice} = this.props;
+    const n = 7;
+
+    const buildPlaceholders = [...Array(n)].map((e, i) => <ElementToolboxPlaceholder key={i} />)
 
     const buildElements = defaultElements.map(element => {
       return (
@@ -34,9 +38,9 @@ class SVGElementToolbox extends React.Component {
     })
 
     return (
-      <div className="SVGElementToolbox d-flew row justify-content-between m-3">
+      <div className="SVGElementToolbox d-flex row justify-content-between m-3">
         {(defaultElements.length === 0)
-          ? <small className="font-weight-bold text-dark"><Spinner size="sm" color="secondary" /> Loading...</small> 
+          ? buildPlaceholders 
           : buildElements
         }
       </div>
