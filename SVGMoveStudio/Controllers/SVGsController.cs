@@ -40,6 +40,19 @@ namespace SVGMoveStudio.Controllers
             return Ok(singleSVG);
         }
 
+        [HttpGet("user/{userId}")]
+        public IActionResult GetUserSVGs(int userId)
+        {
+            var userSVGs = _repo.GetSVGsByUserId(userId);
+
+            if (userSVGs == null)
+            {
+                return NotFound("There are no SVGs with that User's id in the database");
+            }
+
+            return Ok(userSVGs);
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteSVGById(int id)
         {

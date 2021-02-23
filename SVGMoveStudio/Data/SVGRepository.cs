@@ -43,6 +43,21 @@ namespace SVGMoveStudio.Data
             return singleSVG;
         }
 
+        internal List<SVG> GetSVGsByUserId(int userId)
+        {
+            var db = new SqlConnection(_connectionString);
+
+            var query = @"SELECT *
+                          FROM SVG
+                          WHERE UserId = @userId";
+
+            var parameters = new { userId };
+
+            var userSVGs = db.Query<SVG>(query, parameters);
+
+            return userSVGs.ToList(); 
+        }
+
         public void Remove(int svgId)
         {
             var db = new SqlConnection(_connectionString);
