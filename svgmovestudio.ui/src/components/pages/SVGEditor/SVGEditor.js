@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import './SVGEditor.scss';
 import userData from '../../../helpers/data/userData';
+import svgData from '../../../helpers/data/svgData';
 import elementData from '../../../helpers/data/elementData';
 import SVGElementToolbox from '../../shared/SVGElementToolbox/SVGElementToolbox';
 import SVGEditorViewbox from '../../shared/SVGEditorViewbox/SVGEditorViewbox';
@@ -41,8 +42,11 @@ class SVGEditor extends React.Component {
   componentDidMount() {
     if (this.props.authed) {
       userData.getUserByFirebasaeUid()
-          .then(user => {            
-            (this.setState({ user })) 
+          .then(user => {
+            svgData.getUserSVGs(user.userId).then(svgs => {
+              this.setState({ userSVGs: svgs })
+            })            
+            this.setState({ user }) 
           });          
     }
 
