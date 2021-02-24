@@ -62,9 +62,14 @@ class SVGEditor extends React.Component {
 
       if (this.props.authed) {
         userData.getUserByFirebasaeUid()
-            .then(user => (this.setState({ user })) );
+            .then(user => {
+              svgData.getUserSVGs(user.userId).then(svgs => {
+                this.setState({ userSVGs: svgs })
+              }) 
+              this.setState({ user }) 
+            });
       } else {
-        this.setState({ user: {} })
+        this.setState({ user: {}, userSVGs: [] })
       }
     }
   }
@@ -254,6 +259,7 @@ class SVGEditor extends React.Component {
 
   render() {
     const { 
+      userSVGs,
       defaultElements, 
       viewboxElements, 
       selectedEditor, 
@@ -272,6 +278,7 @@ class SVGEditor extends React.Component {
             openSelectedEditor={this.openSelectedEditor} 
             viewboxElements={viewboxElements} 
             setSelectedElement={this.setSelectedElement}
+            userSVGs={userSVGs}
           />
           <Row className="mx-0">
             <SVGEditorViewbox 

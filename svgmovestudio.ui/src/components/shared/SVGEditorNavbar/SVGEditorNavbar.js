@@ -8,11 +8,12 @@ class SVGEditorNavbar extends React.Component {
     authed: PropTypes.bool.isRequired,
     openSelectedEditor: PropTypes.func.isRequired,
     viewboxElements: PropTypes.array.isRequired,
-    setSelectedElement: PropTypes.func.isRequired
+    setSelectedElement: PropTypes.func.isRequired,
+    userSVGs: PropTypes.array.isRequired
   }
 
   state = {
-    SVGDropdownMenuIsDisabled: true
+    SVGDropdownMenuIsDisabled: true,
   }
 
   componentDidMount() {
@@ -58,11 +59,15 @@ class SVGEditorNavbar extends React.Component {
 
   render() { 
     const { SVGDropdownMenuIsDisabled } = this.state;
-    const { viewboxElements } = this.props;
+    const { viewboxElements, userSVGs } = this.props;
     
     const buildElementOptions = viewboxElements.map((element) => {
       return <option key={element.tempId} value={element.tempId}>{element.elementName}</option>
     })
+
+    const buildSVGDropdownItems = userSVGs.map((svg => {
+      return <option key={svg.svgId}>{svg.svgName}</option>
+    }))
     
     return (
       <div className="SVGEditorNavbar pt-3 pb-2">
@@ -99,12 +104,11 @@ class SVGEditorNavbar extends React.Component {
           <Col md={3} className="pl-0">
             <FormGroup className="m-0">
               <Input className="pb-2" type="select" name="select" id="exampleSelect" disabled={SVGDropdownMenuIsDisabled}>
-                <option>Select SVG</option>
-                <option>SVG 1</option>
-                <option>SVG 2</option>
-                <option>SVG 3</option>
-                <option>SVG 4</option>
-                <option>SVG 5</option>
+                <option value="default">Select SVG</option>
+                { userSVGs
+                ? buildSVGDropdownItems
+                : ''
+                }
               </Input>
             </FormGroup>
           </Col>
