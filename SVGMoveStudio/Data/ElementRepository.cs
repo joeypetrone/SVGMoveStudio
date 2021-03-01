@@ -56,6 +56,21 @@ namespace SVGMoveStudio.Data
             return singleElement;
         }
 
+        internal List<Element> GetElementsBySvgId(int svgId)
+        {
+            var db = new SqlConnection(_connectionString);
+
+            var query = @"SELECT *
+                          FROM Element
+                          WHERE SVGId = @svgId";
+
+            var parameters = new { svgId };
+
+            var svgElements = db.Query<Element>(query, parameters);
+
+            return svgElements.ToList();
+        }
+
         public void Remove(int elementId)
         {
             var db = new SqlConnection(_connectionString);

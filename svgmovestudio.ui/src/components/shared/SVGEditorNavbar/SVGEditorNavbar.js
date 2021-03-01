@@ -1,7 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { element } from 'prop-types';
 import { FormGroup, Input, Nav, NavLink, NavItem, Navbar, Row, Col } from 'reactstrap';
 import './SVGEditorNavbar.scss'
+import elementData from '../../../helpers/data/elementData';
 
 class SVGEditorNavbar extends React.Component {
   static propTypes = {
@@ -14,6 +15,7 @@ class SVGEditorNavbar extends React.Component {
 
   state = {
     SVGDropdownMenuIsDisabled: true,
+    selectedSvgElements: []
   }
 
   componentDidMount() {
@@ -57,6 +59,19 @@ class SVGEditorNavbar extends React.Component {
     }
   }
 
+  svgChange = (e) => {
+    const selectedSvgId = e.target.value;
+
+    console.log(selectedSvgId);
+
+    if (selectedSvgId === 'default') {
+      //do not use data call
+    } else {
+      elementData.getElementsBySVGId(selectedSvgId)
+      .then(elements => this.setState({ selectedSvgElements: elements }))
+    }
+  }
+
   render() { 
     const { SVGDropdownMenuIsDisabled } = this.state;
     const { viewboxElements, userSVGs } = this.props;
@@ -66,7 +81,7 @@ class SVGEditorNavbar extends React.Component {
     })
 
     const buildSVGDropdownItems = userSVGs.map((svg => {
-      return <option key={svg.svgId}>{svg.svgName}</option>
+      return <option key={svg.svgId} value={svg.svgId}>{svg.svgName}</option>
     }))
     
     return (
@@ -103,7 +118,7 @@ class SVGEditorNavbar extends React.Component {
           </Col>
           <Col md={3} className="pl-0">
             <FormGroup className="m-0">
-              <Input className="pb-2" type="select" name="select" id="exampleSelect" disabled={SVGDropdownMenuIsDisabled}>
+              <Input className="pb-2" type="select" name="select" id="exampleSelect" onChange={this.svgChange} disabled={SVGDropdownMenuIsDisabled}>
                 <option value="default">Select SVG</option>
                 { userSVGs
                 ? buildSVGDropdownItems

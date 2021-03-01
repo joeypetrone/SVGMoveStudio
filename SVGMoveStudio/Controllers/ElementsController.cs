@@ -40,6 +40,19 @@ namespace SVGMoveStudio.Controllers
             return Ok(singleElement);
         }
 
+        [HttpGet("bySvgId/{svgId}")]
+        public IActionResult GetSvgElements(int svgId)
+        {
+            var svgElements = _repo.GetElementsBySvgId(svgId);
+
+            if (svgElements == null)
+            {
+                return NotFound("There are no elements associated with this SVG Id");
+            }
+
+            return Ok(svgElements);
+        }
+
         [HttpGet("default")]
         public IActionResult GetDefaultElements()
         {
