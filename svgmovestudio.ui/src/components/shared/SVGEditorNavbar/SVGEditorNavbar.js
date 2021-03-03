@@ -15,8 +15,7 @@ class SVGEditorNavbar extends React.Component {
   }
 
   state = {
-    SVGDropdownMenuIsDisabled: true,
-    selectedSvgElements: []
+    SVGDropdownMenuIsDisabled: true
   }
 
   componentDidMount() {
@@ -59,7 +58,7 @@ class SVGEditorNavbar extends React.Component {
   }
 
   svgChange = (e) => {
-    const { loadSelectedSVGElementsToViewbox } = this.props;
+    const { loadSelectedSVGElementsToViewbox, viewboxElements } = this.props;
     const selectedSvgId = e.target.value;
 
     if (selectedSvgId === 'default') {
@@ -67,7 +66,6 @@ class SVGEditorNavbar extends React.Component {
     } else {
       elementData.getElementsBySVGId(selectedSvgId)
       .then(elements => {
-        this.setState({ selectedSvgElements: elements })
         loadSelectedSVGElementsToViewbox(elements)
       })
     }

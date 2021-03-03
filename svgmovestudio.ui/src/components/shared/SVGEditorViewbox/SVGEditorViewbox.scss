@@ -1,7 +1,11 @@
 .SVGEditorViewbox {
   display: block;
-  width: 800px;
-  height: 500px;
+  width: 802px;
+  height: 502px;
   border: solid 0.05rem black;
   background-color: white;
+
+  svg {
+    border-radius: 0.15rem;
+  }
 }

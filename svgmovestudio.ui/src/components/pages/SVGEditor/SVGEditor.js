@@ -75,14 +75,22 @@ class SVGEditor extends React.Component {
   }
 
   loadSelectedSVGElementsToViewbox = (elements) => {
-    const { viewboxElements } = this.props;
+    const { viewboxElements } = this.state;
+    let svgElements = [];
+    let count = 0;
 
-    console.log(elements);
-    console.log(viewboxElements);
-
-    if (viewboxElements === undefined) {
-      console.log(elements);
-      this.setState({ viewboxElements : elements})
+    if (viewboxElements.length !== 0) {
+      alert('There is something in the viewbox.')
+    } else {
+      elements.forEach(element => {
+        count++;
+        element.tempId = count;
+        svgElements.push(element);
+      })
+      this.setState({ 
+        viewboxElements : svgElements, 
+        totalViewboxElementsHistory: count
+      })
     }
   }
 
@@ -91,8 +99,10 @@ class SVGEditor extends React.Component {
     const elementToAdd = Object.assign({}, defaultElements.find(element => element.elementId === parseInt(elementId)));
     elementToAdd.tempId = totalViewboxElementsHistory + 1;
     const joined = viewboxElements.concat(elementToAdd);
-    this.setState({ viewboxElements: joined });
-    this.setState({ totalViewboxElementsHistory: totalViewboxElementsHistory + 1})
+    this.setState({ 
+      viewboxElements: joined,
+      totalViewboxElementsHistory: totalViewboxElementsHistory + 1
+    });
   }
 
   deleteSelectedElement = (elementTempId) => {
