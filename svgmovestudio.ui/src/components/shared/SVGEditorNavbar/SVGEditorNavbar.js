@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { element } from 'prop-types';
+import PropTypes from 'prop-types';
 import { FormGroup, Input, Nav, NavLink, NavItem, Navbar, Row, Col } from 'reactstrap';
 import './SVGEditorNavbar.scss'
 import elementData from '../../../helpers/data/elementData';
@@ -10,7 +10,8 @@ class SVGEditorNavbar extends React.Component {
     openSelectedEditor: PropTypes.func.isRequired,
     viewboxElements: PropTypes.array.isRequired,
     setSelectedElement: PropTypes.func.isRequired,
-    userSVGs: PropTypes.array.isRequired
+    userSVGs: PropTypes.array.isRequired,
+    loadSelectedSVGElementsToViewbox: PropTypes.func.isRequired
   }
 
   state = {
@@ -38,8 +39,6 @@ class SVGEditorNavbar extends React.Component {
     }
   }
 
-
-
   editorSelectionClickEvent = (e) => {
     e.preventDefault();
     const { openSelectedEditor } = this.props;
@@ -60,15 +59,17 @@ class SVGEditorNavbar extends React.Component {
   }
 
   svgChange = (e) => {
+    const { loadSelectedSVGElementsToViewbox } = this.props;
     const selectedSvgId = e.target.value;
-
-    console.log(selectedSvgId);
 
     if (selectedSvgId === 'default') {
       //do not use data call
     } else {
       elementData.getElementsBySVGId(selectedSvgId)
-      .then(elements => this.setState({ selectedSvgElements: elements }))
+      .then(elements => {
+        this.setState({ selectedSvgElements: elements })
+        loadSelectedSVGElementsToViewbox(elements)
+      })
     }
   }
 

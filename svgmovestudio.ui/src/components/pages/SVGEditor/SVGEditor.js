@@ -74,14 +74,25 @@ class SVGEditor extends React.Component {
     }
   }
 
-  addElementToViewbox = (elementId) => {
+  loadSelectedSVGElementsToViewbox = (elements) => {
+    const { viewboxElements } = this.props;
+
+    console.log(elements);
+    console.log(viewboxElements);
+
+    if (viewboxElements === undefined) {
+      console.log(elements);
+      this.setState({ viewboxElements : elements})
+    }
+  }
+
+  addToolboxElementToViewbox = (elementId) => {
     const { defaultElements, viewboxElements, totalViewboxElementsHistory } = this.state;
     const elementToAdd = Object.assign({}, defaultElements.find(element => element.elementId === parseInt(elementId)));
     elementToAdd.tempId = totalViewboxElementsHistory + 1;
     const joined = viewboxElements.concat(elementToAdd);
     this.setState({ viewboxElements: joined });
     this.setState({ totalViewboxElementsHistory: totalViewboxElementsHistory + 1})
-
   }
 
   deleteSelectedElement = (elementTempId) => {
@@ -279,6 +290,7 @@ class SVGEditor extends React.Component {
             viewboxElements={viewboxElements} 
             setSelectedElement={this.setSelectedElement}
             userSVGs={userSVGs}
+            loadSelectedSVGElementsToViewbox={this.loadSelectedSVGElementsToViewbox}
           />
           <Row className="mx-0">
             <SVGEditorViewbox 
@@ -322,7 +334,7 @@ class SVGEditor extends React.Component {
           <hr/>
           <SVGElementToolbox 
             defaultElements={defaultElements} 
-            addElementToViewbox={this.addElementToViewbox} 
+            addToolboxElementToViewbox={this.addToolboxElementToViewbox} 
             elementChoice={this.elementChoice}
           />
         </Container>
