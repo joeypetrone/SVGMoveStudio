@@ -18,7 +18,8 @@ import Polyline from '../../shared/SVGElements/Polyline/Polyline';
 import Path from '../../shared/SVGElements/Path/Path';
 import SVGEditorSidePanel from '../../shared/SVGEditorSidePanel/SVGEditorSidePanel';
 import SVGEditorNavbar from '../../shared/SVGEditorNavbar/SVGEditorNavbar';
-import SVGCodeModal from '../../shared/SVGCodeModal/SVGCodeModal';
+import SVGCodeModal from '../../shared/Modals/SVGCodeModal/SVGCodeModal';
+import SaveSVGModal from '../../shared/Modals/SaveSVGModal/SaveSVGModal';
 
 class SVGEditor extends React.Component {
   static  propTypes = {
@@ -36,7 +37,8 @@ class SVGEditor extends React.Component {
     renderXML: false,
     codeIsCopiedByUser: false,
     saveButtonIsDisabled: true,
-    totalViewboxElementsHistory: 0 
+    totalViewboxElementsHistory: 0,
+    unSavedChanges: false 
   }
 
   componentDidMount() {
@@ -80,7 +82,7 @@ class SVGEditor extends React.Component {
     let count = 0;
 
     if (viewboxElements.length !== 0) {
-      alert('There is something in the viewbox.')
+      this.setState({ unSavedChanges : true });
     } else {
       elements.forEach(element => {
         count++;
@@ -286,7 +288,8 @@ class SVGEditor extends React.Component {
       selectedEditor, 
       selectedElement,
       codeIsCopiedByUser,
-      saveButtonIsDisabled
+      saveButtonIsDisabled,
+      unSavedChanges
     } = this.state;
 
     const { authed } = this.props;
@@ -330,6 +333,10 @@ class SVGEditor extends React.Component {
             </Col>
             <Col md={6} className="pr-2">
               <Row className="float-right mr-1">
+                {unSavedChanges
+                  ? <SaveSVGModal/>
+                  : ''
+                }
                 <SVGCodeModal viewboxElements={viewboxElements} renderSVGCode={this.renderSVGCode} XMLCopiedAlert={this.XMLCopiedAlert}/>
                 {saveButtonIsDisabled 
                   ? <Button color="danger" disabled>Save SVG</Button> 
