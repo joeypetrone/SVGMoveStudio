@@ -6,16 +6,27 @@ const SaveSVGModal = (props) => {
   const {
     isSaveSvgModalOpen,
     toggleSaveSvgModal,
-    disregardCurrentSvgChanges
+    disregardCurrentSvgChanges,
+    setDropDownToCurrentSvg,
+    saveChangesToCurrentSvg
   } = props;
 
 const toggle = () => {
-  console.log('in modal toggle')
   toggleSaveSvgModal()
 }
 
 const disregardChangesEvent = () => {
   disregardCurrentSvgChanges();
+  toggle();
+}
+
+const saveChangesEvent = () => {
+  saveChangesToCurrentSvg();
+  toggle();
+}
+
+const cancelModalEvent = () => {
+  setDropDownToCurrentSvg();
   toggle();
 }
 
@@ -30,8 +41,8 @@ return (
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={disregardChangesEvent}>Disregard Changes</Button>{' '}
-          <Button color="primary" onClick={toggle}>Cancel</Button>{' '}
-          <Button color="danger" onClick={toggle}>Save</Button>
+          <Button color="primary" onClick={cancelModalEvent}>Cancel</Button>{' '}
+          <Button color="danger" onClick={saveChangesEvent}>Save</Button>
         </ModalFooter>
       </Modal>
   </div>

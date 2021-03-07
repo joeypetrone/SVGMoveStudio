@@ -20,7 +20,8 @@ class SVGEditorNavbar extends React.Component {
   state = {
     SVGDropdownMenuIsDisabled: true,
     isSaveSvgModalOpen: false,
-    selectedSvgId: 0
+    selectedSvgId: 0,
+    optionsState: 'default'
   }
 
   componentDidMount() {
@@ -66,7 +67,10 @@ class SVGEditorNavbar extends React.Component {
     const { unSavedChanges } = this.props;
     const selectedSvgId = e.target.value;
 
-    this.setState({ selectedSvgId: parseInt(selectedSvgId) });
+    this.setState({ 
+      selectedSvgId: parseInt(selectedSvgId),
+      optionsState: selectedSvgId
+    });
 
     if (selectedSvgId === 'default') {
       //do not use data call
@@ -94,9 +98,20 @@ class SVGEditorNavbar extends React.Component {
     this.loadSvgElementData(selectedSvgId);    
   }
 
+  setDropDownToCurrentSvg = () => {
+    const { currentSvgId } = this.props;
+    this.setState({ optionsState: currentSvgId.toString() })
+  }
+
+  saveChangesToCurrentSvg = () => {
+    const { selectedSvgId } = this.state;
+    alert('svg saved!');
+    this.setState({ optionsState: selectedSvgId.toString() })
+    this.loadSvgElementData(selectedSvgId);
+  }
 
   render() { 
-    const { SVGDropdownMenuIsDisabled, isSaveSvgModalOpen } = this.state;
+    const { SVGDropdownMenuIsDisabled, isSaveSvgModalOpen, optionsState } = this.state;
     const { viewboxElements, userSVGs } = this.props;
     
     const buildElementOptions = viewboxElements.map((element) => {
@@ -112,7 +127,7 @@ class SVGEditorNavbar extends React.Component {
         <Row>
           <Col md={2} className="pr-3">
             <FormGroup className="m-0">
-              <Input className="pb-2" type="select" name="select" id="exampleSelect" onChange={this.elementChange} >
+              <Input className="pb-2" type="select" name="select" id="exampleSelect" onChange={this.elementChange}>
                 <option value="default">Select Element</option>
                 {buildElementOptions}
               </Input>
@@ -141,7 +156,7 @@ class SVGEditorNavbar extends React.Component {
           </Col>
           <Col md={3} className="pl-0">
             <FormGroup className="m-0">
-              <Input className="pb-2" type="select" name="select" id="exampleSelect" onChange={this.svgChange} disabled={SVGDropdownMenuIsDisabled}>
+              <Input className="pb-2" type="select" name="select" id="exampleSelect" onChange={this.svgChange} value={optionsState} disabled={SVGDropdownMenuIsDisabled}>
                 <option value="default">Select SVG</option>
                 { userSVGs
                 ? buildSVGDropdownItems
@@ -155,6 +170,8 @@ class SVGEditorNavbar extends React.Component {
           isSaveSvgModalOpen={isSaveSvgModalOpen} 
           toggleSaveSvgModal={this.toggleSaveSvgModal} 
           disregardCurrentSvgChanges={this.disregardCurrentSvgChanges} 
+          setDropDownToCurrentSvg={this.setDropDownToCurrentSvg}
+          saveChangesToCurrentSvg={this.saveChangesToCurrentSvg}
         />
       </div>
     )

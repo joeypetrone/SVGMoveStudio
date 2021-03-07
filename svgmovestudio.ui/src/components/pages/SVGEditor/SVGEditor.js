@@ -84,7 +84,7 @@ class SVGEditor extends React.Component {
   loadSelectedSVGElementsToViewbox = (elements, selectedSvgId) => {
     let svgElements = [];
     let count = 0;
-    this.setState({ currentSvgId: selectedSvgId })
+    this.setState({ currentSvgId: selectedSvgId, unSavedChanges: false })
 
     elements.forEach(element => {
       count++;
@@ -93,8 +93,10 @@ class SVGEditor extends React.Component {
     })
     this.setState({ 
       viewboxElements : svgElements, 
-      totalViewboxElementsHistory: count
+      totalViewboxElementsHistory: count,
+      selectedElement: {}
     })
+    this.forceUpdate();
   }
 
   addToolboxElementToViewbox = (elementId) => {
