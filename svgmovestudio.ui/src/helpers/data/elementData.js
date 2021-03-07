@@ -13,4 +13,10 @@ const getElementByElementId = (elementId) => new Promise((resolve, reject) => {
     .catch(reject)
 })
 
-export default { getDefaultElements, getElementByElementId };
+const getElementsBySVGId = (svgId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/elements/bySvgId/${svgId}`)
+    .then(response => resolve(response.data))
+    .catch(reject)
+})
+
+export default { getDefaultElements, getElementByElementId, getElementsBySVGId };

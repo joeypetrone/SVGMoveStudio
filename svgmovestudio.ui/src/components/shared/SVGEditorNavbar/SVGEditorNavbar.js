@@ -2,17 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Input, Nav, NavLink, NavItem, Navbar, Row, Col } from 'reactstrap';
 import './SVGEditorNavbar.scss'
+import elementData from '../../../helpers/data/elementData';
+import SaveSVGModal from '../../shared/Modals/SaveSVGModal/SaveSVGModal';
 
 class SVGEditorNavbar extends React.Component {
   static propTypes = {
     authed: PropTypes.bool.isRequired,
     openSelectedEditor: PropTypes.func.isRequired,
     viewboxElements: PropTypes.array.isRequired,
-    setSelectedElement: PropTypes.func.isRequired
+    setSelectedElement: PropTypes.func.isRequired,
+    userSVGs: PropTypes.array.isRequired,
+    currentSvgId: PropTypes.number.isRequired,
+    unSavedChanges: PropTypes.bool.isRequired,
+    loadSelectedSVGElementsToViewbox: PropTypes.func.isRequired
   }
 
   state = {
-    SVGDropdownMenuIsDisabled: true
+    SVGDropdownMenuIsDisabled: true,
+    isSaveSvgModalOpen: false,
+    selectedSvgId: 0,
+    optionsState: 'default'
   }
 
   componentDidMount() {
@@ -35,8 +44,6 @@ class SVGEditorNavbar extends React.Component {
     }
   }
 
-
-
   editorSelectionClickEvent = (e) => {
     e.preventDefault();
     const { openSelectedEditor } = this.props;
@@ -56,20 +63,71 @@ class SVGEditorNavbar extends React.Component {
     }
   }
 
+  svgChange = (e) => {
+    const { unSavedChanges } = this.props;
+    const selectedSvgId = e.target.value;
+
+    this.setState({ 
+      selectedSvgId: parseInt(selectedSvgId),
+      optionsState: selectedSvgId
+    });
+
+    if (selectedSvgId === 'default') {
+      //do not use data call
+    } else if (unSavedChanges === false) {
+      this.loadSvgElementData(selectedSvgId);
+    } else {
+      this.setState({ isSaveSvgModalOpen: true });
+    }
+  }
+
+  loadSvgElementData = (selectedSvgId) => {
+    const { loadSelectedSVGElementsToViewbox } = this.props;
+    elementData.getElementsBySVGId(selectedSvgId)
+    .then(elements => {
+      loadSelectedSVGElementsToViewbox(elements, parseInt(selectedSvgId))
+    })
+  }
+
+  toggleSaveSvgModal = () => {
+    this.setState({ isSaveSvgModalOpen: false})
+  }
+
+  disregardCurrentSvgChanges = () => {
+    const { selectedSvgId } = this.state;
+    this.loadSvgElementData(selectedSvgId);    
+  }
+
+  setDropDownToCurrentSvg = () => {
+    const { currentSvgId } = this.props;
+    this.setState({ optionsState: currentSvgId.toString() })
+  }
+
+  saveChangesToCurrentSvg = () => {
+    const { selectedSvgId } = this.state;
+    alert('svg saved!');
+    this.setState({ optionsState: selectedSvgId.toString() })
+    this.loadSvgElementData(selectedSvgId);
+  }
+
   render() { 
-    const { SVGDropdownMenuIsDisabled } = this.state;
-    const { viewboxElements } = this.props;
+    const { SVGDropdownMenuIsDisabled, isSaveSvgModalOpen, optionsState } = this.state;
+    const { viewboxElements, userSVGs } = this.props;
     
     const buildElementOptions = viewboxElements.map((element) => {
       return <option key={element.tempId} value={element.tempId}>{element.elementName}</option>
     })
+
+    const buildSVGDropdownItems = userSVGs.map((svg => {
+      return <option key={svg.svgId} value={svg.svgId}>{svg.svgName}</option>
+    }))
     
     return (
       <div className="SVGEditorNavbar pt-3 pb-2">
         <Row>
           <Col md={2} className="pr-3">
             <FormGroup className="m-0">
-              <Input className="pb-2" type="select" name="select" id="exampleSelect" onChange={this.elementChange} >
+              <Input className="pb-2" type="select" name="select" id="exampleSelect" onChange={this.elementChange}>
                 <option value="default">Select Element</option>
                 {buildElementOptions}
               </Input>
@@ -98,17 +156,23 @@ class SVGEditorNavbar extends React.Component {
           </Col>
           <Col md={3} className="pl-0">
             <FormGroup className="m-0">
-              <Input className="pb-2" type="select" name="select" id="exampleSelect" disabled={SVGDropdownMenuIsDisabled}>
-                <option>Select SVG</option>
-                <option>SVG 1</option>
-                <option>SVG 2</option>
-                <option>SVG 3</option>
-                <option>SVG 4</option>
-                <option>SVG 5</option>
+              <Input className="pb-2" type="select" name="select" id="exampleSelect" onChange={this.svgChange} value={optionsState} disabled={SVGDropdownMenuIsDisabled}>
+                <option value="default">Select SVG</option>
+                { userSVGs
+                ? buildSVGDropdownItems
+                : ''
+                }
               </Input>
             </FormGroup>
           </Col>
         </Row>
+        <SaveSVGModal 
+          isSaveSvgModalOpen={isSaveSvgModalOpen} 
+          toggleSaveSvgModal={this.toggleSaveSvgModal} 
+          disregardCurrentSvgChanges={this.disregardCurrentSvgChanges} 
+          setDropDownToCurrentSvg={this.setDropDownToCurrentSvg}
+          saveChangesToCurrentSvg={this.saveChangesToCurrentSvg}
+        />
       </div>
     )
   }

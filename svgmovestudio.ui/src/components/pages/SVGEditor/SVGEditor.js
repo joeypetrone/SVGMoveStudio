@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import './SVGEditor.scss';
 import userData from '../../../helpers/data/userData';
+import svgData from '../../../helpers/data/svgData';
 import elementData from '../../../helpers/data/elementData';
 import SVGElementToolbox from '../../shared/SVGElementToolbox/SVGElementToolbox';
 import SVGEditorViewbox from '../../shared/SVGEditorViewbox/SVGEditorViewbox';
@@ -17,7 +18,7 @@ import Polyline from '../../shared/SVGElements/Polyline/Polyline';
 import Path from '../../shared/SVGElements/Path/Path';
 import SVGEditorSidePanel from '../../shared/SVGEditorSidePanel/SVGEditorSidePanel';
 import SVGEditorNavbar from '../../shared/SVGEditorNavbar/SVGEditorNavbar';
-import SVGCodeModal from '../../shared/SVGCodeModal/SVGCodeModal';
+import SVGCodeModal from '../../shared/Modals/SVGCodeModal/SVGCodeModal';
 
 class SVGEditor extends React.Component {
   static  propTypes = {
@@ -32,16 +33,23 @@ class SVGEditor extends React.Component {
     viewboxElements: [],    
     selectedEditor: '',
     selectedElement: {},
+    currentSvgId: 0,
     renderXML: false,
     codeIsCopiedByUser: false,
     saveButtonIsDisabled: true,
-    totalViewboxElementsHistory: 0 
+    totalViewboxElementsHistory: 0,
+    unSavedChanges: false 
   }
 
   componentDidMount() {
     if (this.props.authed) {
       userData.getUserByFirebasaeUid()
-          .then(user => (this.setState({ user })) );
+          .then(user => {
+            svgData.getUserSVGs(user.userId).then(svgs => {
+              this.setState({ userSVGs: svgs })
+            })            
+            this.setState({ user }) 
+          });          
     }
 
     this.disableSaveButtonToggle()
@@ -56,21 +64,51 @@ class SVGEditor extends React.Component {
 
       if (this.props.authed) {
         userData.getUserByFirebasaeUid()
-            .then(user => (this.setState({ user })) );
+            .then(user => {
+              svgData.getUserSVGs(user.userId).then(svgs => {
+                this.setState({ userSVGs: svgs })
+              }) 
+              this.setState({ user }) 
+            });
       } else {
-        this.setState({ user: {} })
+        this.setState({ user: {}, userSVGs: [] })
       }
     }
   }
 
-  addElementToViewbox = (elementId) => {
+  viewboxElementChange = () => {
+    this.setState({ unSavedChanges: true });
+    this.forceUpdate();
+  }
+
+  loadSelectedSVGElementsToViewbox = (elements, selectedSvgId) => {
+    let svgElements = [];
+    let count = 0;
+    this.setState({ currentSvgId: selectedSvgId, unSavedChanges: false })
+
+    elements.forEach(element => {
+      count++;
+      element.tempId = count;
+      svgElements.push(element);
+    })
+    this.setState({ 
+      viewboxElements : svgElements, 
+      totalViewboxElementsHistory: count,
+      selectedElement: {}
+    })
+    this.forceUpdate();
+  }
+
+  addToolboxElementToViewbox = (elementId) => {
     const { defaultElements, viewboxElements, totalViewboxElementsHistory } = this.state;
     const elementToAdd = Object.assign({}, defaultElements.find(element => element.elementId === parseInt(elementId)));
     elementToAdd.tempId = totalViewboxElementsHistory + 1;
     const joined = viewboxElements.concat(elementToAdd);
-    this.setState({ viewboxElements: joined });
-    this.setState({ totalViewboxElementsHistory: totalViewboxElementsHistory + 1})
-
+    this.setState({ 
+      viewboxElements: joined,
+      totalViewboxElementsHistory: totalViewboxElementsHistory + 1,
+      unSavedChanges: true
+    });
   }
 
   deleteSelectedElement = (elementTempId) => {
@@ -78,7 +116,7 @@ class SVGEditor extends React.Component {
     if(viewboxElements.length !== 0) {
       viewboxElements.splice(viewboxElements.findIndex(element => element.tempId === elementTempId), 1);
       this.setState({ selectedElement: {} })
-      this.forceUpdate();
+      this.viewboxElementChange()
     }
   }
 
@@ -86,35 +124,35 @@ class SVGEditor extends React.Component {
     const { selectedElement } = this.state;
     if (x_position === null) {
       selectedElement.y_Translate = y_position;
-      this.forceUpdate()
+      this.viewboxElementChange();
     } else if (y_position === null) {
       selectedElement.x_Translate = x_position;
-      this.forceUpdate()
+      this.viewboxElementChange();
     } else {
       selectedElement.x_Translate = x_position;
       selectedElement.y_Translate = y_position;
-      this.forceUpdate()
+      this.viewboxElementChange();
     }
   }
 
   updateElementRotation = (rotation) => {
     const { selectedElement } = this.state;
     selectedElement.rotate = rotation;
-    this.forceUpdate()
+    this.viewboxElementChange();
   }
 
   updateElementScale = (scale, strokeWidth) => {
     const { selectedElement } = this.state;
     if (scale === null) {
       selectedElement.strokeWidth = strokeWidth;
-      this.forceUpdate()
+      this.viewboxElementChange();
     } else if (strokeWidth === null) {
       selectedElement.scale = scale;
-      this.forceUpdate()    
+      this.viewboxElementChange();
     } else {
       selectedElement.scale = scale;
       selectedElement.strokeWidth = strokeWidth;
-      this.forceUpdate()
+      this.viewboxElementChange();
     }
   }
 
@@ -122,14 +160,14 @@ class SVGEditor extends React.Component {
     const { selectedElement } = this.state;
     if (fillColor === null) {
       selectedElement.stroke = strokeColor;
-      this.forceUpdate()
+      this.viewboxElementChange();
     } else if (strokeColor === null) {
       selectedElement.fill = fillColor;
-      this.forceUpdate()
+      this.viewboxElementChange();
     } else {
       selectedElement.fill = fillColor;
       selectedElement.stroke = strokeColor;
-      this.forceUpdate()
+      this.viewboxElementChange();
     }
   }
 
@@ -137,14 +175,14 @@ class SVGEditor extends React.Component {
     const { selectedElement } = this.state;
     if (fillOpacity === null) {
       selectedElement.strokeOpacity = strokeOpacity;
-      this.forceUpdate()
+      this.viewboxElementChange();
     } else if (strokeOpacity === null) {
       selectedElement.fillOpacity = fillOpacity;
-      this.forceUpdate()    
+      this.viewboxElementChange();
     } else {
       selectedElement.fillOpacity = fillOpacity;
       selectedElement.strokeOpacity = strokeOpacity;
-      this.forceUpdate()
+      this.viewboxElementChange();
     }
   }
 
@@ -152,14 +190,14 @@ class SVGEditor extends React.Component {
     const { selectedElement } = this.state;
     if (x_skew === null) {
       selectedElement.y_Skew = y_skew;
-      this.forceUpdate()
+      this.viewboxElementChange();
     } else if (y_skew === null) {
       selectedElement.x_Skew = x_skew;
-      this.forceUpdate()    
+      this.viewboxElementChange();
     } else {
       selectedElement.x_Skew = x_skew;
       selectedElement.y_Skew = y_skew;
-      this.forceUpdate()
+      this.viewboxElementChange();
     }
   }
 
@@ -248,12 +286,15 @@ class SVGEditor extends React.Component {
 
   render() {
     const { 
+      userSVGs,
       defaultElements, 
       viewboxElements, 
       selectedEditor, 
       selectedElement,
+      currentSvgId,
       codeIsCopiedByUser,
-      saveButtonIsDisabled
+      saveButtonIsDisabled,
+      unSavedChanges
     } = this.state;
 
     const { authed } = this.props;
@@ -266,6 +307,10 @@ class SVGEditor extends React.Component {
             openSelectedEditor={this.openSelectedEditor} 
             viewboxElements={viewboxElements} 
             setSelectedElement={this.setSelectedElement}
+            userSVGs={userSVGs}
+            currentSvgId={currentSvgId}
+            unSavedChanges={unSavedChanges}
+            loadSelectedSVGElementsToViewbox={this.loadSelectedSVGElementsToViewbox}
           />
           <Row className="mx-0">
             <SVGEditorViewbox 
@@ -309,7 +354,7 @@ class SVGEditor extends React.Component {
           <hr/>
           <SVGElementToolbox 
             defaultElements={defaultElements} 
-            addElementToViewbox={this.addElementToViewbox} 
+            addToolboxElementToViewbox={this.addToolboxElementToViewbox} 
             elementChoice={this.elementChoice}
           />
         </Container>

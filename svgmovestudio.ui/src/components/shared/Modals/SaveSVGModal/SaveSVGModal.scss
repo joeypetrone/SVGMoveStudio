@@ -1,0 +1,13 @@
+@import '../../../../styles/variables';
+
+.SaveSVGModal {
+  display: block;
+
+  .modal-body {
+    background-color: $componentColorGrey;
+
+    .modal-text-area {
+      min-height: 300px;
+    }
+  }
+}

@@ -7,7 +7,7 @@ import ElementToolboxPlaceholder from '../../shared/Placeholders/ElementToolboxP
 class SVGElementToolbox extends React.Component {
   static propTypes = {
     defaultElements: PropTypes.array.isRequired,
-    addElementToViewbox: PropTypes.func.isRequired,
+    addToolboxElementToViewbox: PropTypes.func.isRequired,
     elementChoice: PropTypes.func.isRequired,
   }
 
@@ -17,8 +17,8 @@ class SVGElementToolbox extends React.Component {
 
   addToViewBoxEvent = (e) => {
     e.preventDefault();
-    const { addElementToViewbox } = this.props;
-    addElementToViewbox(e.target.id);
+    const { addToolboxElementToViewbox } = this.props;
+    addToolboxElementToViewbox(e.target.id);
   }
 
   render() {
