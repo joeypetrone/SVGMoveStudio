@@ -1,31 +1,38 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import './SaveSVGModal.scss';
 
 const SaveSVGModal = (props) => {
-
-const [modal, setModal] = useState(true);
+  const {
+    isSaveSvgModalOpen,
+    toggleSaveSvgModal,
+    disregardCurrentSvgChanges
+  } = props;
 
 const toggle = () => {
-  setModal(!modal);
+  console.log('in modal toggle')
+  toggleSaveSvgModal()
+}
+
+const disregardChangesEvent = () => {
+  disregardCurrentSvgChanges();
+  toggle();
 }
 
 return (
-  <div>
-      <Modal className="w-100" isOpen={modal} toggle={toggle}>
-        <div className="SVGCodeModal">
-          <ModalHeader toggle={toggle}>Viewbox Has Unsaved Changes</ModalHeader>
-          <ModalBody className="modal-body">
-            <p>
-              Please save your current changes.
-            </p>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary">Disregard Changes</Button>{' '}
-            <Button color="primary">Cancel</Button>{' '}
-            <Button color="danger" onClick={toggle}>Save</Button>
-          </ModalFooter>
-        </div>
+  <div className="SaveSVGModal">
+      <Modal className="w-100" isOpen={isSaveSvgModalOpen} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Viewbox Has Unsaved Changes</ModalHeader>
+        <ModalBody className="modal-body">
+          <p>
+            Please save your current changes.
+          </p>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={disregardChangesEvent}>Disregard Changes</Button>{' '}
+          <Button color="primary" onClick={toggle}>Cancel</Button>{' '}
+          <Button color="danger" onClick={toggle}>Save</Button>
+        </ModalFooter>
       </Modal>
   </div>
   )
