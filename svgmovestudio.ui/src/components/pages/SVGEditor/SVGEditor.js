@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Button, Col, Alert } from 'reactstrap';
-import PropTypes from 'prop-types';
+import PropTypes, { element } from 'prop-types';
 
 import './SVGEditor.scss';
 import userData from '../../../helpers/data/userData';
@@ -30,7 +30,7 @@ class SVGEditor extends React.Component {
     userSVGs: [],
     userElements: [],
     defaultElements: [],
-    viewboxElements: [],    
+    viewboxElements: [], 
     selectedEditor: '',
     selectedElement: {},
     currentSvgId: 0,
@@ -76,7 +76,24 @@ class SVGEditor extends React.Component {
     }
   }
 
+  saveSvgEvent = (e) => {
+    e.preventDefault();
+    this.saveCurrentSvgChanges();
+  }
+
+  saveCurrentSvgChanges = () => {
+    const { viewboxElements } = this.state;
+    const elementsToUpdate = viewboxElements.filter(element => element.isUpdated === true);
+    const elementsToAdd = viewboxElements.filter(element => element.isDefault === true);
+    console.log('Elements to update: ', elementsToUpdate);
+    console.log('Elements to add: ', elementsToAdd);
+  }
+
   viewboxElementChange = () => {
+    const { selectedElement } = this.state;
+    if ( selectedElement.isDefault === false) {
+      selectedElement.isUpdated = true;
+    }
     this.setState({ unSavedChanges: true });
     this.forceUpdate();
   }
@@ -100,15 +117,21 @@ class SVGEditor extends React.Component {
   }
 
   addToolboxElementToViewbox = (elementId) => {
-    const { defaultElements, viewboxElements, totalViewboxElementsHistory } = this.state;
+    const { 
+      defaultElements, 
+      viewboxElements, 
+      totalViewboxElementsHistory,
+      currentSvgId
+    } = this.state;
     const elementToAdd = Object.assign({}, defaultElements.find(element => element.elementId === parseInt(elementId)));
     elementToAdd.tempId = totalViewboxElementsHistory + 1;
+    elementToAdd.svgId = currentSvgId;
     const joined = viewboxElements.concat(elementToAdd);
     this.setState({ 
       viewboxElements: joined,
       totalViewboxElementsHistory: totalViewboxElementsHistory + 1,
       unSavedChanges: true
-    });
+    });    
   }
 
   deleteSelectedElement = (elementTempId) => {
@@ -310,6 +333,7 @@ class SVGEditor extends React.Component {
             userSVGs={userSVGs}
             currentSvgId={currentSvgId}
             unSavedChanges={unSavedChanges}
+            saveCurrentSvgChanges={this.saveCurrentSvgChanges}
             loadSelectedSVGElementsToViewbox={this.loadSelectedSVGElementsToViewbox}
           />
           <Row className="mx-0">
@@ -343,7 +367,7 @@ class SVGEditor extends React.Component {
                 <SVGCodeModal viewboxElements={viewboxElements} renderSVGCode={this.renderSVGCode} XMLCopiedAlert={this.XMLCopiedAlert}/>
                 {saveButtonIsDisabled 
                   ? <Button color="danger" disabled>Save SVG</Button> 
-                  : <Button color="danger" >Save SVG</Button>
+                  : <Button color="danger" onClick={this.saveSvgEvent}>Save SVG</Button>
                 }                
               </Row>
             </Col>

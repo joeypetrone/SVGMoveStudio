@@ -14,6 +14,7 @@ class SVGEditorNavbar extends React.Component {
     userSVGs: PropTypes.array.isRequired,
     currentSvgId: PropTypes.number.isRequired,
     unSavedChanges: PropTypes.bool.isRequired,
+    saveCurrentSvgChanges: PropTypes.func.isRequired,
     loadSelectedSVGElementsToViewbox: PropTypes.func.isRequired
   }
 
@@ -104,8 +105,9 @@ class SVGEditorNavbar extends React.Component {
   }
 
   saveChangesToCurrentSvg = () => {
+    const { saveCurrentSvgChanges } = this.props;
     const { selectedSvgId } = this.state;
-    alert('svg saved!');
+    saveCurrentSvgChanges();
     this.setState({ optionsState: selectedSvgId.toString() })
     this.loadSvgElementData(selectedSvgId);
   }
