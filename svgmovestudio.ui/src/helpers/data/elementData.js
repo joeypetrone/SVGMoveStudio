@@ -19,4 +19,14 @@ const getElementsBySVGId = (svgId) => new Promise((resolve, reject) => {
     .catch(reject)
 })
 
-export default { getDefaultElements, getElementByElementId, getElementsBySVGId };
+const postElements = (arrayOfNewElements) =>  axios.post(`${baseUrl}/elements`, arrayOfNewElements);
+
+const putElements = (arrayOfUpdatedElements) => axios.put(`${baseUrl}/elements`, arrayOfUpdatedElements);
+
+export default { 
+  getDefaultElements, 
+  getElementByElementId, 
+  getElementsBySVGId,
+  postElements,
+  putElements 
+};

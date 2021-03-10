@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Button, Col, Alert } from 'reactstrap';
-import PropTypes, { element } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import './SVGEditor.scss';
 import userData from '../../../helpers/data/userData';
@@ -82,9 +82,27 @@ class SVGEditor extends React.Component {
   }
 
   saveCurrentSvgChanges = () => {
-    const { viewboxElements } = this.state;
+    const { viewboxElements, user } = this.state;
     const elementsToUpdate = viewboxElements.filter(element => element.isUpdated === true);
     const elementsToAdd = viewboxElements.filter(element => element.isDefault === true);
+
+    if (user) {
+      elementData.postElements(elementsToAdd)
+      .then(() => {
+        console.alert('New elements saved!');
+      })
+      .catch((err) => console.error('Unable to add new elements: ', err)); 
+    
+    elementData.putElements(elementsToUpdate)
+      .then(() => {
+        console.alert('Updated elements saved!');
+      })
+      .catch((err) => console.error('Unable to update existing elements: ', err))
+    } else {
+      console.error('Unregistered user saves are unautherized, user must be registered in order to use this feature.');
+    }
+
+
     console.log('Elements to update: ', elementsToUpdate);
     console.log('Elements to add: ', elementsToAdd);
   }

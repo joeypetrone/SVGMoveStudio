@@ -28,7 +28,7 @@ class MyNavbar extends React.Component {
 
   signOutEvent = (e) => {
     e.preventDefault();
-    authData.signOutUser()
+    authData.signOutUser();
   }
 
   render() {

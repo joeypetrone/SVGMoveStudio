@@ -14,7 +14,7 @@ namespace SVGMoveStudio.Controllers
     {
         protected string FirebaseUserId => User.FindFirst(x => x.Type == "user_id").Value;
     } 
-
+        
     [Route("api/users")]
     [ApiController]
     public class UsersController : FirebaseEnabledController
