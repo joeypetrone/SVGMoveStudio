@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SVGMoveStudio.Data;
+using SVGMoveStudio.Models;
 
 namespace SVGMoveStudio.Controllers
 {
     [Route("api/elements")]
     [ApiController]
-    public class ElementsController : ControllerBase
+    public class ElementsController : FirebaseEnabledController
     {
         readonly ElementRepository _repo;
 
@@ -59,6 +61,13 @@ namespace SVGMoveStudio.Controllers
             var defaultElements = _repo.GetDefault();
 
             return Ok(defaultElements);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult CreateNewElements(List<Element> elements)
+        {
+            return Ok();
         }
 
         [HttpDelete("{id}")]

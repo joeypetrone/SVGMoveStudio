@@ -45,7 +45,11 @@ const signInUser = (user) => {
 };
 
 const signOutUser = () => {
-  return firebase.auth().signOut();
+  firebase.auth().signOut().then(function() {
+    console.log('signout success!')
+  }).catch(function(error) {
+    console.log('still signed in?')
+  });
 };
 
 const getUid = () => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Button, Col, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
+import firebase from 'firebase/app';
 
 import './SVGEditor.scss';
 import userData from '../../../helpers/data/userData';
@@ -60,19 +61,21 @@ class SVGEditor extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.authed !== this.props.authed) {
-      this.disableSaveButtonToggle()
+      this.disableSaveButtonToggle();
 
-      if (this.props.authed) {
-        userData.getUserByFirebasaeUid()
-            .then(user => {
-              svgData.getUserSVGs(user.userId).then(svgs => {
-                this.setState({ userSVGs: svgs })
-              }) 
-              this.setState({ user }) 
-            });
-      } else {
-        this.setState({ user: {}, userSVGs: [] })
-      }
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          userData.getUserByFirebasaeUid()
+          .then(user => {
+            svgData.getUserSVGs(user.userId).then(svgs => {
+              this.setState({ userSVGs: svgs });
+            }); 
+            this.setState({ user }); 
+          });
+        } else {
+          this.setState({ user: {}, userSVGs: [] });
+        }
+      });
     }
   }
 
@@ -86,25 +89,33 @@ class SVGEditor extends React.Component {
     const elementsToUpdate = viewboxElements.filter(element => element.isUpdated === true);
     const elementsToAdd = viewboxElements.filter(element => element.isDefault === true);
 
-    if (user) {
-      elementData.postElements(elementsToAdd)
-      .then(() => {
-        console.alert('New elements saved!');
-      })
-      .catch((err) => console.error('Unable to add new elements: ', err)); 
-    
-    elementData.putElements(elementsToUpdate)
-      .then(() => {
-        console.alert('Updated elements saved!');
-      })
-      .catch((err) => console.error('Unable to update existing elements: ', err))
-    } else {
-      console.error('Unregistered user saves are unautherized, user must be registered in order to use this feature.');
-    }
+    elementsToAdd.forEach(element => element.isDefault = false);
 
+    this.addElementsToDatabase(elementsToAdd, user);
+    this.updateElementsInDatabase(elementsToUpdate, user);
 
     console.log('Elements to update: ', elementsToUpdate);
     console.log('Elements to add: ', elementsToAdd);
+  }
+
+  addElementsToDatabase = (elementsToAdd, user) => {
+    if (elementsToAdd.length > 0 && Object.entries(user).length !== 0) {
+      elementData.postElements(elementsToAdd)
+      .then(() => {
+        console.log('New elements saved!');
+      })
+      .catch((err) => console.error('Unable to add new elements: ', err)); 
+    }
+  }
+
+  updateElementsInDatabase = (elementsToUpdate, user) => {
+    if (elementsToUpdate > 0 && Object.entries(user).length !== 0) {
+      elementData.putElements(elementsToUpdate)
+      .then(() => {
+        console.log('Updated elements saved!');
+      })
+      .catch((err) => console.error('Unable to update existing elements: ', err))
+    }
   }
 
   viewboxElementChange = () => {
