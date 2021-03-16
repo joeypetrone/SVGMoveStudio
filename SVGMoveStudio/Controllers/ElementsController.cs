@@ -79,7 +79,10 @@ namespace SVGMoveStudio.Controllers
         [HttpPut]
         public IActionResult UpdateElements(List<Element> elementsToUpdate)
         {
-            _repo.Update(elementsToUpdate);
+            elementsToUpdate.ForEach(element =>
+            {
+                _repo.Update(element);
+            });
 
             return Ok();
         }
