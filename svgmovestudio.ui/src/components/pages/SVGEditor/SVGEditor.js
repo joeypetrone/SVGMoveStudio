@@ -109,7 +109,7 @@ class SVGEditor extends React.Component {
   }
 
   updateElementsInDatabase = (elementsToUpdate, user) => {
-    if (elementsToUpdate > 0 && Object.entries(user).length !== 0) {
+    if (elementsToUpdate.length > 0 && Object.entries(user).length !== 0) {
       elementData.putElements(elementsToUpdate)
       .then(() => {
         console.log('Updated elements saved!');
@@ -122,6 +122,7 @@ class SVGEditor extends React.Component {
     const { selectedElement } = this.state;
     if ( selectedElement.isDefault === false) {
       selectedElement.isUpdated = true;
+      console.log(selectedElement);
     }
     this.setState({ unSavedChanges: true });
     this.forceUpdate();

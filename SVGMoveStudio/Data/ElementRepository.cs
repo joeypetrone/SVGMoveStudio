@@ -71,6 +71,109 @@ namespace SVGMoveStudio.Data
             return svgElements.ToList();
         }
 
+        internal void Add(Element element)
+        {
+            var db = new SqlConnection(_connectionString);
+
+            var query = @"INSERT INTO [dbo].[Element]
+                                     ([SVGId]
+                                     ,[ElementTypeId]
+                                     ,[ElementName]
+                                     ,[ArrangeNumber]
+                                     ,[Fill]
+                                     ,[FillOpacity]
+                                     ,[Opacity]
+                                     ,[Stroke]
+                                     ,[StrokeWidth]
+                                     ,[StrokeOpacity]
+                                     ,[Width]
+                                     ,[Height]
+                                     ,[X_CoordinateStart]
+                                     ,[Y_CoordinateStart]
+                                     ,[X_CoordinateEnd]
+                                     ,[Y_CoordinateEnd]
+                                     ,[X_Radius]
+                                     ,[Y_Radius]
+                                     ,[Points]
+                                     ,[PathShape]
+                                     ,[PathLength]
+                                     ,[X_Translate]
+                                     ,[Y_Translate]
+                                     ,[Rotate]
+                                     ,[Scale]
+                                     ,[X_Skew]
+                                     ,[Y_Skew]
+                                     ,[isDefault])
+                               Output inserted.ElementId
+                               VALUES                        
+                                     (@svgid,
+                                      @elementtypeid,
+                                      @elementname,
+                                      @arrangenumber,
+                                      @fill,
+                                      @fillopacity,
+                                      @opacity,
+                                      @stroke,
+                                      @strokewidth,
+                                      @strokeopacity,
+                                      @width,
+                                      @height,
+                                      @x_coordinatestart,
+                                      @y_coordinatestart,
+                                      @x_coordinateend,
+                                      @y_coordinateend,
+                                      @x_radius,
+                                      @y_radius,
+                                      @points,
+                                      @pathshape,
+                                      @pathlength,
+                                      @x_translate,
+                                      @y_translate,
+                                      @rotate,
+                                      @scale,
+                                      @x_skew,
+                                      @y_skew,
+                                      @isdefault)";
+            var parameters = new
+            {
+                svgid = element.SVGId,
+                elementtypeid = element.ElementTypeId,
+                elementname = element.ElementName,
+                arrangenumber = element.ArrangeNumber,
+                fill = element.Fill,
+                fillopacity = element.FillOpacity,
+                opacity = element.Opacity,
+                stroke = element.Stroke,
+                strokewidth = element.StrokeWidth,
+                strokeopacity = element.StrokeOpacity,
+                width = element.Width,
+                height = element.Height,
+                x_coordinatestart = element.X_CoordinateStart,
+                y_coordinatestart = element.Y_CoordinateStart,
+                x_coordinateend = element.X_CoordinateEnd,
+                y_coordinateend = element.Y_CoordinateEnd,
+                x_radius = element.X_Radius,
+                y_radius = element.Y_Radius,
+                points = element.Points,
+                pathshape = element.PathShape,
+                pathlength = element.PathLength,
+                x_translate = element.X_Translate,
+                y_translate = element.Y_Translate,
+                rotate = element.Rotate,
+                scale = element.Scale,
+                x_skew = element.X_Skew,
+                y_skew = element.Y_Skew,
+                isdefault = element.isDefault
+            };
+
+            db.Execute(query, parameters);
+        }
+
+        internal void Update(Element element)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Remove(int elementId)
         {
             var db = new SqlConnection(_connectionString);

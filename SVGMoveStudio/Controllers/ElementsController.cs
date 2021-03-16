@@ -65,8 +65,22 @@ namespace SVGMoveStudio.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult CreateNewElements(List<Element> elements)
+        public IActionResult CreateNewElements(List<Element> elementsToAdd)
         {
+            elementsToAdd.ForEach(element =>
+            {
+                _repo.Add(element);
+            });
+            
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPut]
+        public IActionResult UpdateElements(List<Element> elementsToUpdate)
+        {
+            _repo.Update(elementsToUpdate);
+
             return Ok();
         }
 
