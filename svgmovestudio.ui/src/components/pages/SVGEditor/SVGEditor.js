@@ -32,6 +32,7 @@ class SVGEditor extends React.Component {
     userElements: [],
     defaultElements: [],
     viewboxElements: [], 
+    deletedElements: [],
     selectedEditor: '',
     selectedElement: {},
     currentSvgId: 0,
@@ -113,6 +114,9 @@ class SVGEditor extends React.Component {
       elementData.putElements(elementsToUpdate)
       .then(() => {
         console.log('Updated elements saved!');
+        elementsToUpdate.forEach(element => {
+          element.isUpdated = false;
+        });
       })
       .catch((err) => console.error('Unable to update existing elements: ', err))
     }
@@ -122,7 +126,6 @@ class SVGEditor extends React.Component {
     const { selectedElement } = this.state;
     if ( selectedElement.isDefault === false) {
       selectedElement.isUpdated = true;
-      console.log(selectedElement);
     }
     this.setState({ unSavedChanges: true });
     this.forceUpdate();
@@ -156,21 +159,31 @@ class SVGEditor extends React.Component {
     const elementToAdd = Object.assign({}, defaultElements.find(element => element.elementId === parseInt(elementId)));
     elementToAdd.tempId = totalViewboxElementsHistory + 1;
     elementToAdd.svgId = currentSvgId;
-    const joined = viewboxElements.concat(elementToAdd);
+    const joinedViewbox = viewboxElements.concat(elementToAdd);
     this.setState({ 
-      viewboxElements: joined,
+      viewboxElements: joinedViewbox,
       totalViewboxElementsHistory: totalViewboxElementsHistory + 1,
       unSavedChanges: true
     });    
   }
 
   deleteSelectedElement = (elementTempId) => {
-    const { viewboxElements } = this.state;
+    const { viewboxElements, deletedElements } = this.state;
     if(viewboxElements.length !== 0) {
+      const elementToDelete = viewboxElements.find(element => element.tempId === elementTempId);
       viewboxElements.splice(viewboxElements.findIndex(element => element.tempId === elementTempId), 1);
+      if (elementToDelete.isDefault === false) {
+        const joinedDeleted = deletedElements.concat(elementToDelete);
+        console.log(joinedDeleted);
+        this.setState({ deletedElements: joinedDeleted });
+      }
       this.setState({ selectedElement: {} })
       this.viewboxElementChange()
     }
+  }
+
+  clearDeletedElementsArray = () => {
+    this.setState({ deletedElements: [] });
   }
 
   updateElementPosition = (x_position, y_position) => {
@@ -341,7 +354,7 @@ class SVGEditor extends React.Component {
     const { 
       userSVGs,
       defaultElements, 
-      viewboxElements, 
+      viewboxElements,
       selectedEditor, 
       selectedElement,
       currentSvgId,
@@ -359,6 +372,7 @@ class SVGEditor extends React.Component {
             authed={authed}
             openSelectedEditor={this.openSelectedEditor} 
             viewboxElements={viewboxElements} 
+            clearDeletedElementsArray={this.clearDeletedElementsArray}
             setSelectedElement={this.setSelectedElement}
             userSVGs={userSVGs}
             currentSvgId={currentSvgId}

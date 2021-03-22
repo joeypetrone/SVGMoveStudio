@@ -10,6 +10,7 @@ class SVGEditorNavbar extends React.Component {
     authed: PropTypes.bool.isRequired,
     openSelectedEditor: PropTypes.func.isRequired,
     viewboxElements: PropTypes.array.isRequired,
+    clearDeletedElementsArray: PropTypes.func.isRequired,
     setSelectedElement: PropTypes.func.isRequired,
     userSVGs: PropTypes.array.isRequired,
     currentSvgId: PropTypes.number.isRequired,
@@ -95,7 +96,9 @@ class SVGEditorNavbar extends React.Component {
   }
 
   disregardCurrentSvgChanges = () => {
+    const { clearDeletedElementsArray } = this.props;
     const { selectedSvgId } = this.state;
+    clearDeletedElementsArray();
     this.loadSvgElementData(selectedSvgId);    
   }
 
