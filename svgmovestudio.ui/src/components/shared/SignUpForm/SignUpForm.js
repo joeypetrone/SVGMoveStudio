@@ -1,8 +1,18 @@
 import React from 'react';
-import { Alert, Button, Form, FormGroup, Input } from 'reactstrap';
+import { Button, Form, FormFeedback, FormGroup, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import getAuthErrorMessage from '../../../helpers/authErrors';
+import getApiErrorMessage from '../../../helpers/apiErrors';
+import toast from '../../../helpers/toast';
+import { validateEmail, validateNewPassword, validateUsername, hasErrors } from '../../../helpers/validation';
 import './SignUpForm.scss';
+
+const emptyFields = {
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+};
 
 class SignUpForm extends React.Component {
   static propTypes = {
@@ -10,12 +20,8 @@ class SignUpForm extends React.Component {
   }
 
   state = {
-    user: {
-      username: '',
-      email: '',
-      password: ''
-    },
-    errorMessage: '',
+    user: { ...emptyFields },
+    errors: { ...emptyFields },
     isSigningUp: false
   }
 
@@ -23,85 +29,113 @@ class SignUpForm extends React.Component {
     this.unmounted = true;
   }
 
+  validate = () => {
+    const { user } = this.state;
+    const errors = {
+      username: validateUsername(user.username),
+      email: validateEmail(user.email),
+      password: validateNewPassword(user.password),
+      confirmPassword: !user.confirmPassword
+        ? 'Re-enter your password.'
+        : user.confirmPassword !== user.password ? 'Passwords don\'t match.' : ''
+    };
+    this.setState({ errors });
+    return !hasErrors(errors);
+  }
+
   signUpClickEvent = (e) => {
     const { user } = this.state;
     e.preventDefault();
 
-    if (!user.username.trim() || !user.email.trim() || !user.password) {
-      this.setState({ errorMessage: 'Enter a username, email and password.' });
-      return;
-    }
+    if (!this.validate()) return;
 
-    this.setState({ errorMessage: '', isSigningUp: true });
-    this.props.signUp(user)
+    this.setState({ isSigningUp: true });
+    this.props.signUp({
+      username: user.username.trim(),
+      email: user.email.trim(),
+      password: user.password
+    })
       .catch(error => {
         console.error('there was an error in the user\'s sign up', error);
+        // Firebase errors carry a code; errors saving the profile come from the API.
+        toast.error(error && error.code ? getAuthErrorMessage(error) : getApiErrorMessage(error));
         if (!this.unmounted) {
-          this.setState({ errorMessage: getAuthErrorMessage(error), isSigningUp: false });
+          this.setState({ isSigningUp: false });
         }
       });
   }
 
-  usernameChange = e => {
-    const tempUser = { ...this.state.user };
-    tempUser.username = e.target.value;
-    this.setState({ user: tempUser, errorMessage: '' })
-  }
-
-  emailChange = e => {
-    const tempUser = { ...this.state.user };
-    tempUser.email = e.target.value;
-    this.setState({ user: tempUser, errorMessage: '' })
-  }
-
-  passwordChange = e => {
-    const tempUser = { ...this.state.user };
-    tempUser.password = e.target.value;
-    this.setState({ user: tempUser, errorMessage: '' })
+  fieldChange = e => {
+    const { name, value } = e.target;
+    this.setState(({ user, errors }) => ({
+      user: { ...user, [name]: value },
+      errors: { ...errors, [name]: '' }
+    }));
   }
 
   render() {
-    const { user, errorMessage, isSigningUp } = this.state;
+    const { user, errors, isSigningUp } = this.state;
 
     return (
       <div className="SignUpForm">
-        <Form onSubmit={this.signUpClickEvent}>
-          <Alert color="danger" isOpen={!!errorMessage} role="alert">{errorMessage}</Alert>
+        <Form noValidate onSubmit={this.signUpClickEvent}>
           <FormGroup>
-            <Input 
-              type="username" 
-              name="username" 
-              id="username" 
+            <Input
+              type="text"
+              name="username"
+              id="sign-up-username"
               placeholder="Username"
+              autoComplete="username"
               value={user.username}
-              onChange={this.usernameChange} 
-            />          
+              invalid={!!errors.username}
+              onChange={this.fieldChange}
+            />
+            <FormFeedback>{errors.username}</FormFeedback>
           </FormGroup>
           <FormGroup>
             <Input
-              type="email" 
-              name="email" 
-              id="exampleEmail" 
+              type="email"
+              name="email"
+              id="sign-up-email"
               placeholder="Email"
+              autoComplete="email"
               value={user.email}
-              onChange={this.emailChange} 
+              invalid={!!errors.email}
+              onChange={this.fieldChange}
             />
+            <FormFeedback>{errors.email}</FormFeedback>
           </FormGroup>
           <FormGroup>
-            <Input 
-              type="password" 
-              name="password" 
-              id="examplePassword" 
+            <Input
+              type="password"
+              name="password"
+              id="sign-up-password"
               placeholder="Password"
+              autoComplete="new-password"
               value={user.password}
-              onChange={this.passwordChange}  
+              invalid={!!errors.password}
+              onChange={this.fieldChange}
             />
+            <FormFeedback>{errors.password}</FormFeedback>
+          </FormGroup>
+          <FormGroup>
+            <Input
+              type="password"
+              name="confirmPassword"
+              id="sign-up-confirm-password"
+              placeholder="Confirm Password"
+              autoComplete="new-password"
+              value={user.confirmPassword}
+              invalid={!!errors.confirmPassword}
+              onChange={this.fieldChange}
+            />
+            <FormFeedback>{errors.confirmPassword}</FormFeedback>
           </FormGroup>
           <Button type="submit" className="btn-dark mb-3 w-100" disabled={isSigningUp}>
             {isSigningUp ? 'Signing Up…' : 'Sign Up'}
           </Button>
         </Form>
-      </div>      
+      </div>
     )
   }
 }

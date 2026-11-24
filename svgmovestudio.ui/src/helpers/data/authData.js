@@ -4,8 +4,20 @@ import {baseUrl} from '../constants.json';
 
 // interceptors work by changing the outbound request before the xhr is sent 
 // or by changing the response before it's returned to our .then() method.
-axios.interceptors.request.use(function (request) {
-  const token = sessionStorage.getItem('token');
+// Firebase ID tokens expire after an hour. Ask Firebase for the current one on
+// every request (it refreshes it when needed) and fall back to the stored copy.
+axios.interceptors.request.use(async function (request) {
+  const currentUser = firebase.auth().currentUser;
+  let token = sessionStorage.getItem('token');
+
+  if (currentUser) {
+    try {
+      token = await currentUser.getIdToken();
+      sessionStorage.setItem('token', token);
+    } catch (e) {
+      // keep the stored token; the API will answer 401 if it's no longer valid
+    }
+  }
 
   if (token != null) {
       request.headers.Authorization = `Bearer ${token}`;
@@ -45,11 +57,16 @@ const signInUser = (user) => {
 };
 
 const signOutUser = () => {
+  sessionStorage.removeItem('token');
   return firebase.auth().signOut();
+};
+
+const sendPasswordReset = (email) => {
+  return firebase.auth().sendPasswordResetEmail(email);
 };
 
 const getUid = () => {
   return firebase.auth().currentUser.uid;
 };
 
-export default {getUid, signInUser, signOutUser, registerUser};
+export default {getUid, signInUser, signOutUser, registerUser, sendPasswordReset};

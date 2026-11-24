@@ -4,6 +4,8 @@ import { FormGroup, Input, Nav, NavLink, NavItem, Navbar, Row, Col } from 'react
 import './SVGEditorNavbar.scss'
 import elementData from '../../../helpers/data/elementData';
 import SaveSVGModal from '../../shared/Modals/SaveSVGModal/SaveSVGModal';
+import toast from '../../../helpers/toast';
+import getApiErrorMessage from '../../../helpers/apiErrors';
 
 class SVGEditorNavbar extends React.Component {
   static propTypes = {
@@ -14,7 +16,8 @@ class SVGEditorNavbar extends React.Component {
     userSVGs: PropTypes.array.isRequired,
     currentSvgId: PropTypes.number.isRequired,
     unSavedChanges: PropTypes.bool.isRequired,
-    loadSelectedSVGElementsToViewbox: PropTypes.func.isRequired
+    loadSelectedSVGElementsToViewbox: PropTypes.func.isRequired,
+    saveCurrentSvg: PropTypes.func.isRequired
   }
 
   state = {
@@ -31,6 +34,11 @@ class SVGEditorNavbar extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.authed !== this.props.authed) {
       this.disableSVGDropdownMenuToggle()
+    }
+
+    // After a new SVG is saved, show it as the selected SVG.
+    if (prevProps.currentSvgId !== this.props.currentSvgId) {
+      this.setDropDownToCurrentSvg();
     }
   }
 
@@ -87,6 +95,10 @@ class SVGEditorNavbar extends React.Component {
     .then(elements => {
       loadSelectedSVGElementsToViewbox(elements, parseInt(selectedSvgId))
     })
+    .catch(error => {
+      toast.error(getApiErrorMessage(error, 'Couldn\'t open that SVG. Please try again.'));
+      this.setDropDownToCurrentSvg();
+    })
   }
 
   toggleSaveSvgModal = () => {
@@ -100,14 +112,30 @@ class SVGEditorNavbar extends React.Component {
 
   setDropDownToCurrentSvg = () => {
     const { currentSvgId } = this.props;
-    this.setState({ optionsState: currentSvgId.toString() })
+    this.setState({ optionsState: currentSvgId ? currentSvgId.toString() : 'default' })
   }
 
+  // "Save" in the unsaved-changes dialog: save the current SVG, then open the
+  // one that was picked. A brand-new SVG needs a name first, so the switch is
+  // dropped and the editor's name dialog opens instead.
   saveChangesToCurrentSvg = () => {
     const { selectedSvgId } = this.state;
-    alert('svg saved!');
-    this.setState({ optionsState: selectedSvgId.toString() })
-    this.loadSvgElementData(selectedSvgId);
+    const { currentSvgId, saveCurrentSvg } = this.props;
+
+    if (currentSvgId === 0) {
+      this.setDropDownToCurrentSvg();
+      saveCurrentSvg();
+      return;
+    }
+
+    saveCurrentSvg().then(saved => {
+      if (saved) {
+        this.setState({ optionsState: selectedSvgId.toString() })
+        this.loadSvgElementData(selectedSvgId);
+      } else {
+        this.setDropDownToCurrentSvg();
+      }
+    });
   }
 
   render() { 

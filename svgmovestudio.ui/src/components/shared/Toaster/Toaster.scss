@@ -1,0 +1,15 @@
+.Toaster {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  width: 28rem;
+  max-width: 92vw;
+  pointer-events: none;
+}
+
+.Toaster-item {
+  pointer-events: auto;
+  margin-bottom: 0.5rem;
+}
