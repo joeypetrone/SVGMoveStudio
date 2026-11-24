@@ -25,8 +25,8 @@ const registerUser = (user) => {
       Email: cred.user.email
     };
 
-    //get token from firebase
-    cred.user.getIdToken()
+    //get token from firebase (returned so callers wait for it and see any failure)
+    return cred.user.getIdToken()
       //save the token to the session storage
       .then(token => sessionStorage.setItem('token',token))
       //save the user to the the api
@@ -37,8 +37,8 @@ const registerUser = (user) => {
 const signInUser = (user) => {
   //sub out whatever auth method firebase provides that you want to use.
   return firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(cred => {
-    //get token from firebase
-    cred.user.getIdToken()
+    //get token from firebase (returned so callers wait for it and see any failure)
+    return cred.user.getIdToken()
         //save the token to the session storage
       .then(token => sessionStorage.setItem('token',token));
   });

@@ -7,15 +7,11 @@ import './Register.scss';
 
 class Register extends React.Component {
 
-  signUp = (user) => {
-    authData.registerUser(user)
-      .then(
-        this.props.history.push('/editor') //push to user profile when that component gets setup
-      )
-      .catch(error => {
-        console.error('there was an error in the user\'s sign in', error)
-      })
-  }
+  // Returns the promise so SignUpForm can show any error to the user.
+  signUp = (user) => authData.registerUser(user)
+    .then(() => {
+      this.props.history.push('/editor'); //push to user profile when that component gets setup
+    })
 
   render() {
     return (
