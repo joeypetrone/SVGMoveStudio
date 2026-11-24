@@ -19,6 +19,9 @@ import Path from '../../shared/SVGElements/Path/Path';
 import SVGEditorSidePanel from '../../shared/SVGEditorSidePanel/SVGEditorSidePanel';
 import SVGEditorNavbar from '../../shared/SVGEditorNavbar/SVGEditorNavbar';
 import SVGCodeModal from '../../shared/Modals/SVGCodeModal/SVGCodeModal';
+import NameSVGModal from '../../shared/Modals/NameSVGModal/NameSVGModal';
+import toast from '../../../helpers/toast';
+import getApiErrorMessage from '../../../helpers/apiErrors';
 
 class SVGEditor extends React.Component {
   static  propTypes = {
@@ -38,24 +41,21 @@ class SVGEditor extends React.Component {
     codeIsCopiedByUser: false,
     saveButtonIsDisabled: true,
     totalViewboxElementsHistory: 0,
-    unSavedChanges: false 
+    unSavedChanges: false,
+    isNameSvgModalOpen: false,
+    isSaving: false
   }
 
   componentDidMount() {
     if (this.props.authed) {
-      userData.getUserByFirebasaeUid()
-          .then(user => {
-            svgData.getUserSVGs(user.userId).then(svgs => {
-              this.setState({ userSVGs: svgs })
-            })            
-            this.setState({ user }) 
-          });          
+      this.loadUserSvgs();
     }
 
     this.disableSaveButtonToggle()
 
     elementData.getDefaultElements()
       .then(elements => this.setState({ defaultElements: elements }) )
+      .catch(error => toast.error(getApiErrorMessage(error, 'Couldn\'t load the toolbox shapes. Refresh the page to try again.')))
   }
 
   componentDidUpdate(prevProps) {
@@ -63,16 +63,87 @@ class SVGEditor extends React.Component {
       this.disableSaveButtonToggle()
 
       if (this.props.authed) {
-        userData.getUserByFirebasaeUid()
-            .then(user => {
-              svgData.getUserSVGs(user.userId).then(svgs => {
-                this.setState({ userSVGs: svgs })
-              }) 
-              this.setState({ user }) 
-            });
+        this.loadUserSvgs();
       } else {
-        this.setState({ user: {}, userSVGs: [] })
+        this.setState({ user: {}, userSVGs: [], currentSvgId: 0 })
       }
+    }
+  }
+
+  loadUserSvgs = () => {
+    userData.getUserByFirebasaeUid()
+      .then(user => {
+        this.setState({ user });
+        return svgData.getUserSVGs(user.userId);
+      })
+      .then(svgs => this.setState({ userSVGs: svgs }))
+      .catch(error => {
+        if (error && error.response && error.response.status === 404) {
+          // Signed in to Firebase, but the API has no profile for this account.
+          toast.error('Your SVG Move Studio profile is missing, so saved SVGs can\'t load. Try signing out and back in.');
+          return;
+        }
+        toast.error(getApiErrorMessage(error, 'Couldn\'t load your saved SVGs.'));
+      });
+  }
+
+  // Saves the canvas. New SVGs ask for a name first. Resolves true when saved.
+  saveCurrentSvg = () => {
+    const { currentSvgId, viewboxElements } = this.state;
+
+    if (!this.props.authed) {
+      toast.error('Sign in to save your SVG.');
+      return Promise.resolve(false);
+    }
+
+    if (currentSvgId === 0) {
+      if (viewboxElements.length === 0) {
+        toast.error('Add at least one element before saving.');
+        return Promise.resolve(false);
+      }
+      this.setState({ isNameSvgModalOpen: true });
+      return Promise.resolve(false);
+    }
+
+    this.setState({ isSaving: true });
+    return svgData.saveSvgElements(currentSvgId, viewboxElements)
+      .then(() => {
+        this.setState({ isSaving: false, unSavedChanges: false });
+        const svg = this.state.userSVGs.find(s => s.svgId === currentSvgId);
+        toast.success(svg ? `Saved "${svg.svgName}".` : 'SVG saved.');
+        return true;
+      })
+      .catch(error => {
+        this.setState({ isSaving: false });
+        toast.error(getApiErrorMessage(error, 'Couldn\'t save your SVG. Please try again.'));
+        return false;
+      });
+  }
+
+  saveNewSvg = (svgName) => {
+    const { viewboxElements } = this.state;
+
+    this.setState({ isSaving: true });
+    svgData.createSvg(svgName, viewboxElements)
+      .then(svg => {
+        this.setState(({ userSVGs }) => ({
+          userSVGs: [...userSVGs, svg],
+          currentSvgId: svg.svgId,
+          unSavedChanges: false,
+          isSaving: false,
+          isNameSvgModalOpen: false
+        }));
+        toast.success(`Saved "${svg.svgName}".`);
+      })
+      .catch(error => {
+        this.setState({ isSaving: false });
+        toast.error(getApiErrorMessage(error, 'Couldn\'t save your SVG. Please try again.'));
+      });
+  }
+
+  toggleNameSvgModal = () => {
+    if (!this.state.isSaving) {
+      this.setState(({ isNameSvgModalOpen }) => ({ isNameSvgModalOpen: !isNameSvgModalOpen }));
     }
   }
 
@@ -294,7 +365,9 @@ class SVGEditor extends React.Component {
       currentSvgId,
       codeIsCopiedByUser,
       saveButtonIsDisabled,
-      unSavedChanges
+      unSavedChanges,
+      isNameSvgModalOpen,
+      isSaving
     } = this.state;
 
     const { authed } = this.props;
@@ -311,6 +384,7 @@ class SVGEditor extends React.Component {
             currentSvgId={currentSvgId}
             unSavedChanges={unSavedChanges}
             loadSelectedSVGElementsToViewbox={this.loadSelectedSVGElementsToViewbox}
+            saveCurrentSvg={this.saveCurrentSvg}
           />
           <Row className="mx-0">
             <SVGEditorViewbox 
@@ -341,14 +415,24 @@ class SVGEditor extends React.Component {
             <Col md={6} className="pr-2">
               <Row className="float-right mr-1">
                 <SVGCodeModal viewboxElements={viewboxElements} renderSVGCode={this.renderSVGCode} XMLCopiedAlert={this.XMLCopiedAlert}/>
-                {saveButtonIsDisabled 
-                  ? <Button color="danger" disabled>Save SVG</Button> 
-                  : <Button color="danger" >Save SVG</Button>
-                }                
+                <Button
+                  color="danger"
+                  disabled={saveButtonIsDisabled || isSaving}
+                  title={saveButtonIsDisabled ? 'Sign in to save your SVG' : undefined}
+                  onClick={this.saveCurrentSvg}
+                >
+                  {isSaving ? 'Saving…' : 'Save SVG'}
+                </Button>
               </Row>
             </Col>
           </Row>
         </Container>
+        <NameSVGModal
+          isOpen={isNameSvgModalOpen}
+          isSaving={isSaving}
+          toggle={this.toggleNameSvgModal}
+          saveNewSvg={this.saveNewSvg}
+        />
         <Container className="editor-toolbox my-3 p-2 rounded">
           Toolbox
           <hr/>

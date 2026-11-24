@@ -15,6 +15,8 @@ import Home from '../components/pages/Home/Home';
 import Register from '../components/pages/Register/Register';
 import Documents from '../components/pages/Documents/Documents';
 import Auth from '../components/pages/Auth/Auth';
+import ForgotPassword from '../components/pages/ForgotPassword/ForgotPassword';
+import Toaster from '../components/shared/Toaster/Toaster';
 
 import './App.scss';
 import SVGEditor from '../components/pages/SVGEditor/SVGEditor';
@@ -63,9 +65,11 @@ class App extends React.Component {
                 <Route path='/editor' render={(props) => <SVGEditor authed={authed} {...props} />} />
                 <Route path='/documents' component={Documents} authed={authed}/>
                 <Route path='/sign-in' component={Auth} authed={authed}/>
+                <Route path='/forgot-password' component={ForgotPassword}/>
                 <Redirect from="*" to="home" />
               </Switch>
             </div>
+            <Toaster />
           </React.Fragment>
         </BrowserRouter>
       </div>

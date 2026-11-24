@@ -44,16 +44,19 @@ class ScaleEditor extends React.Component {
     } 
   }
 
+  // The database stores scale and stroke width as numeric(3,2): 0 to 9.99.
+  clampToSavable = value => Math.min(Math.max(Number.isNaN(value) ? 0 : value, 0), 9.99);
+
   scaleChange = e => {
     const { updateElementScale } = this.props;
-    const scale = parseFloat(e.target.value);
+    const scale = this.clampToSavable(parseFloat(e.target.value));
     this.setState({ scale })
     updateElementScale(scale, null);
   }
 
   strokeWidthChange = e => {
     const { updateElementScale } = this.props;
-    const strokeWidth = parseFloat(e.target.value);
+    const strokeWidth = this.clampToSavable(parseFloat(e.target.value));
     this.setState({ strokeWidth })
     updateElementScale(null, strokeWidth);
   }
@@ -85,7 +88,7 @@ class ScaleEditor extends React.Component {
                   name="scale" 
                   id="scale"
                   min="0" 
-                  max="10"
+                  max="9.99"
                   value={scale}
                   onChange={this.scaleChange} 
                   disabled={disable()}
@@ -103,7 +106,7 @@ class ScaleEditor extends React.Component {
                   name="stroke width" 
                   id="stroke-width"
                   min="0" 
-                  max="100"
+                  max="9.99"
                   value={strokeWidth}
                   onChange={this.strokeWidthChange}
                   disabled={disable()} 
