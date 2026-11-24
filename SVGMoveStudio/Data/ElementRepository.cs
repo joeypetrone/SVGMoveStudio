@@ -21,7 +21,7 @@ namespace SVGMoveStudio.Data
 
         public List<Element> GetAll()
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var elements = db.Query<Element>("SELECT * FROM Element");
 
@@ -30,7 +30,7 @@ namespace SVGMoveStudio.Data
 
         public List<Element> GetDefault()
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var query = @"SELECT *
                           FROM Element
@@ -43,7 +43,7 @@ namespace SVGMoveStudio.Data
 
         public Element GetElementById(int elementId)
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var query = @"SELECT *
                           FROM Element
@@ -58,7 +58,7 @@ namespace SVGMoveStudio.Data
 
         internal List<Element> GetElementsBySvgId(int svgId)
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var query = @"SELECT *
                           FROM Element
@@ -73,7 +73,7 @@ namespace SVGMoveStudio.Data
 
         public void Remove(int elementId)
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var query = @"DELETE
                           FROM Element

@@ -18,6 +18,9 @@ namespace SVGMoveStudio
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                // Sends logs (including unhandled exceptions) to the App Service log stream
+                // when App Service logs are turned on in the portal. No-op when run locally.
+                .ConfigureLogging(logging => logging.AddAzureWebAppDiagnostics())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -77,7 +77,7 @@ namespace SVGMoveStudio.Controllers
         {
             if (_repo.GetUserById(id) == null)
             {
-                NotFound("User with that id not found in the database.");
+                return NotFound("User with that id not found in the database.");
             }
 
             _repo.Remove(id);
