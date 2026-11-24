@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SVGMoveStudio.Data;
@@ -10,13 +11,17 @@ namespace SVGMoveStudio.Controllers
 {
     [Route("api/elements")]
     [ApiController]
-    public class ElementsController : ControllerBase
+    public class ElementsController : FirebaseEnabledController
     {
         readonly ElementRepository _repo;
+        readonly SVGRepository _svgRepo;
+        readonly UserRepository _userRepo;
 
-        public ElementsController(ElementRepository repo)
+        public ElementsController(ElementRepository repo, SVGRepository svgRepo, UserRepository userRepo)
         {
             _repo = repo;
+            _svgRepo = svgRepo;
+            _userRepo = userRepo;
         }
 
         [HttpGet]
@@ -61,12 +66,21 @@ namespace SVGMoveStudio.Controllers
             return Ok(defaultElements);
         }
 
+        // Signed-in users can only delete elements of their own SVGs.
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult DeleteElementById(int id)
         {
-            if (_repo.GetElementById(id) == null)
+            var element = _repo.GetElementById(id);
+
+            if (element == null)
             {
                 return NotFound("This element does not exist in the database");
+            }
+
+            if (!IsCurrentUsersSvg(_svgRepo.GetSVGById(element.SVGId), _userRepo))
+            {
+                return Forbid();
             }
 
             _repo.Remove(id);

@@ -40,17 +40,5 @@ namespace SVGMoveStudio.Controllers
             return Ok(singleElementType);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteElementType(int id)
-        {
-            if (_repo.GetElementTypeById(id) == null)
-            {
-                return NotFound("This element type does not exist in the database");
-            }
-
-            _repo.Remove(id);
-
-            return Ok();
-        }
     }
 }
