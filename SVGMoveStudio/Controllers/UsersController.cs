@@ -1,58 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SVGMoveStudio.Data;
 using SVGMoveStudio.Models;
 
 namespace SVGMoveStudio.Controllers
 {
-    public abstract class FirebaseEnabledController : ControllerBase
-    {
-        protected string FirebaseUserId => User.FindFirst(x => x.Type == "user_id").Value;
-    } 
-
+    // Every users route needs a Firebase ID token. The old GET api/users and
+    // GET api/users/{id} routes returned every user's email to anyone and were
+    // not used by the front end, so they are gone.
     [Route("api/users")]
     [ApiController]
+    [Authorize]
     public class UsersController : FirebaseEnabledController
     {
-        UserRepository _repo;
+        readonly UserRepository _repo;
 
         public UsersController(UserRepository repo)
         {
             _repo = repo;
         }
 
-        [HttpGet]
-        public IActionResult GetAllUsers()
-        {
-            var allUsers = _repo.GetAll();
-
-            return Ok(allUsers);
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetSingleUser(int id)
-        {
-            var singleUser = _repo.GetUserById(id);
-
-            if (singleUser == null)
-            {
-                return NotFound("User with that id not found in the database.");
-            }
-
-            return Ok(singleUser);
-        }
-
         [HttpGet("firebaseUid")]
         public IActionResult GetUserByFirebaseUid()
         {
-            var uid = FirebaseUserId;
-
-            var singleUserByUid = _repo.GetUserByFirebaseUid(uid);
+            var singleUserByUid = _repo.GetUserByFirebaseUid(FirebaseUserId);
 
             if (singleUserByUid == null)
             {
@@ -72,12 +43,20 @@ namespace SVGMoveStudio.Controllers
             return Created($"/api/users/{user.UserId}", user);
         }
 
+        // A signed-in user can only delete their own account.
         [HttpDelete("{id}")]
         public IActionResult DeleteUserById(int id)
         {
-            if (_repo.GetUserById(id) == null)
+            var user = _repo.GetUserById(id);
+
+            if (user == null)
             {
                 return NotFound("User with that id not found in the database.");
+            }
+
+            if (user.FirebaseUId != FirebaseUserId)
+            {
+                return Forbid();
             }
 
             _repo.Remove(id);
