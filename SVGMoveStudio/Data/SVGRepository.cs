@@ -21,7 +21,7 @@ namespace SVGMoveStudio.Data
 
         public List<SVG> GetAll()
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var SVGs = db.Query<SVG>("SELECT * FROM SVG");
 
@@ -30,7 +30,7 @@ namespace SVGMoveStudio.Data
 
         public SVG GetSVGById(int svgId)
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var query = @"SELECT *
                           FROM SVG
@@ -45,7 +45,7 @@ namespace SVGMoveStudio.Data
 
         internal List<SVG> GetSVGsByUserId(int userId)
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var query = @"SELECT *
                           FROM SVG
@@ -60,7 +60,7 @@ namespace SVGMoveStudio.Data
 
         public void Remove(int svgId)
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var query = @"DELETE
                           FROM SVG
