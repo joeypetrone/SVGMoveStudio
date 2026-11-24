@@ -49,7 +49,7 @@ namespace SVGMoveStudio.Data
 
         public List<User> GetAll()
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var allUsers = db.Query<User>("SELECT * FROM [User]");
 
@@ -58,7 +58,7 @@ namespace SVGMoveStudio.Data
 
         public User GetUserById(int userId)
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var query = @"SELECT *
                           FROM [User]
@@ -73,7 +73,7 @@ namespace SVGMoveStudio.Data
 
         public User GetUserByFirebaseUid(string firebaseUid)
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var query = @"SELECT *
                           FROM [User]
@@ -88,7 +88,7 @@ namespace SVGMoveStudio.Data
 
         public void Remove(int userId)
         {
-            var db = new SqlConnection(_connectionString);
+            using var db = new SqlConnection(_connectionString);
 
             var query = @"DELETE
                           FROM [User]
